@@ -1,0 +1,22 @@
+{
+  "name": "flexipay",
+  "version": "1.0.0",
+  "description": "Dissertation project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ailis321/flexipay.git"
+  },
+  "author": "Ailis Taylor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ailis321/flexipay/issues"
+  },
+  "homepage": "https://github.com/ailis321/flexipay#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

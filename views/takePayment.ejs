@@ -1,0 +1,74 @@
+<%- include('_header') %>
+
+<div class="container my-5">
+    <h2>Hello, <%= customer.name %></h2>
+    <p>You have received a payment request from <%= paymentIntent.on_behalf_of %></p>
+    <p>Please enter your details to complete the payment.</p>
+
+    <p>Payment Details:</p>
+    <p>Amount: <%= (paymentIntent.amount / 100).toFixed(2) %> <%= paymentIntent.currency.toUpperCase() %></p>
+    <p>Description: <%= paymentIntent.description %></p>
+
+    <form id="paymentForm" action="/create-payment-method" method="post">
+
+       
+        <div class="form-group">
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" name="fullName" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="addressLine1">Address Line 1:</label>
+            <input type="text" id="addressLine1" name="addressLine1" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="addressLine2">Address Line 2:</label>
+            <input type="text" id="addressLine2" name="addressLine2" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="country" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="postcode">Postcode:</label>
+            <input type="text" id="postcode" name="postcode" class="form-control" required>
+        </div>
+
+        
+        <div class="form-group">
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" id="cardNumber" name="cardNumber" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="expiryMonth">Expiry Month (MM):</label>
+            <input type="text" id="expiryMonth" name="expiryMonth" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="expiryYear">Expiry Year (YYYY):</label>
+            <input type="text" id="expiryYear" name="expiryYear" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="cardCvc">Card CVC:</label>
+            <input type="text" id="cardCvc" name="cardCvc" class="form-control" required>
+        </div>
+
+
+        <input type="hidden" id="paymentIntentId" name="paymentIntentId" value="<%= paymentIntent.id %>">
+        <input type="hidden" id="customerId" name="customerId" value="<%= customer.id %>">
+
+        <button type="submit" class="btn btn-primary">Complete Payment</button>
+    </form>
+</div>
+
+<%- include('_footer') %>

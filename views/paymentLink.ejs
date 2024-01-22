@@ -1,0 +1,42 @@
+<%- include('_header') %>
+
+<div class="container my-5">
+    <h2>Create Payment Link</h2>
+    <form id="paymentForm" action="/create-payment-link" method="POST">
+        <div class="mb-3">
+            <label for="amount">Amount:</label>
+            <input type="text" id="amount" name="amount" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" class="form-control" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="customerId">Customer:</label>
+            <select id="customerId" name="customerId" class="form-control" required>
+                <!-- Customer options will be dynamically populated here -->
+            </select>
+        </div>
+       
+        <button type="submit" class="btn btn-primary">Generate Payment Link</button>
+    </form>
+</div>
+
+<script>
+  // Fetch and populate the dropdown with customer names and emails
+  fetch('/get-customers') // Replace with the appropriate route to get customers from your server
+    .then(response => response.json())
+    .then(customers => {
+      const customerDropdown = document.getElementById('customerId');
+
+      customers.forEach(customer => {
+        const option = document.createElement('option');
+        option.value = customer.id;
+        option.textContent = `${customer.name} (${customer.email})`; // Adjust based on your customer data
+        customerDropdown.appendChild(option);
+      });
+    })
+    .catch(error => console.error('Error fetching customers:', error));
+</script>
+
+<%- include('_footer') %>

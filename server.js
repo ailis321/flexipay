@@ -1,7 +1,6 @@
-const express = require('express');
-const app = express();
-const port = 8080;
+const dotenv = require('dotenv').config({path: './config.env'});
+const app = require('./app');
 
-app.listen(port, () => {
- console.log("SERVER RUNNING " +port);
-})
+app.listen(process.env.PORT, () => {
+    console.log('Listening on port ' +process.env.PORT);
+});

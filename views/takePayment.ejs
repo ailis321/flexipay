@@ -1,74 +1,37 @@
-<%- include('_header') %>
+<%- include('_header.ejs'); %>
 
-<div class="container my-5">
-    <h2>Hello, <%= customer.name %></h2>
-    <p>You have received a payment request from <%= paymentIntent.on_behalf_of %></p>
-    <p>Please enter your details to complete the payment.</p>
+<title>Accept a payment</title>
+<meta name="description" content="A demo of a payment on Stripe" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <p>Payment Details:</p>
-    <p>Amount: <%= (paymentIntent.amount / 100).toFixed(2) %> <%= paymentIntent.currency.toUpperCase() %></p>
-    <p>Description: <%= paymentIntent.description %></p>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="/javascript/checkout.js" defer></script>
+</head>
+<body>
 
-    <form id="paymentForm" action="/create-payment-method" method="post">
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
 
-       
-        <div class="form-group">
-            <label for="fullName">Full Name:</label>
-            <input type="text" id="fullName" name="fullName" class="form-control" required>
+    <!-- In your takepayment.ejs template -->
+    <input type="hidden" id="paymentIntentId" value="<%= paymentIntentId %>">
+    <input type="hidden" id="customerId" value="<%= customerId %>">
+    <input type="hidden" id="clientSecret" value="<%= clientSecret %>">
+
+    <!-- Display a styled payment form -->
+    <div style="width: 80%; max-width: 500px; margin: 0 auto;">
+      <form id="payment-form" style="padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 10px; background-color: #fff; text-align: center;">
+        <div id="payment-element" style="margin-bottom: 24px;">
+          <!-- Stripe.js injects the Payment Element -->
         </div>
+        <button id="submit" style="background-color: #5469d4; color: #fff; border: none; border-radius: 4px; padding: 12px 16px; font-size: 16px; cursor: pointer; width: 100%;">
+          <div class="spinner hidden" id="spinner"></div>
+          <span id="button-text">Pay now</span>
+        </button>
+        <div id="payment-message" class="hidden" style="color: rgb(105, 115, 134); font-size: 16px; line-height: 20px; padding-top: 12px;"></div>
+      </form>
+    </div>
 
-        <div class="form-group">
-            <label for="addressLine1">Address Line 1:</label>
-            <input type="text" id="addressLine1" name="addressLine1" class="form-control" required>
-        </div>
+  </div>
 
-        <div class="form-group">
-            <label for="addressLine2">Address Line 2:</label>
-            <input type="text" id="addressLine2" name="addressLine2" class="form-control">
-        </div>
-
-        <div class="form-group">
-            <label for="city">City:</label>
-            <input type="text" id="city" name="city" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-            <label for="country">Country:</label>
-            <input type="text" id="country" name="country" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-            <label for="postcode">Postcode:</label>
-            <input type="text" id="postcode" name="postcode" class="form-control" required>
-        </div>
-
-        
-        <div class="form-group">
-            <label for="cardNumber">Card Number:</label>
-            <input type="text" id="cardNumber" name="cardNumber" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-            <label for="expiryMonth">Expiry Month (MM):</label>
-            <input type="text" id="expiryMonth" name="expiryMonth" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-            <label for="expiryYear">Expiry Year (YYYY):</label>
-            <input type="text" id="expiryYear" name="expiryYear" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-            <label for="cardCvc">Card CVC:</label>
-            <input type="text" id="cardCvc" name="cardCvc" class="form-control" required>
-        </div>
-
-
-        <input type="hidden" id="paymentIntentId" name="paymentIntentId" value="<%= paymentIntent.id %>">
-        <input type="hidden" id="customerId" name="customerId" value="<%= customer.id %>">
-
-        <button type="submit" class="btn btn-primary">Complete Payment</button>
-    </form>
-</div>
-
-<%- include('_footer') %>
+<%- include('_footer.ejs'); %>
+</body>
+</html>

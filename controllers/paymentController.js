@@ -41,23 +41,27 @@ function getPaymentLink(req, res) {
       res.status(500).send('Error creating payment link.');
     }
   }
-  
-  //function to take the payment
+
   async function getTakePaymentPage(req, res) {
+    const { paymentIntentId, customerId } = req.params;
+  
     try {
-        const paymentIntentId = req.params.paymentIntentId;
-        const customerId = req.params.customerId;
+      // Fetch the payment intent from Stripe
+      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+  
+      // Extract the client secret
+      const clientSecret = paymentIntent.client_secret;
 
-        //getting payment intent info and customers info from stripe
-        const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-        const customer = await stripe.customers.retrieve(customerId);
-
-        res.render('takePayment', { paymentIntent, customer });
+      console.log('Client sceret: ' + clientSecret);
+  
+      // Render the takepayment.ejs template with the necessary information
+      res.render('takePayment', { paymentIntentId, customerId, clientSecret });
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Error rendering takePayment page.');
+      // Handle errors appropriately
+      res.status(500).send('Error fetching payment intent');
     }
-}
+  }
+  
 
 
 //taking info from takepayment form and posting to create a payment method

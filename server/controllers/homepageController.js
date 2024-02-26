@@ -20,6 +20,6 @@ const renderHowItWorks = (req, res) => {
 module.exports = {
     renderHomepage,
     renderHowItWorks,
-    // Add other controller functions here as needed
+    
 };
 

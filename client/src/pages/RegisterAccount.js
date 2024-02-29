@@ -27,9 +27,9 @@ const RegisterAccount = () => {
       <header className="text-center py-4">
         <h1>Register Your Account</h1>
       </header>
-      <div className="container mt-5 mb-5"> {/* Add bottom margin */}
+      <div className="container mt-5 mb-5"> 
         <SignUpForm />
-        {/* Pass features data as props to FeatureSections component */}
+     
         <FeatureSections features={features} />
       </div>
     </div>

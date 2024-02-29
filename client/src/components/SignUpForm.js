@@ -49,7 +49,7 @@ const SignUpForm = () => {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center align-items-center">
-      <div className="col-md-5"> {/* Decreased the column width to move the image slightly to the right */}
+      <div className="col-md-5"> 
           <img src="https://www.projectcounter.org/wp-content/uploads/2016/03/icon-register.png" className="img-fluid pl-3" alt="Illustration" /> {/* Added padding to the left of the image */}
         </div>
         <div className="col-md-7">

@@ -1,3 +1,5 @@
+// Home.js
+
 import React, { useEffect, useState } from 'react';
 import Tagline from '../components/Tagline';
 import FeatureSections from '../components/FeatureSections'; 
@@ -25,10 +27,16 @@ const Home = () => {
 
   return (
     <div className="Home">
-      <Tagline />
-      {/* Pass features data as props to FeatureSections component */}
+      <Tagline 
+        title="Accept Payments Online" 
+        description="Simple and secure payment solutions for organisations. Get started today!" 
+        buttonText="Sign Up" 
+        buttonLink="http://localhost:3000/register" 
+        imageUrl="https://qph.cf2.quoracdn.net/main-qimg-367cac9f2514e421d6f90cabd770c18d" 
+      />
+ 
       <FeatureSections features={features} />
-      <FAQSection /> {/* Include the FAQSection component */}
+      <FAQSection /> 
     </div>
   );
 };

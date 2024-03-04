@@ -4,7 +4,7 @@
 /client/.pnp.js
 /server/package-lock.
 
-/server/.env
+/server/config.env
 
 
 /client/yarn.lock

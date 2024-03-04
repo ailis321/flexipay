@@ -9,6 +9,6 @@ router.get('/register-organisation', organisationController.renderRegisterOrgani
 // Route to add a new organisation
 router.post('/organisations', organisationController.addOrganisation);
 
-// any other routes here
+
 
 module.exports = router;

@@ -6,6 +6,6 @@ const accountController = require('../controllers/accountsController');
 router.post('/create-account', accountController.createStripeAccount);
 
 // Route for periodically checking account details status
-router.get('/check-onboarding/:accountId', accountController.checkOnboardingStatus); // Define the check-onboarding rout
+router.get('/check-onboarding/:accountId', accountController.checkOnboardingStatus); 
 
 module.exports = router;

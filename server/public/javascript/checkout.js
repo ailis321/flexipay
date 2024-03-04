@@ -11,13 +11,13 @@ document
   .querySelector("#payment-form")
   .addEventListener("submit", handleSubmit);
 
-// Initialize the Stripe elements and mount the payment element
+// Initialising the Stripe elements and mount the payment element
 function initialize() {
   const appearance = {
     theme: 'stripe',
   };
 
-   // Extract the necessary information from the rendered HTML
+   // Extracting information from the payment intent and customer
  const paymentIntentId = document.querySelector("#paymentIntentId").value;
  const customerId = document.querySelector("#customerId").value;
  const clientSecret = document.querySelector("#clientSecret").value;

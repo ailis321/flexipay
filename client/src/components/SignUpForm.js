@@ -53,7 +53,7 @@ const SignUpForm = () => {
           <img src="https://www.projectcounter.org/wp-content/uploads/2016/03/icon-register.png" className="img-fluid pl-3" alt="Illustration" /> {/* Added padding to the left of the image */}
         </div>
         <div className="col-md-7">
-          <h2 className="mb-4">Create Your Account</h2>
+  
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <input type="text" className="form-control" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />

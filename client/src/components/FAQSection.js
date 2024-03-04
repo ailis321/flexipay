@@ -1,8 +1,8 @@
-
+import React from 'react';
 
 const FAQSection = () => {
     return (
-        <section className="py-5">
+        <section className="py-5" style={{ color: '#53937d' }}>
             <div className="container">
                 <div className="row">
                     <div className="col-lg-8 mx-auto text-center">
@@ -12,7 +12,7 @@ const FAQSection = () => {
                             id="accordionFlushExample"
                         >
                             <div className="accordion-item">
-                                <h2 className="accordion-header">
+                                <h2 className="accordion-header" style={{ color: '#53937d' }}>
                                     <button
                                         className="accordion-button collapsed"
                                         type="button"
@@ -29,7 +29,7 @@ const FAQSection = () => {
                                     className="accordion-collapse collapse"
                                     data-bs-parent="#accordionFlushExample"
                                 >
-                                    <div className="accordion-body">
+                                    <div className="accordion-body" style={{ color: '#53937d' }}>
                                         Placeholder content for this accordion, which is intended to
                                         demonstrate the <code>.accordion-flush</code> className.
                                         This is the first item's accordion body.
@@ -37,7 +37,7 @@ const FAQSection = () => {
                                 </div>
                             </div>
                             <div className="accordion-item">
-                                <h2 className="accordion-header">
+                                <h2 className="accordion-header" style={{ color: '#53937d' }}>
                                     <button
                                         className="accordion-button collapsed"
                                         type="button"
@@ -54,7 +54,7 @@ const FAQSection = () => {
                                     className="accordion-collapse collapse"
                                     data-bs-parent="#accordionFlushExample"
                                 >
-                                    <div className="accordion-body">
+                                    <div className="accordion-body" style={{ color: '#53937d' }}>
                                         Placeholder content for this accordion, which is intended to
                                         demonstrate the <code>.accordion-flush</code> className.
                                         This is the second item's accordion body. Let's imagine this
@@ -63,7 +63,7 @@ const FAQSection = () => {
                                 </div>
                             </div>
                             <div className="accordion-item">
-                                <h2 className="accordion-header">
+                                <h2 className="accordion-header" style={{ color: '#53937d' }}>
                                     <button
                                         className="accordion-button collapsed"
                                         type="button"
@@ -80,7 +80,7 @@ const FAQSection = () => {
                                     className="accordion-collapse collapse"
                                     data-bs-parent="#accordionFlushExample"
                                 >
-                                    <div className="accordion-body">
+                                    <div className="accordion-body" style={{ color: '#53937d' }}>
                                         Placeholder content for this accordion, which is intended to
                                         demonstrate the <code>.accordion-flush</code> className.
                                         This is the third item's accordion body. Nothing more

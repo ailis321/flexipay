@@ -1,44 +1,48 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Account = require('../models/account');
+const bycrypt = require('bcrypt');
 
 
 exports.createStripeAccount = async (req, res) => {
-  try {
-    const { email, firstName, lastName, businessName, password } = req.body;
-
-    // Create Stripe Connect account
-    const account = await stripe.accounts.create({
+    try {
+      const { email, firstName, lastName, businessName, password } = req.body;
+  
+      //Creating Stripe Connect account
+      const account = await stripe.accounts.create({
         type: 'standard',
         country: 'GB',
         email: email,
       });
   
-      // Create a user in the database
-      const newAccount = new Account({
-        email,
-        firstName,
-        lastName,
-        businessName,
-        password,
-        stripeAccountId: account.id, // Update the user document with the Stripe account ID
+      //Saving user to database with stripeAccountId using static method in Account model
+      const registerUser = async () => {
+        try {
+          const user = await Account.register(email, password, firstName, lastName, businessName, account.id);
+          return user;
+        } catch (error) {
+          throw new Error(error.message);
+        }
+      };
+  
+      //registerUser function
+      const user = await registerUser();
+  
+      //Create account link
+      const accountLink = await stripe.accountLinks.create({
+        account: account.id,
+        refresh_url: `http://localhost:8000/api/accounts/check-onboarding/${account.id}`, // Update refresh_url
+        return_url: 'http://localhost:3000/LoginHomeComplete',
+        type: 'account_onboarding',
       });
-      await newAccount.save(); 
-
-    // Create account link
-    const accountLink = await stripe.accountLinks.create({
-      account: account.id,
-      refresh_url: `http://localhost:8000/api/accounts/check-onboarding/${account.id}`, // Update refresh_url
-      return_url: 'http://localhost:3000/LoginHomeComplete',
-      type: 'account_onboarding',
-    });
-
-    // Send the account link URL to the frontend
-    res.json({ accountLink: accountLink.url });
-  } catch (error) {
-    console.error('Error creating Stripe account:', error);
-    res.status(500).json({ error: 'Failed to create Stripe account' });
-  }
-};
+  
+      //Sending the account link URL to frontend
+      res.json({ accountLink: accountLink.url, user: user });
+    } catch (error) {
+      console.error('Error creating Stripe account:', error);
+      res.status(500).json({ error: 'Failed to create Stripe account' });
+    }
+  };
+  
 
 exports.checkOnboardingStatus = async (req, res) => {
   try {

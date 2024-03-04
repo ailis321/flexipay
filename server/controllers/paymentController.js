@@ -46,25 +46,23 @@ function getPaymentLink(req, res) {
     const { paymentIntentId, customerId } = req.params;
   
     try {
-      // Fetch the payment intent from Stripe
+    
       const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
   
-      // Extract the client secret
       const clientSecret = paymentIntent.client_secret;
 
       console.log('Client sceret: ' + clientSecret);
   
-      // Render the takepayment.ejs template with the necessary information
       res.render('takePayment', { paymentIntentId, customerId, clientSecret });
     } catch (error) {
-      // Handle errors appropriately
+    
       res.status(500).send('Error fetching payment intent');
     }
   }
   
 
 
-//taking info from takepayment form and posting to create a payment method
+
 async function createPaymentMethod(req, res) {
     try {
         const {

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Tagline from '../components/Tagline';
 import FeatureSections from '../components/FeatureSections'; 
 import FAQSection from '../components/FAQSection';
+import Carousel from '../components/Carousel';
 
 const Home = () => {
   const [features, setFeatures] = useState([]);
@@ -37,6 +38,7 @@ const Home = () => {
  
       <FeatureSections features={features} />
       <FAQSection /> 
+      <Carousel />
     </div>
   );
 };

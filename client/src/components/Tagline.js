@@ -11,7 +11,7 @@ const TaglineComponent = ({ title, description, buttonText, buttonLink, imageUrl
           <div className="col-lg-6">
             <h1 className="display-4">{title}</h1>
             <p className="lead">{description}</p>
-            {/* Use Link component from react-router-dom for navigation */}
+        
             <Link to={buttonLink} className="btn btn-primary btn-lg">{buttonText}</Link>
           </div>
           <div className="col-lg-6 d-flex justify-content-end align-items-center">

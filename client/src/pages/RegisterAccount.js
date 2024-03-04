@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SignUpForm from '../components/SignUpForm';
 import FeatureSections from '../components/FeatureSections';
+import StripePartnerSection from '../components/StripePartnerSection';
 
 const RegisterAccount = () => {
   const [features, setFeatures] = useState([]);
@@ -21,20 +22,30 @@ const RegisterAccount = () => {
 
     fetchFeatures();
   }, []);
-
   return (
     <div>
-      <header className="text-center py-4">
+      <header className="text-center py-5 bg-light" style={{ color: '#53937d' }}>
+        <h1>
+          FlexiPay is Powered by Stripe
+          <img
+            src="https://www.svgrepo.com/show/331592/stripe-v2.svg"
+            alt="Stripe Logo"
+            style={{ width: '60px', height: 'auto', marginLeft: '10px' }}
+          />
+        </h1>
+      </header>
+      <StripePartnerSection />
+      <header className="text-center py-5">
         <h1>Register Your Account</h1>
       </header>
-      <div className="container mt-5 mb-5"> 
+      <div className="container mt-5 mb-5">
         <SignUpForm />
-     
-        <FeatureSections features={features} />
       </div>
+      <FeatureSections features={features} />
     </div>
   );
 };
+
 
 export default RegisterAccount;
 

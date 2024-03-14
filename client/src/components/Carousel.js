@@ -26,13 +26,13 @@ const ReviewsCarousel = () => {
                 <div className="row">
                   {group.map((review) => (
                     <div key={review.id} className="col-md-4">
-                      <div className="card mb-4">
+                      <div className="shadow card mb-4">
                         <div className="card-body">
                           <div className="d-flex align-items-center justify-content-center mb-3">
                             <img
                               src="https://cdn.vectorstock.com/i/preview-1x/41/19/five-star-5-gold-stars-for-review-and-rating-vector-32824119.jpg"
                               alt="Rating Logo"
-                              style={{ width: '50px', height: '50px' }}
+                              style={{ width: '100px', height: '30px' }}
                             />
                           </div>
                           <div className="text-center mb-3">

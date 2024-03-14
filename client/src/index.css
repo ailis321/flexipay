@@ -2,3 +2,8 @@
 .navbar {
   font-family: 'Roboto', sans-serif; /* Apply Roboto font to navbar */
 }
+.nav-link:hover {
+    color: #53937d !important;
+    
+}
+

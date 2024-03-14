@@ -9,10 +9,6 @@ const LoginHomeIncomplete = () => {
   const onboardingUrl = queryParams.get('onboardingUrl');
   const stripeAccountId = queryParams.get('account');
 
-  const handleCompleteOnboarding = () => {
- 
-    window.location.href = onboardingUrl;
-  };
 
   return (
     <div className="Home">
@@ -23,9 +19,7 @@ const LoginHomeIncomplete = () => {
         buttonLink={onboardingUrl}
         imageUrl="https://freeagent-res.cloudinary.com/image/upload/c_limit,w_1200/dpr_auto,f_auto/website-images/netlify/Stripe-blog-June-23.png"
       />
-      <button className="btn btn-primary" onClick={handleCompleteOnboarding}>
-        Complete Now
-      </button>
+  
     </div>
   );
 };

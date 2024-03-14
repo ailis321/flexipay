@@ -16,11 +16,11 @@ const StripePartnerSection = () => {
             <div className="text-center">
               <ul className="list-unstyled text-start">
 
-                <li className="mb-3">Upon completing the registration with FlexiPay below, you'll proceed to finalise additional registration details with Stripe.</li>
-                <li className="mb-3">This step ensures secure fund transfers to your organisation's account.</li>
-                <li className="mb-3">Completing the Stripe registration is necessary to access FlexiPay services.</li>
-                <li className="mb-3">Upon completion, you'll be redirected to your new FlexiPay account and Dashboard</li>
-                <li className="mb-3">It's a free process and typically takes no longer than 5 minutes.</li>
+                <li className="mb-3 text-center">Upon completing the registration with FlexiPay below, you'll proceed to finalise additional registration details with Stripe.</li>
+                <li className="mb-3 text-center">This step ensures secure fund transfers to your organisation's account.</li>
+                <li className="mb-3 text-center">Completing the Stripe registration is necessary to access FlexiPay services.</li>
+                <li className="mb-3 text-center">Upon completion, you'll be redirected to your new FlexiPay account and Dashboard</li>
+                <li className="mb-3 text-center">It's a free process and typically takes no longer than 5 minutes.</li>
               </ul>
             </div>
           </div>

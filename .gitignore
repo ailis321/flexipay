@@ -5,6 +5,7 @@
 /server/package-lock.
 
 /server/config.env
+/server/.env
 
 
 /client/yarn.lock

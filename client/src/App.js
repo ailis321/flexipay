@@ -2,11 +2,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Header from "./components/Header";
-import Login from "./components/Login";
+//import Login from "./components/Login";
 import RegisterAccount from "./pages/RegisterAccount";
 import Footer from "./components/Footer";
 import LoginHomeIncomplete from "./pages/LoginHomeIncomplete";
 import LoginHomeComplete from "./pages/LoginHomeComplete";
+import Login from "./pages/LoginPage";
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
             <Route path="/yourAccount" element={<LoginHomeComplete/>} />
           </Routes>
         </div>
-        <Footer /> {/* Include the Footer component outside the Routes element */}
+        <Footer /> 
       </BrowserRouter>
     </div>
   );

@@ -16,6 +16,7 @@ const paymentRouter = require('./routes/paymentRouter');
 const organisationRouter = require('./routes/organisationRouter');
 const featureRouter = require('./routes/featureRouter');
 const accountRouter = require('./routes/accountRouter');
+const clientRouter = require('./routes/clientRouter');
 
 // USING ROUTER FILES
 app.use('/', userRouter);
@@ -23,6 +24,8 @@ app.use('/', paymentRouter);
 app.use('/api', organisationRouter);
 app.use('/api/features', featureRouter);
 app.use('/api/accounts', accountRouter);
+app.use('/api/clients', clientRouter);
+
 
 
 module.exports = app;

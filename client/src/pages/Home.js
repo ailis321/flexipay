@@ -5,6 +5,8 @@ import Tagline from '../components/Tagline';
 import FeatureSections from '../components/FeatureSections'; 
 import FAQSection from '../components/FAQSection';
 import Carousel from '../components/Carousel';
+import Header from '../components/HeroVideo';
+import HeroVideo from '../components/HeroVideo';
 
 const Home = () => {
   const [features, setFeatures] = useState([]);
@@ -28,6 +30,7 @@ const Home = () => {
 
   return (
     <div className="Home">
+  
       <Tagline 
         title="Accept Payments Online" 
         description="Simple and secure payment solutions for organisations. Get started today!" 
@@ -35,7 +38,7 @@ const Home = () => {
         buttonLink="http://localhost:3000/register" 
         imageUrl="https://qph.cf2.quoracdn.net/main-qimg-367cac9f2514e421d6f90cabd770c18d" 
       />
- 
+     <HeroVideo />
       <FeatureSections features={features} />
       <FAQSection /> 
       <Carousel />

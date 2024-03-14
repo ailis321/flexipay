@@ -6,4 +6,46 @@
     color: #53937d !important;
     
 }
+.hero-video {
+  position: relative;
+  width: 100%;
+  max-height: 700px; /* Adjust the maximum height as needed */
+  overflow: hidden;
+}
+
+.hero-video__video {
+  width: 100%;
+}
+
+.hero-video__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #ffffff; /* Text color */
+  z-index: 1; /* Ensure content is on top of the video */
+}
+
+.hero-video__title {
+  font-size: 2rem; /* Adjust as needed */
+}
+
+.hero-video__description {
+  margin-top: 20px; /* Adjust spacing */
+}
+
+.hero-video__button {
+  padding: 10px 20px;
+  background-color: #007bff; /* Button color */
+  color: #ffffff; /* Button text color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.hero-video__button:hover {
+  background-color: #0056b3; /* Button color on hover */
+}
 

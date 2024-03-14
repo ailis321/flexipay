@@ -18,7 +18,7 @@ export const useSignupForm = () => {
       setIsLoading(false); 
       return;
     }
-
+    
     try {
       const response = await fetch('/api/accounts/create-account', {
         method: 'POST',

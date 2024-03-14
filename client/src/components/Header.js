@@ -11,7 +11,7 @@ const Header = () => {
     <nav className="navbar navbar-expand-lg navbar-light bg-light py-4">
       <div className="container">
       <Link className="navbar-brand" to="/">
-          {user ? `Welcome back, ${user.user.firstName}` : "FlexiPay"}
+          {user ? `Hello, ${user.user.firstName}` : "FlexiPay"}
         </Link>
         <button
           className="navbar-toggler"
@@ -26,37 +26,44 @@ const Header = () => {
         </button>
         <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul className="navbar-nav">
+            {!user && (  
             <li className="nav-item">
               <Link className="nav-link" to="/">
                 Home
               </Link>
             </li>
+             )}
+             {user && ( 
             <li className="nav-item">
               <Link className="nav-link" to="/dashboard">
                 Dashboard
               </Link>
             </li>
+             )}
+             {user && (
             <li className="nav-item">
               <Link className="nav-link" to="/paymentLink">
                 Payment Links
               </Link>
             </li>
-            <li className="nav-item">
+             )}
+               {!user && (
+              <li className="nav-item">
               <Link className="nav-link" to="/pricing">
                 Pricing
               </Link>
             </li>
+             )}
+        
             <li className="nav-item">
               <Link className="nav-link" to="/contact">
                 Contact
               </Link>
             </li>
             {user && (
-              
                 <li className="nav-item">
                   <button className="btn btn-link nav-link" onClick={logout}>Logout</button>
                 </li>
-              
             )}
             {!user && (
               <li className="nav-item">

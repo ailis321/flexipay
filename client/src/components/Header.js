@@ -11,7 +11,7 @@ const Header = () => {
     <nav className="navbar navbar-expand-lg navbar-light bg-light py-4">
       <div className="container">
       <Link className="navbar-brand" to="/">
-          {user ? `Hello, ${user.user.firstName}` : "FlexiPay"}
+          {user ? `Hello, ${user.email}` : "FlexiPay"}
         </Link>
         <button
           className="navbar-toggler"

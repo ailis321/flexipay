@@ -36,8 +36,6 @@ export const useSignupForm = () => {
         return;
       }
 
-
-      
       //if no error, get data to create account
       const responseData = await response.json(); 
       

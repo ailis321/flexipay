@@ -5,14 +5,14 @@ const requireAuthHeader = async (req, res, next) => {
     const { authorisation } = req.headers;
 
     if (!authorisation) {
-        return res.status(401).json({ error: 'Authorisation Token Required' });
+        return res.status(401).json({ error: 'You are not authorised for this request' });
     }
 
     const token = authorisation.split(' ')[1];
 
     try {
        const {_id} = jwt.verify(token, process.env.JWT_SECRET)
-       req.user = await User.findOne({ _id }).select(_id)
+       req.user = await User.findOne({ _id });
        next();
       
     } catch (error) {

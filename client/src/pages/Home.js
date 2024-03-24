@@ -5,7 +5,7 @@ import Tagline from '../components/Tagline';
 import FeatureSections from '../components/FeatureSections'; 
 import FAQSection from '../components/FAQSection';
 import Carousel from '../components/Carousel';
-import Header from '../components/HeroVideo';
+
 import HeroVideo from '../components/HeroVideo';
 
 const Home = () => {

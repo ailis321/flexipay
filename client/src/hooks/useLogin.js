@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useAuthenticationContext } from './useAuthenticationContext';
 
+
 export const useLoginForm = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { dispatch } = useAuthenticationContext();
+ 
+
 
   const login = async ({ email, password}) => {
 
@@ -16,32 +19,26 @@ export const useLoginForm = () => {
       const response = await fetch('/api/accounts/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password })
       });
 
+      const json = await response.json()
+
       if (!response.ok) {
-        setIsLoading(false); 
-        const responseData = await response.json(); 
-        // retreive error message from the backend
-        setError(responseData.error); 
-        return;
+        setIsLoading(false)
+        setError(json.error)
       }
-
-      if(response.ok){
-        //if no error, successful login
-        const responseData = await response.json(); 
-    
-        console.log('User logged in : ', responseData);
-           
-        //Saving the user to local storage which includes the JWT token
-         localStorage.setItem('user', JSON.stringify(responseData));
-
-        // Updating authentication context as logged in
-        dispatch({ type: 'LOGIN', payload: responseData });
-        setIsLoading(false); 
-
+      if (response.ok) {
+        
+        localStorage.setItem('user', JSON.stringify(json))
+  
+        // update the auth context
+        dispatch({type: 'LOGIN', payload: json})
+  
+        // update loading state
+        setIsLoading(false)
       }
       
     } catch (error) {

@@ -1,5 +1,5 @@
 
-const Organisation = require('../models/organisation');
+const Organisation = require('../models/business');
 
 
 const renderRegisterOrganisationForm = (req, res) => {

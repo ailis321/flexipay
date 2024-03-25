@@ -1,3 +1,5 @@
+const { parse } = require('path');
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 function getPaymentLink(req, res) {
@@ -6,41 +8,39 @@ function getPaymentLink(req, res) {
   
   async function createPaymentLink(req, res) {
     try {
-       //creating payment intent 
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: parseInt(req.body.amount) * 100,
-        currency: 'gbp',
-        description: req.body.description,
-        receipt_email: req.body.email,
-        customer: req.body.customerId,
-        automatic_payment_methods: {
-            enabled: true,
+        // Creating payment intent with stripeAccount parameter
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: parseInt(req.body.amount) * 100,
+            currency: 'gbp',
+            customer: req.body.customerId,
+            description: req.body.description,
+            receipt_email: req.body.email,
+            payment_method: "pm_card_visa",
+            automatic_payment_methods: {
+                enabled: true,
+            },
           },
+          {
+            stripeAccount: req.user.stripeAccountId,
+            
+          }
+        );
 
-      });
+        console.log('Payment intent:', paymentIntent);
 
-         // Retrieve customer details using the customer ID
-         const customer = await stripe.customers.retrieve(req.body.customerId);
-
-         console.log(paymentIntent);
-         console.log(customer);
- 
-         // Construct the payment link
-         const paymentLink = `localhost:3000/pay/${paymentIntent.id}/${req.body.customerId}`;
+        // Construct the payment link
+        const paymentLink = `localhost:8000/pay/${paymentIntent.id}/${req.body.customerId}`;
 
 
-         //here i could store the just enough customer info to my DB to be able to retrieve info from 
-         //stripes customer/payment intent api later when making payment?
- 
-         //show payment link to copy
-         
-         res.render('presentPaymentLink', { paymentLink});
+        res.json({ paymentLink });
 
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Error creating payment link.');
+        console.error(error);
+        res.status(500).send('Error creating payment link.');
     }
-  }
+}
+
+
 
   async function getTakePaymentPage(req, res) {
     const { paymentIntentId, customerId } = req.params;

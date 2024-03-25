@@ -11,6 +11,7 @@ import LoginHomeIncomplete from "./pages/LoginHomeIncomplete";
 import LoginHomeComplete from "./pages/LoginHomeComplete";
 import Login from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
+import PaymentLinkPage from "./pages/PaymentLinkPage";
 
 function App() {
   // this is null if they are not logged in and an object if they are
@@ -29,6 +30,7 @@ function App() {
           <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
           <Route path="/register" element={!user ? <RegisterAccount /> : <Navigate to="/dashboard" />} />
           <Route path="/moreInfo" element={<LoginHomeIncomplete />} />
+          <Route path="/paymentLink" element={<PaymentLinkPage />} />
           <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/login" />} />
           <Route path="/yourAccount" element={user ? <LoginHomeComplete /> : <Navigate to="/login" />} />
           <Route path="/home" element={<Home />} />

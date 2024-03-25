@@ -1,6 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const requireAuthHeader = require("../middleware/requireAuthHeader");
 const paymentController = require('../controllers/paymentController');
+
+
+// need to fire the middleware to check the user is authenticated before they can access any routes to do with the client
+router.use(requireAuthHeader);
+
 
 router.get('/paymentLink', paymentController.getPaymentLink);
 

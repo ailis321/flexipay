@@ -20,7 +20,7 @@ const clientRouter = require('./routes/clientRouter');
 
 // USING ROUTER FILES
 app.use('/', userRouter);
-app.use('/', paymentRouter);
+app.use('/api/payment', paymentRouter);
 app.use('/api', organisationRouter);
 app.use('/api/features', featureRouter);
 app.use('/api/accounts', accountRouter);

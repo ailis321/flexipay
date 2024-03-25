@@ -45,7 +45,7 @@ const useRetrieveClients = () => {
       setIsLoading(false);
       setError('An error occurred while retrieving the clients');
     }
-  }, [navigate]); 
+  }, [navigate, logout]); 
 
   useEffect(() => {
     //Resetting the error 

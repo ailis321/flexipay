@@ -14,7 +14,7 @@ exports.getAllFeatures = async (req, res) => {
 // Controller function to create and save new features
 exports.createFeatures = async (req, res) => {
   try {
-    const features = req.body; // Assuming req.body contains an array of feature objects
+    const features = req.body; 
 
     const savedFeatures = [];
     for (const featureData of features) {

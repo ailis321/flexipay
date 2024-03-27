@@ -1,6 +1,6 @@
 
 .navbar {
-  font-family: 'Roboto', sans-serif; /* Apply Roboto font to navbar */
+  font-family: 'Roboto', sans-serif; 
 }
 .nav-link:hover {
     color: #53937d !important;
@@ -9,7 +9,7 @@
 .hero-video {
   position: relative;
   width: 100%;
-  max-height: 700px; /* Adjust the maximum height as needed */
+  max-height: 700px; 
   overflow: hidden;
 }
 
@@ -23,22 +23,22 @@
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  color: #ffffff; /* Text color */
-  z-index: 1; /* Ensure content is on top of the video */
+  color: #ffffff; 
+  z-index: 1; 
 }
 
 .hero-video__title {
-  font-size: 2rem; /* Adjust as needed */
+  font-size: 2rem; 
 }
 
 .hero-video__description {
-  margin-top: 20px; /* Adjust spacing */
+  margin-top: 20px; 
 }
 
 .hero-video__button {
   padding: 10px 20px;
-  background-color: #007bff; /* Button color */
-  color: #ffffff; /* Button text color */
+  background-color: #007bff; 
+  color: #ffffff; 
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -46,15 +46,15 @@
 }
 
 .hero-video__button:hover {
-  background-color: #0056b3; /* Button color on hover */
+  background-color: #0056b3; 
 }
 
 #payment-form {
-  max-width: 500px; /* Adjust width as needed */
+  max-width: 500px; 
   margin: auto;
   padding: 20px;
-  background-color: #f4f4f4; /* Example background color */
-  border-radius: 10px; /* Example border radius */
+  background-color: #f4f4f4; 
+  border-radius: 10px; 
 }
 
 #payment-message {
@@ -70,14 +70,36 @@
 button {
   width: 100%;
   padding: 10px;
-  margin-top: 20px; /* Adjust spacing above the button as needed */
-  background-color: #00a4df; /* Example button color */
+  margin-top: 20px; 
+  background-color: #00a4df; 
   color: white;
   border: none;
-  border-radius: 5px; /* Example border radius */
+  border-radius: 5px; 
   cursor: pointer;
 }
 
 button:disabled {
   background-color: #cccccc;
+}
+
+.PaymentTakePage {
+  display: flex;
+  justify-content: flex-start; 
+  align-items: center;
+  min-height: 100vh; 
+  flex-direction: column;
+  text-align: center;
+  padding-top: 10vh; 
+}
+
+.ErrorMessage {
+  color: #D8000C;
+  background-color: #FFD2D2;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #D8000C;
+  max-width: 80%;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 20px; 
 }

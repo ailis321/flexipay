@@ -1,42 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import CheckoutForm from '../components/CheckoutForm';
 
-const stripePromise = loadStripe('pk_test_51O5DdBCkhYVN3YDQno05RFtCiRGflPMJoTmbVeqlwrOt011CgAXdhH6qG2jGY7bLVICyq0aFUVkkCJrRUcZMf3nJ00q8uRQQ5B', {
-  stripeAccount: 'acct_1OtGRvEDU39wlrlV'
-});
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
 const PaymentTakePage = () => {
   const { paymentIntentId } = useParams();
+  const query = useQuery();
+  const stripeAccountId = query.get("account");
   const [clientSecret, setClientSecret] = useState('');
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchClientSecret = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem('user'));
-        const token = user.token;
-
-        const response = await fetch('/api/payment/get-client', {
+        const response = await fetch('/api/payment-client/get-client', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorisation': `Bearer ${token}`, 
           },
-          body: JSON.stringify({ paymentIntentId })
+          body: JSON.stringify({ paymentIntentId, stripeAccountId })
         });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          setError(`Error: ${errorData.error || 'An unexpected error occurred.'}`);
+          return;
+        }
 
         const data = await response.json();
         setClientSecret(data.clientSecret);
       } catch (error) {
         console.error('Error:', error);
+        setError('An unexpected error occurred. Please try again later.');
       }
     };
 
     fetchClientSecret();
-  }, [paymentIntentId]);
+  }, [paymentIntentId, stripeAccountId]);
 
+  const stripePromise = loadStripe('pk_test_51O5DdBCkhYVN3YDQno05RFtCiRGflPMJoTmbVeqlwrOt011CgAXdhH6qG2jGY7bLVICyq0aFUVkkCJrRUcZMf3nJ00q8uRQQ5B', {
+    stripeAccount: stripeAccountId
+  });
 
   const appearance = {
     theme: 'stripe',
@@ -49,39 +58,37 @@ const PaymentTakePage = () => {
       spacingUnit: '8px', 
       borderRadius: '10px', 
       fontSizeBase: '16px', 
-      lineHeightBase: '22px', 
+      lineHeightBase: '22px',
     },
     rules: {
       '.Input': {
         border: '1px solid #e6ebf1',
         height: '30px', 
         marginTop: '8px', 
-        marginBottom: '15px', 
+        marginBottom: '15px',
       },
       '.Block': {
-        padding: '12px', 
+        padding: '12px',
       },
       '.Label': {
-        marginBottom: '8px', 
+        marginBottom: '8px',
       }
     }
-  };
-  
-
-  const options = {
-    clientSecret,
-    appearance, 
   };
 
   return (
     <div className="PaymentTakePage">
-      {clientSecret && (
-        <Elements stripe={stripePromise} options={options}> 
+      {error ? (
+        <div className="ErrorMessage">
+          {error}
+        </div>
+      ) : clientSecret ? (
+        <Elements stripe={stripePromise} options={{ clientSecret, appearance }}> 
           <CheckoutForm clientSecret={clientSecret} />
         </Elements>
-      )}
+      ) : <p>Loading...</p>}
     </div>
   );
-}
+      }  
 
 export default PaymentTakePage;

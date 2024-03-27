@@ -4,7 +4,7 @@ const Customer = require('../models/customer');
 
 async function createCustomer(req, res) {
   const { firstName, surname, email, phone } = req.body;
-  const { _id, stripeAccountId } = req.user; // Destructure _id and stripeAccountId directly from req.user
+  const { _id, stripeAccountId } = req.user; 
 
   try {
     const stripeCustomer = await stripe.customers.create(

@@ -22,16 +22,14 @@ function getPaymentLink(req, res) {
             },
           },
           {
-            stripeAccount: req.user.stripeAccountId,
-            
+            stripeAccount: req.user.stripeAccountId, 
           }
         );
 
         console.log('Payment intent:', paymentIntent);
 
-        // Construct the payment link
-        const paymentLink = `localhost:3000/pay/${paymentIntent.id}`;
-
+        
+        const paymentLink = `http://localhost:3000/pay/${paymentIntent.id}?account=${req.user.stripeAccountId}`;
 
         res.json({ paymentLink });
 
@@ -41,30 +39,6 @@ function getPaymentLink(req, res) {
     }
 }
 
-  async function getTakePaymentInfo(req, res) {
-
-    const { stripeAccountId } = req.user;
-    const { paymentIntentId } = req.body;
-    console.log('Payment intent ID:', paymentIntentId);
-
-    try { 
-      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId, {
-      stripeAccount: stripeAccountId
-     });
-        console.log('Payment intent:', paymentIntent);
-    
-        const clientSecret = paymentIntent.client_secret;
-        console.log('Client secret:', clientSecret);
-
-        res.send({
-            clientSecret: paymentIntent.client_secret
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error fetching payment intent.');
-    }
-  
-  }
 
 async function createPaymentMethod(req, res) {
     try {
@@ -153,7 +127,6 @@ async function createPaymentMethod(req, res) {
 module.exports = {
   getPaymentLink,
   createPaymentLink,
-  getTakePaymentInfo,
   createPaymentMethod,
   completePayment  
 };

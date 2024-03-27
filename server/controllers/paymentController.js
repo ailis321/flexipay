@@ -1,4 +1,5 @@
 const { parse } = require('path');
+const bodyParser = require('body-parser');
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
@@ -29,7 +30,7 @@ function getPaymentLink(req, res) {
         console.log('Payment intent:', paymentIntent);
 
         // Construct the payment link
-        const paymentLink = `localhost:8000/pay/${paymentIntent.id}/${req.body.customerId}`;
+        const paymentLink = `localhost:3000/pay/${paymentIntent.id}`;
 
 
         res.json({ paymentLink });
@@ -40,28 +41,30 @@ function getPaymentLink(req, res) {
     }
 }
 
+  async function getTakePaymentInfo(req, res) {
 
+    const { stripeAccountId } = req.user;
+    const { paymentIntentId } = req.body;
+    console.log('Payment intent ID:', paymentIntentId);
 
-  async function getTakePaymentPage(req, res) {
-    const { paymentIntentId, customerId } = req.params;
-  
-    try {
+    try { 
+      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId, {
+      stripeAccount: stripeAccountId
+     });
+        console.log('Payment intent:', paymentIntent);
     
-      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-  
-      const clientSecret = paymentIntent.client_secret;
+        const clientSecret = paymentIntent.client_secret;
+        console.log('Client secret:', clientSecret);
 
-      console.log('Client sceret: ' + clientSecret);
-  
-      res.render('takePayment', { paymentIntentId, customerId, clientSecret });
+        res.send({
+            clientSecret: paymentIntent.client_secret
+        });
     } catch (error) {
-    
-      res.status(500).send('Error fetching payment intent');
+        console.error(error);
+        res.status(500).send('Error fetching payment intent.');
     }
-  }
   
-
-
+  }
 
 async function createPaymentMethod(req, res) {
     try {
@@ -150,7 +153,7 @@ async function createPaymentMethod(req, res) {
 module.exports = {
   getPaymentLink,
   createPaymentLink,
-  getTakePaymentPage,
+  getTakePaymentInfo,
   createPaymentMethod,
   completePayment  
 };

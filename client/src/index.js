@@ -15,4 +15,3 @@ root.render(
     </AuthenticationContextProvider>
   </React.StrictMode>
 );
-

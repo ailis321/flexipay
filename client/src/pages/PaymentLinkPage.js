@@ -2,8 +2,8 @@ import { useAuthenticationContext } from '../hooks/useAuthenticationContext';
 import PaymentLink from '../components/PaymentLink';
 
 const PaymentLinkPage = () => {
-    const { user } = useAuthenticationContext();
-    console.log('user:', user);
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log('user paymnt link page :', user);
     const token = user.token;
     console.log('token:', token);
   

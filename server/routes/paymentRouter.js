@@ -16,7 +16,7 @@ router.post('/create-payment-link', paymentController.createPaymentLink);
 //router.post('/collect-payment', paymentController.collectPayment);
 
 //router.get(`/pay/:paymentIntentId`, paymentController.getTakePaymentPage);
-router.get(`/pay/:paymentIntentId/:customerId`, paymentController.getTakePaymentPage);
+router.post('/get-client', paymentController.getTakePaymentInfo);
 
 router.post('/create-payment-method', paymentController.createPaymentMethod);
 

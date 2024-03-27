@@ -48,3 +48,36 @@
 .hero-video__button:hover {
   background-color: #0056b3; /* Button color on hover */
 }
+
+#payment-form {
+  max-width: 500px; /* Adjust width as needed */
+  margin: auto;
+  padding: 20px;
+  background-color: #f4f4f4; /* Example background color */
+  border-radius: 10px; /* Example border radius */
+}
+
+#payment-message {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.spinner {
+  margin: auto;
+  display: block;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 20px; /* Adjust spacing above the button as needed */
+  background-color: #00a4df; /* Example button color */
+  color: white;
+  border: none;
+  border-radius: 5px; /* Example border radius */
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #cccccc;
+}

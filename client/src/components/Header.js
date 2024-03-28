@@ -28,7 +28,7 @@ const Header = () => {
           <ul className="navbar-nav">
             {!user && (  
             <li className="nav-item">
-              <Link className="nav-link" to="/">
+              <Link className="nav-link" to="/home">
                 Home
               </Link>
             </li>

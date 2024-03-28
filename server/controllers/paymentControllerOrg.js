@@ -9,7 +9,7 @@ function getPaymentLink(req, res) {
   
   async function createPaymentLink(req, res) {
     try {
-        const email = req.body.email;
+        const email = req.body.email; 
         console.log('Email:', email);
     
         // Creating payment intent with stripeAccount parameter
@@ -18,29 +18,26 @@ function getPaymentLink(req, res) {
             currency: 'gbp',
             customer: req.body.customerId,
             description: req.body.description,
-            receipt_email: req.body.email,
+            receipt_email: email,
             payment_method: "pm_card_visa",
-            automatic_payment_methods: {
-                enabled: true,
-            },
+            automatic_payment_methods: { enabled: true },
           },
-          {
-            stripeAccount: req.user.stripeAccountId, 
-          }
+          { stripeAccount: req.user.stripeAccountId }
         );
 
         console.log('Payment intent:', paymentIntent);
-
-        
         const paymentLink = `http://localhost:3000/pay/${paymentIntent.id}?account=${req.user.stripeAccountId}`;
 
-        res.json({ paymentLink });
+ 
+        console.log(`Sending payment link ${paymentLink} to ${email}`);
 
+        res.json({ paymentLink });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error creating payment link.');
     }
 }
+
 
 
 async function createPaymentMethod(req, res) {

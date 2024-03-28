@@ -14,12 +14,12 @@ const CustomersList = ({ customers }) => {
   };
 
   const handleEdit = () => {
-   //NEED TO ADD IN EDIT FUNCTIONALITY
+    //NEED TO ADD IN EDIT FUNCTIONALITY
     console.log("Edit selected:", selectedCustomers);
   };
 
   const handleDelete = () => {
-//SAME FOR DELETE
+    //SAME FOR DELETE
     console.log("Delete selected:", selectedCustomers);
   };
 
@@ -38,7 +38,7 @@ const CustomersList = ({ customers }) => {
               </tr>
             </thead>
             <tbody>
-              {customers && customers.map(customer => (
+              {customers.map(customer => (
                 <tr key={customer.id} style={{ height: '60px' }}>
                   <td>
                     <input 
@@ -48,19 +48,19 @@ const CustomersList = ({ customers }) => {
                       checked={selectedCustomers.includes(customer.id)}
                     />
                   </td>
-                  <td style={{ color: '#53937d' }}>{customer.name}</td>
-                  <td style={{ color: '#53937d' }}>{customer.email}</td>
-                  <td style={{ color: '#53937d' }}>{customer.phone}</td>
+                  <td>{customer.name}</td>
+                  <td>{customer.email}</td>
+                  <td>{customer.phone}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         {selectedCustomers.length > 0 && (
-          <div className="mt-3">
-            <button className="btn btn-primary me-2" onClick={handleEdit} style={{ backgroundColor: '#53937d' }}>Edit</button>
-            <button className="btn btn-danger me-2" onClick={handleDelete} style={{ backgroundColor: '#53937d' }}>Delete</button>
-            <button className="btn btn-secondary" onClick={() => setSelectedCustomers([])} style={{ backgroundColor: '#53937d' }}>Clear Selection</button>
+          <div className="mt-3 d-flex justify-content-center gap-2"> 
+            <button className="btn btn-sm" onClick={handleEdit} style={{ backgroundColor: '#53937d', color: 'white' }}>Edit</button> 
+            <button className="btn btn-sm" onClick={handleDelete} style={{ backgroundColor: '#53937d', color: 'white' }}>Delete</button>
+            <button className="btn btn-sm" onClick={() => setSelectedCustomers([])} style={{ backgroundColor: '#53937d', color: 'white' }}>Clear Selection</button>
           </div>
         )}
       </div>

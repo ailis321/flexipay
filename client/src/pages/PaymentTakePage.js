@@ -14,6 +14,7 @@ const PaymentTakePage = () => {
   const query = useQuery();
   const stripeAccountId = query.get("account");
   const [clientSecret, setClientSecret] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState(''); 
   const [paymentInfo, setPaymentInfo] = useState({
     customerName: '',
     companyName: '',
@@ -40,7 +41,7 @@ const PaymentTakePage = () => {
 
         const data = await response.json();
         setClientSecret(data.clientSecret);
-        // Update to set additional payment information
+        setPaymentStatus(data.status); 
         setPaymentInfo({
           customerName: data.customerName,
           companyName: data.businessName,
@@ -88,6 +89,7 @@ const PaymentTakePage = () => {
     }
   };
 
+  
   return (
     <div className="PaymentTakePage">
       {error ? (
@@ -96,7 +98,15 @@ const PaymentTakePage = () => {
             {error}
           </div>
         </div>
+      ) : paymentStatus === 'succeeded' ? (
+        
+        <div className="d-flex flex-column align-items-center justify-content-center vh-100">
+          <img src="https://zeuxinnovation.com/wp-content/uploads/2023/04/maximising-user-satisfaction-1.jpg" alt="Success" className="img-fluid mb-4" style={{ maxWidth: '500px' }} />
+          <h2 className="text-success">Payment Already Received, Thank You!</h2>
+          <p>Your support and trust in FlexiPay mean the world to us.</p>
+        </div>
       ) : clientSecret ? (
+        //ONLY rendering the payment form if the payment status is not succeeded
         <div>
           <PaymentGreeting 
             customerName={paymentInfo.customerName} 
@@ -104,7 +114,7 @@ const PaymentTakePage = () => {
             amount={paymentInfo.amount} 
             logoUrl={process.env.PUBLIC_URL + "/logo.png"}/>
           <Elements stripe={stripePromise} options={{ clientSecret, appearance }}> 
-            <CheckoutForm clientSecret={clientSecret} stripeAccountId = {stripeAccountId}/>
+            <CheckoutForm clientSecret={clientSecret} stripeAccountId={stripeAccountId}/>
           </Elements>
         </div>
       ) : <p>Loading...</p>}

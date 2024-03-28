@@ -7,55 +7,66 @@ async function getTakePaymentInfo(req, res) {
     const { stripeAccountId, paymentIntentId } = req.body;
 
     try { 
-    
         const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId, {
             stripeAccount: stripeAccountId
         });
 
-      
         let customerName = "Not provided";
         if (paymentIntent.customer) {
             const customer = await stripe.customers.retrieve(paymentIntent.customer, {
                 stripeAccount: stripeAccountId
             });
-          
             customerName = customer.name || "Not provided";
         }
 
-       
         const account = await Account.findOne({ stripeAccountId: stripeAccountId });
         const businessName = account ? account.businessName : "Not provided";
 
-        const amount = paymentIntent.amount / 100; //Have to convert as amount is in pence
-
+        const amount = paymentIntent.amount / 100; 
+        
+ 
+        const status = paymentIntent.status;
 
         res.send({
             clientSecret: paymentIntent.client_secret,
             amount,
             customerName,
-            businessName
+            businessName,
+            status 
         });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error fetching payment intent information.');
     }
 }
-async function confirmationPaymentDetails (req, res) {
+
+async function confirmationPaymentDetails(req, res) {
     const { paymentIntentId } = req.params;
-    const { account: stripeAccountId } = req.query; 
-  
+    const { account: stripeAccountId } = req.query;
+
     try {
-      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId, {
-        stripeAccount: stripeAccountId,
-      });
-      console.log("RECEIPT " ,paymentIntent.receipt_email)
-      res.json({ receiptUrl: paymentIntent.receipt_email }); 
-      
+        const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId, {
+            stripeAccount: stripeAccountId,
+        });
+
+    
+        console.log("PAYMENT STATUS: ", paymentIntent.status);
+        console.log("RECEIPT EMAIL: ", paymentIntent.receipt_email);
+        console.log("PAYMENT INTENT AFTER PAID: ", paymentIntent);
+
+        const amount = paymentIntent.amount / 100; // Convert amount to pounds
+
+        res.json({
+            status: paymentIntent.status,
+            receiptEmail: paymentIntent.receipt_email || 'Email not provided', 
+            amount: amount, 
+        });
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Error fetching payment details.');
+        console.error(error);
+        res.status(500).send('Error fetching payment details.');
     }
-    }
+}
+
 
   module.exports = {    
     getTakePaymentInfo,

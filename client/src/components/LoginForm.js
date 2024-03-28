@@ -3,7 +3,7 @@ import { useLoginForm } from '../hooks/useLogin';
 
 const LoginForm = () => {
   
-  //custom login hook being called for login, loading and error
+  
   const { login, isLoading, error } = useLoginForm();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,7 +18,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //once submitted, Call the login function from the hook
+    
    await login({ email, password });
   };
 

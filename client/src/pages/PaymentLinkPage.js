@@ -6,6 +6,10 @@ const PaymentLinkPage = () => {
     console.log('user paymnt link page :', user);
     const token = user.token;
     console.log('token:', token);
+
+    if (!token) {
+        return null;
+    }
   
 
   return (

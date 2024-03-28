@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const PaymentLink = ({ token }) => {
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
-  const [customerId, setCustomerId] = useState('');
+  const [selectedCustomer, setSelectedCustomer] = useState({id: '', email: ''}); 
   const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
@@ -13,17 +13,17 @@ const PaymentLink = ({ token }) => {
   const fetchCustomers = async (token) => {
     try {
       const response = await fetch('/api/clients/get-customers', {
-        method: 'GET', 
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'Authorisation': `Bearer ${token}` 
         }
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch customers');
       }
-      
+
       const data = await response.json();
       setCustomers(data);
     } catch (error) {
@@ -39,12 +39,13 @@ const PaymentLink = ({ token }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorisation': `Bearer ${token}` 
+          'Authorisation': `Bearer ${token}`
         },
         body: JSON.stringify({
-          amount: amount,
-          description: description,
-          customerId: customerId,
+          amount,
+          description,
+          customerId: selectedCustomer.id,
+          email: selectedCustomer.email, 
         })
       });
 
@@ -76,10 +77,14 @@ const PaymentLink = ({ token }) => {
           </div>
           <div className="mb-3">
             <label htmlFor="customerId">Customer:</label>
-            <select id="customerId" name="customerId" className="form-control" value={customerId} onChange={(e) => setCustomerId(e.target.value)} required>
-              <option value="">Select a customer</option>
-              {customers.map(customer => (
-                <option key={customer.id} value={customer.id}>{`${customer.name} (${customer.email})`}</option>
+            <select id="customerId" name="customerId" className="form-control" 
+              value={JSON.stringify(selectedCustomer)} 
+              onChange={(e) => setSelectedCustomer(JSON.parse(e.target.value))} required>
+              <option value={JSON.stringify({id: '', email: ''})}>Select a customer</option>
+              {customers.map((customer) => (
+                <option key={customer.id} value={JSON.stringify({id: customer.id, email: customer.email})}>
+                  {`${customer.name} (${customer.email})`}
+                </option>
               ))}
             </select>
           </div>

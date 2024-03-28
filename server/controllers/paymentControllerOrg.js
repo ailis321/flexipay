@@ -9,6 +9,9 @@ function getPaymentLink(req, res) {
   
   async function createPaymentLink(req, res) {
     try {
+        const email = req.body.email;
+        console.log('Email:', email);
+    
         // Creating payment intent with stripeAccount parameter
         const paymentIntent = await stripe.paymentIntents.create({
             amount: parseInt(req.body.amount) * 100,

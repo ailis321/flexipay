@@ -16,18 +16,18 @@ const CreateCustomerForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Check if the user is logged in
+      
         if (!user) {
-            // Redirect to the login page if the user is not logged in
+            
             navigate('/login');
             return;
         }
 
         try {
-            // Submit the form data to the backend
+            
             await createCustomer({ firstName, surname, email, phone });
 
-            // Display success message
+          
             setSuccessMessage(`${firstName} has been successfully added to your customer directory`);
         } catch (error) {
             console.error('Error creating customer:', error);

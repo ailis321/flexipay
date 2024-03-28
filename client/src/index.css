@@ -82,14 +82,13 @@ button:disabled {
   background-color: #cccccc;
 }
 
-.PaymentTakePage {
+/* New class for the error message wrapper */
+.ErrorWrapper {
   display: flex;
-  justify-content: flex-start; 
+  justify-content: center;
   align-items: center;
-  min-height: 100vh; 
-  flex-direction: column;
-  text-align: center;
-  padding-top: 10vh; 
+  width: 100%;
+  padding-top: 5vh; /* Adjust this value as needed */
 }
 
 .ErrorMessage {
@@ -101,5 +100,41 @@ button:disabled {
   max-width: 80%;
   font-size: 1.2rem;
   font-weight: bold;
-  margin-top: 20px; 
 }
+.paymentGreeting {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.paymentGreeting h2 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.paymentGreeting p {
+  color: #666;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.paymentLogo {
+  max-width: 100px;
+  margin-bottom: 20px;
+}
+
+.poweredBy {
+  font-size: 14px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: #aaa;
+}
+
+.footer-custom-bg {
+  background-color: #53937d !important; 
+}
+

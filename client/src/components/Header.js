@@ -55,11 +55,20 @@ const Header = () => {
             </li>
              )}
         
+          {user && (
             <li className="nav-item">
-              <Link className="nav-link" to="/contact">
-                Contact
+              <Link className="nav-link" to="/view-customers">
+                Customers
               </Link>
             </li>
+             )}
+               {!user && (
+              <li className="nav-item">
+              <Link className="nav-link" to="/pricing">
+                Pricing
+              </Link>
+            </li>
+             )}
             {user && (
                 <li className="nav-item">
                   <button className="btn btn-link nav-link" onClick={logout}>Logout</button>

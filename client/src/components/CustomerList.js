@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
+import useEditCustomer from '../hooks/useEditCustomer';
+import useDeleteCustomer from '../hooks/useDeleteCustomer';
 
-const CustomersList = ({ customers }) => {
+const CustomersList = ({ customers, fetchCustomers }) => {
   const [selectedCustomers, setSelectedCustomers] = useState([]);
-  
+  const [showModal, setShowModal] = useState(false);
+  const [editingCustomer, setEditingCustomer] = useState({ id: '', firstName: '', lastName: '', email: '', phone: '' });
+  const [modalMessage, setModalMessage] = useState('');
+
+  const { editCustomer } = useEditCustomer();
+  const { deleteCustomer } = useDeleteCustomer();
+
   const handleCheckboxChange = (customerId) => {
     setSelectedCustomers(prevSelectedCustomers => {
       if (prevSelectedCustomers.includes(customerId)) {
@@ -13,15 +21,71 @@ const CustomersList = ({ customers }) => {
     });
   };
 
-  const handleEdit = () => {
-    //NEED TO ADD IN EDIT FUNCTIONALITY
-    console.log("Edit selected:", selectedCustomers);
+  const handleEditClick = () => {
+    if (selectedCustomers.length === 1) {
+      const customerToEdit = customers.find(customer => customer.id === selectedCustomers[0]);
+      const [firstName, lastName] = customerToEdit.name.split(' ');
+      setEditingCustomer({ ...customerToEdit, firstName, lastName });
+      setShowModal(true);
+    }
   };
 
-  const handleDelete = () => {
-    //SAME FOR DELETE
-    console.log("Delete selected:", selectedCustomers);
+  const handleSaveChanges = async () => {
+    const updatedCustomer = {
+      ...editingCustomer,
+      name: `${editingCustomer.firstName} ${editingCustomer.lastName}`,
+    };
+    await editCustomer(editingCustomer.id, updatedCustomer);
+    setModalMessage('Customer updated successfully!');
+    setTimeout(() => {
+      setShowModal(false);
+      setModalMessage('');
+      setSelectedCustomers([]);
+      fetchCustomers();
+    }, 2000);
   };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setEditingCustomer(prev => ({ ...prev, [name]: value }));
+  };
+
+  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
+
+  const handleDeleteClick = () => {
+    selectedCustomers.forEach(customerId => deleteCustomer(customerId));
+    setSelectedCustomers([]);
+    fetchCustomers();
+  };
+
+  const renderEditModal = () => (
+    <div style={{ display: showModal ? 'block' : 'none', position: 'fixed', zIndex: '1', left: '0', top: '0', width: '100%', height: '100%', overflow: 'auto', backgroundColor: 'rgba(0,0,0,0.4)' }}>
+      <div style={{ backgroundColor: '#fefefe', margin: '15% auto', padding: '20px', border: '1px solid #888', width: '80%', maxWidth: '600px' }}>
+        <span style={{ color: '#aaa', float: 'right', fontSize: '28px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setShowModal(false)}>&times;</span>
+        <h2>Edit Customer</h2>
+        <form onSubmit={(e) => e.preventDefault()}>
+          <div style={{ marginBottom: '10px' }}>
+            <label>First Name:</label>
+            <input type="text" value={editingCustomer.firstName} onChange={handleInputChange} name="firstName" required />
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <label>Last Name:</label>
+            <input type="text" value={editingCustomer.lastName} onChange={handleInputChange} name="lastName" required />
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <label>Email:</label>
+            <input type="email" value={editingCustomer.email} onChange={handleInputChange} name="email" required pattern="\S+@\S+\.\S+" title="Please enter a valid email address" />
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <label>Phone:</label>
+            <input type="text" value={editingCustomer.phone} onChange={handleInputChange} name="phone" />
+          </div>
+          <button type="button" onClick={handleSaveChanges} disabled={!isValidEmail(editingCustomer.email)}>Save Changes</button>
+        </form>
+        {modalMessage && <div style={{ marginTop: '20px', color: 'green' }}>{modalMessage}</div>}
+      </div>
+    </div>
+  );
 
   return (
     <section className="py-5">
@@ -41,12 +105,7 @@ const CustomersList = ({ customers }) => {
               {customers.map(customer => (
                 <tr key={customer.id} style={{ height: '60px' }}>
                   <td>
-                    <input 
-                      type="checkbox" 
-                      value={customer.id} 
-                      onChange={() => handleCheckboxChange(customer.id)} 
-                      checked={selectedCustomers.includes(customer.id)}
-                    />
+                    <input type="checkbox" value={customer.id} onChange={() => handleCheckboxChange(customer.id)} checked={selectedCustomers.includes(customer.id)} />
                   </td>
                   <td>{customer.name}</td>
                   <td>{customer.email}</td>
@@ -56,16 +115,17 @@ const CustomersList = ({ customers }) => {
             </tbody>
           </table>
         </div>
+        {renderEditModal()}
         {selectedCustomers.length > 0 && (
-          <div className="mt-3 d-flex justify-content-center gap-2"> 
-            <button className="btn btn-sm" onClick={handleEdit} style={{ backgroundColor: '#53937d', color: 'white' }}>Edit</button> 
-            <button className="btn btn-sm" onClick={handleDelete} style={{ backgroundColor: '#53937d', color: 'white' }}>Delete</button>
+          <div className="mt-3 d-flex justify-content-center gap-2">
+            <button className="btn btn-sm" onClick={handleEditClick} style={{ backgroundColor: '#53937d', color: 'white' }}>Edit</button>
+            <button className="btn btn-sm" onClick={handleDeleteClick} style={{ backgroundColor: '#53937d', color: 'white' }}>Delete</button>
             <button className="btn btn-sm" onClick={() => setSelectedCustomers([])} style={{ backgroundColor: '#53937d', color: 'white' }}>Clear Selection</button>
           </div>
         )}
       </div>
     </section>
   );
-}
+};
 
 export default CustomersList;

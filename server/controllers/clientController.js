@@ -59,8 +59,76 @@ async function createCustomer(req, res) {
       }
     }
     
+    async function editCustomer(req, res) {
+      const { customerId } = req.params;
+      const { firstName, lastName, email, phone } = req.body; 
+      const fullName = `${firstName} ${lastName}`; //combing  these to make a full name for updating stripe
+      const { stripeAccountId } = req.user;
+    
+      try {
+        const updatedStripeCustomer = await stripe.customers.update(
+          customerId,
+          {
+            name: fullName,
+            email: email,
+            phone: phone,
+          },
+          {
+            stripeAccount: stripeAccountId
+          }
+        );
+  
+        const updatedDatabaseCustomer = await Customer.findOneAndUpdate(
+          { stripeCustomerId: customerId },
+          {
+            
+            name: fullName,
+            email,
+            phone,
+          },
+          { new: true } 
+        );
+  
+        if (!updatedDatabaseCustomer) {
+          return res.status(404).json({ message: "Customer not found in database" });
+        }
+  
+        console.log('Customer updated on stripe ', updatedStripeCustomer);
+        console.log('Customer updated in database ', updatedDatabaseCustomer);
+  
+        res.json({ message: "Customer updated successfully", updatedCustomer: updatedStripeCustomer });
+      } catch (error) {
+        console.error('Error updating customer:', error);
+        res.status(500).send('Error updating customer');
+      }
+  }
+  
+
+    async function deleteCustomer(req, res) {
+      const { customerId } = req.params;
+      const { stripeAccountId } = req.user;
+    
+      try {
+        await stripe.customers.del(
+          customerId,
+          {
+            stripeAccount: stripeAccountId
+          }
+        );
+    
+        res.json({ message: "Customer deleted successfully" });
+      } catch (error) {
+        console.error('Error deleting customer:', error);
+        res.status(500).send('Error deleting customer');
+      }
+    }
+    
+    
 module.exports = {
  
   createCustomer,
   getCustomers,
+  editCustomer,
+  deleteCustomer,
+
 };

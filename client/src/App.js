@@ -26,7 +26,7 @@ function App() {
       <BrowserRouter>
         <Layout>
           <Routes>
-            <Route path="/view-customers" element={<ViewCustomers />} />
+            <Route path="/view-customers" element={user ? <ViewCustomers/> : <Navigate to="/login" />} />
             <Route path="/createCustomer" element={<CreateCustomerPage />} />
             <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
             <Route path="/register" element={!user ? <RegisterAccount /> : <Navigate to="/dashboard" />} />

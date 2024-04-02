@@ -16,6 +16,7 @@ const paymentRouterOrg = require('./routes/paymentRouterOrg');
 const organisationRouter = require('./routes/organisationRouter');
 const featureRouter = require('./routes/featureRouter');
 const accountRouter = require('./routes/accountRouter');
+const dashboardRouter = require('./routes/dashboardRouter');
 const clientRouter = require('./routes/clientRouter');
 const paymentRouterClient = require('./routes/paymentRouterClient');
 
@@ -27,6 +28,7 @@ app.use('/api', organisationRouter);
 app.use('/api/features', featureRouter);
 app.use('/api/accounts', accountRouter);
 app.use('/api/clients', clientRouter);
+app.use('/api/dashboard', dashboardRouter);
 app.use('/api/payment-client', paymentRouterClient);
 
 

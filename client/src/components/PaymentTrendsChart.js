@@ -14,14 +14,18 @@ Chart.register(
   Legend
 );
 
-const PaymentTrendsChart = ({ data }) => {
+const PaymentTrendsChart = ({ data, type }) => {
+
+  const isCharge = type === 'charge';
+  const labelTitle = isCharge ? 'Payments Received' : 'Payments Out';
+
 
   console.log("RAW DATA : ",data);
 
   const chartData = {
     labels: data.map(d => d.date), 
     datasets: [{
-      label: 'Payments Received over the last 7 days',
+      label: labelTitle,
       data: data.map(d => d.amount),
       fill: false,
       backgroundColor: 'rgb(83, 147, 125)',

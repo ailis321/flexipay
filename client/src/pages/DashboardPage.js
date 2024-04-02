@@ -2,6 +2,7 @@ import React from 'react';
 import useTransactions from '../hooks/useTransactions'; 
 import PaymentTrendsChart from '../components/PaymentTrendsChart';
 import SummaryWidget from '../components/SummaryWidget';
+import PaymentsTable from '../components/PaymentsTable';
 
 const DashboardPage = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -28,6 +29,7 @@ const DashboardPage = () => {
   const totalTransactionsRecd = charges.length;
   const totalTransactionsPaid = payouts.length;
 
+
   return (
     <section className="bg-light py-5">
       <div className="dashboard-page container">
@@ -38,7 +40,7 @@ const DashboardPage = () => {
           <>
             <div className="row">
               <div className="col-lg-8">
-                <PaymentTrendsChart data={chargeTrends} title="Payments Received" />
+                <PaymentTrendsChart data={chargeTrends} title="Payments Received" type="charge"/>
               </div>
               <div className="col-lg-4">
                 <SummaryWidget title="Total Received" value={`£${totalReceived.toFixed(2)}`} />
@@ -49,12 +51,14 @@ const DashboardPage = () => {
             </section>
             <div className="row mt-4">
               <div className="col-lg-8">
-                <PaymentTrendsChart data={payoutTrends} title="Payments Out" />
+                <PaymentTrendsChart data={payoutTrends} title="Payments Out" type="payout"/>
               </div>
               <div className="col-lg-4">
                 <SummaryWidget title="Total Paid Out" value={`£${totalPaidOut.toFixed(2)}`} />
                 <SummaryWidget title="Transactions" value={totalTransactionsPaid} />
               </div>
+              <PaymentsTable transactions={charges} type="charge" />
+            <PaymentsTable transactions={payouts} type="payout" />
             </div>
           </>
         )}

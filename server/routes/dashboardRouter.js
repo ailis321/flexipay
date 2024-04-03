@@ -6,7 +6,7 @@ const router = require('express').Router();
 // need to fire the middleware to check the user is authenticated before they can access any routes on the dashboard
 router.use(requireAuthHeader);
 
-router.get('/transactions/last-week', dashboardController.getTransactions);
+router.get('/transactions', dashboardController.getTransactions);
 
 
 module.exports = router;

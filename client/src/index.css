@@ -138,3 +138,12 @@ button:disabled {
   background-color: #53937d !important; 
 }
 
+.nav-link {
+  color: #4A4A4A;
+}
+
+.nav-link.active {
+  color: #FFFFFF;
+  background-color: #0D6EFD;
+}
+

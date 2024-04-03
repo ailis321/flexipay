@@ -19,7 +19,6 @@ const PaymentTrendsChart = ({ data, type }) => {
   const isCharge = type === 'charge';
   const labelTitle = isCharge ? 'Payments Received' : 'Payments Out';
 
-
   console.log("RAW DATA : ",data);
 
   const chartData = {

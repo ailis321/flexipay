@@ -7,7 +7,7 @@ import useTransactions from '../hooks/useTransactions';
 import PaymentTrendsChart from '../components/PaymentTrendsChart';
 import SummaryWidget from '../components/SummaryWidget';
 import PaymentsTable from '../components/PaymentsTable';
-import SidebarMenu from '../components/SidebarMenu';
+
 
 const DashboardPage = () => {
   const user = JSON.parse(localStorage.getItem('user'));

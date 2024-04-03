@@ -16,6 +16,7 @@ import PaymentTakePage from "./pages/PaymentTakePage";
 import Layout from "./components/Layout";
 import PaymentSuccess from "./components/PaymentSuccess";
 import Dashboard from "./pages/Dashboard";
+import PaymentsInAndOut from "./pages/PaymentsInAndOut";
 
 function App() {
   const { user } = useAuthenticationContext();
@@ -35,8 +36,9 @@ function App() {
             <Route path="/paymentLink" element={user ? <PaymentLinkPage /> : <Navigate to="/login" />} />
             <Route path="/pay/:paymentIntentId" element={<PaymentTakePage />} />
             <Route path="/pay/success" element={<PaymentSuccess />} />
-            <Route path="/dashboard" element={user ? <DashboardPage /> : <Navigate to="/login" />} />
-            <Route path="/dashboard2" element={<Dashboard />} />
+            <Route path="/dashboard2" element={user ? <DashboardPage /> : <Navigate to="/login" />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/view-payments" element={ <PaymentsInAndOut />} />
             <Route path="/yourAccount" element={user ? <LoginHomeComplete /> : <Navigate to="/login" />} />
             <Route path="/home" element={<Home />} />
           </Routes>

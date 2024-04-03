@@ -14,7 +14,7 @@ function preventDefault(event) {
 const Orders = ({ transactions }) => {
     return (
       <React.Fragment>
-        <Title>Recent Orders</Title>
+        <Title>Today's Orders</Title>
         <Table size="small">
           <TableHead>
             <TableRow>
@@ -28,7 +28,7 @@ const Orders = ({ transactions }) => {
           <TableBody>
             {transactions.map((transaction, index) => (
               <TableRow key={index}>
-                <TableCell>{transaction.date}</TableCell>
+                <TableCell>{new Date(transaction.created * 1000).toLocaleDateString()}</TableCell>
                 <TableCell>{transaction.source?.receipt_email}</TableCell> 
                 <TableCell>{transaction.description}</TableCell>
                 <TableCell>{transaction.status}</TableCell>

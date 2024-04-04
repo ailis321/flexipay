@@ -8,5 +8,7 @@ router.use(requireAuthHeader);
 
 router.get('/transactions', dashboardController.getTransactions);
 
+router.get('/payment-intents', dashboardController.getIntents);
+
 
 module.exports = router;

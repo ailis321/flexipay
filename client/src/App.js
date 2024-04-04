@@ -16,6 +16,7 @@ import PaymentTakePage from "./pages/PaymentTakePage";
 import Layout from "./components/Layout";
 import PaymentSuccess from "./components/PaymentSuccess";
 import Dashboard from "./pages/Dashboard";
+import PaymentIntentsDashboard from "./pages/PaymentIntentsDashboard";
 import PaymentsInAndOut from "./pages/PaymentsInAndOut";
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
             <Route path="/pay/success" element={<PaymentSuccess />} />
             <Route path="/dashboard2" element={user ? <DashboardPage /> : <Navigate to="/login" />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/paymentIntents" element={<PaymentIntentsDashboard />} />
             <Route path="/view-payments" element={ <PaymentsInAndOut />} />
             <Route path="/yourAccount" element={user ? <LoginHomeComplete /> : <Navigate to="/login" />} />
             <Route path="/home" element={<Home />} />

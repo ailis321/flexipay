@@ -105,7 +105,12 @@ const PaymentTakePage = () => {
           <h2 className="text-success">Payment Already Received, Thank You!</h2>
           <p>Your support and trust in FlexiPay mean the world to us.</p>
         </div>
-      ) : clientSecret ? (
+       ) : paymentStatus === 'canceled' ? ( //want an error message to display if the payment intent has been cancelled by the sender
+       <div className="d-flex flex-column align-items-center justify-content-center vh-100">
+         <h2 className="text-danger">Payment Cancelled</h2>
+         <p>The payment of {Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(paymentInfo.amount / 100)} has been cancelled by the sender. Please contact {paymentInfo.companyName || 'the sender'} for any further queries on this.</p>
+       </div>
+     ) : clientSecret ? (
         //ONLY rendering the payment form if the payment status is not succeeded
         <div>
           <PaymentGreeting 

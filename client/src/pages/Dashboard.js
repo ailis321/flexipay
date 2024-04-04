@@ -78,6 +78,10 @@ export default function Dashboard() {
   const user = JSON.parse(localStorage.getItem("user"));
   const token = user.token;
 
+  if (!user) {
+    navigate('/login');
+  }
+
   const { transactions, isLoading, error } = useTransactions(token);
 
   // Filter transactions for today

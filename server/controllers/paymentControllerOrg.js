@@ -38,6 +38,26 @@ function getPaymentLink(req, res) {
     }
 }
 
+const generateNewPaymentIntent = async (req, res) => {
+    try {
+        const stripeAccountId = req.user.stripeAccountId;
+        const paymentIntentId = req.body.paymentIntentId;
+
+        const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId, {
+            stripeAccount: stripeAccountId,
+        });
+
+        const email = paymentIntent.receipt_email;
+        console.log('Email:', email);
+        console.log('Payment intent:', paymentIntent);
+        const paymentLink = `http://localhost:3000/pay/${paymentIntent.id}?account=${stripeAccountId}`;
+        res.send({ paymentLink });
+     } catch (error) {
+        console.error(error);
+        res.status(500).send('Error creating payment link.');
+    }
+};
+
 
 
 async function createPaymentMethod(req, res) {
@@ -124,9 +144,31 @@ async function createPaymentMethod(req, res) {
   
 }
 
+
+
+const cancelPayment = async (req, res) => {
+    console.log('Cancelling payment');
+    const { stripeAccountId } = req.user;
+    try {
+        const { paymentIntentId } = req.body;
+        const cancelledPaymentIntent = await stripe.paymentIntents.cancel(paymentIntentId, {
+            stripeAccount: stripeAccountId,
+        });
+        
+        console.log('CANCELLED INTENT ', cancelledPaymentIntent);
+    
+        res.status(200).json(cancelledPaymentIntent);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error cancelling payment.' });
+    }
+};
+
 module.exports = {
   getPaymentLink,
   createPaymentLink,
   createPaymentMethod,
-  completePayment  
+  completePayment, 
+  cancelPayment,
+  generateNewPaymentIntent,
 };

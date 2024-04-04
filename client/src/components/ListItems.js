@@ -40,11 +40,14 @@ export const MainListItems = () => {
       </ListItemIcon>
       <ListItemText primary="Reports" />
     </ListItemButton>
-    <ListItemButton>
       <ListItemIcon>
         <LayersIcon />
       </ListItemIcon>
-      <ListItemText primary="Integrations" />
+      <ListItemButton onClick={() => navigate('/paymentIntents')}>
+        <ListItemIcon>
+          <ShoppingCartIcon />
+        </ListItemIcon>
+      <ListItemText primary="Payment List Activity" />
     </ListItemButton>
     </React.Fragment>
   );

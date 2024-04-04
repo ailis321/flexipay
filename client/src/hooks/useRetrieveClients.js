@@ -47,12 +47,17 @@ const useRetrieveClients = () => {
     }
   }, []); 
 
+      // Function to get a single client by ID
+  const getClientById = useCallback((clientId) => {
+    return clients.find(client => client.id === clientId) || null;
+  }, [clients]);
+
   useEffect(() => {
     //Resetting the error 
     setError(null);
   }, []);
 
-  return { clients, retrieveClients, isLoading, error };
+  return { clients, retrieveClients, getClientById, isLoading, error };
 };
 
 export default useRetrieveClients;

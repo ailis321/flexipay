@@ -13,10 +13,12 @@ router.get('/paymentLink', paymentControllerOrg.getPaymentLink);
 
 router.post('/create-payment-link', paymentControllerOrg.createPaymentLink);
 
-//router.post('/collect-payment', paymentController.collectPayment);
-
 
 router.post('/create-payment-method', paymentControllerOrg.createPaymentMethod);
+
+router.post('/cancel-payment', paymentControllerOrg.cancelPayment);
+
+router.post('/generate-new-intent', paymentControllerOrg.generateNewPaymentIntent);
 
 
 router.post('/complete-payment', paymentControllerOrg.completePayment);

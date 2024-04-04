@@ -1,9 +1,11 @@
 import * as React from "react";
+
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
+import { useNavigate } from 'react-router-dom';
 import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
 import Divider from "@mui/material/Divider";
@@ -71,6 +73,7 @@ const defaultTheme = createTheme();
 
 export default function Dashboard() {
   const [open, setOpen] = React.useState(true);
+  const navigate = useNavigate();
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -78,7 +81,7 @@ export default function Dashboard() {
   const user = JSON.parse(localStorage.getItem("user"));
   const token = user.token;
 
-  if (!user) {
+    if (!user) {
     navigate('/login');
   }
 

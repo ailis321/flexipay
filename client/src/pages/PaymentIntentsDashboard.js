@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import {
   Box,
@@ -85,6 +86,7 @@ const PaymentIntentsDashboard = () => {
   const [messageType, setMessageType] = useState("success");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [link, setLink] = useState(null);
+  const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem("user"));
   const token = user.token;
@@ -92,7 +94,7 @@ const PaymentIntentsDashboard = () => {
   if (!user) {
     navigate('/login');
   }
-  
+
   const [open, setOpen] = React.useState(true);
   const { intents, isLoading, error, noIntents } = useGetIntents(token);
   const { retrieveClients, getClientById, clients } = useRetrieveClients();

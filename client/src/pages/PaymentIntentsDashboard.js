@@ -4,12 +4,9 @@ import { useEffect, useState } from "react";
 import {
   Box,
   CssBaseline,
-  List,
   Button,
   Snackbar,
-  Divider,
-  Toolbar,
-  IconButton,
+
   Typography,
   Paper,
   Table,
@@ -20,13 +17,12 @@ import {
   TableRow,
   CircularProgress,
 } from "@mui/material";
-import MuiDrawer from "@mui/material/Drawer";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
-import { MainListItems, SecondaryListItems } from "../components/ListItems";
+
 import useGetIntents from "../hooks/useGetIntents";
 import useRetrieveClients from "../hooks/useRetrieveClients";
 import useCancelPaymentIntent from "../hooks/useCancelPaymentIntent";
+import SidebarMenu from "../components/SidebarMenu";
 import useGenerateNewPaymentLink from "../hooks/useGenerateNewPaymentLink";
 import Chart from "react-apexcharts";
 import MuiAlert from "@mui/material/Alert";
@@ -38,31 +34,6 @@ const chartStyles = {
   margin: "0 auto", 
 };
 
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  "& .MuiDrawer-paper": {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    boxSizing: "border-box",
-    ...(!open && {
-      overflowX: "hidden",
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9),
-      },
-    }),
-  },
-}));
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -87,6 +58,7 @@ const PaymentIntentsDashboard = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [link, setLink] = useState(null);
   const navigate = useNavigate();
+  const [open, setOpen] = React.useState(true);
 
   const user = JSON.parse(localStorage.getItem("user"));
   const token = user.token;
@@ -95,7 +67,7 @@ const PaymentIntentsDashboard = () => {
     navigate('/login');
   }
 
-  const [open, setOpen] = React.useState(true);
+
   const { intents, isLoading, error, noIntents } = useGetIntents(token);
   const { retrieveClients, getClientById, clients } = useRetrieveClients();
   const { generateNewPaymentLink } = useGenerateNewPaymentLink();
@@ -200,43 +172,17 @@ const PaymentIntentsDashboard = () => {
 
   return (
     <ThemeProvider theme={customTheme}>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
-            <MainListItems />
-            <Divider sx={{ my: 1 }} />
-            <SecondaryListItems />
-          </List>
-        </Drawer>
+        <SidebarMenu open={open} handleDrawerClose={toggleDrawer} />
         <Box
           component="main"
-          sx={{
-            flexGrow: 1,
-            p: 3,
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
-          }}
+          sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
         >
-          <Toolbar />
           {isLoading && <CircularProgress />}
           {error && <Typography color="error">{error}</Typography>}
           {!isLoading && !noIntents && (
             <Box>
-
-              {/* container for charts */}
               <Box
                 sx={{
                   display: "flex",
@@ -244,8 +190,6 @@ const PaymentIntentsDashboard = () => {
                   marginBottom: "32px",
                 }}
               >
-                {" "}
-       
                 <Paper sx={{ ...chartStyles }}>
                   <Chart
                     options={chartOptions}
@@ -261,9 +205,7 @@ const PaymentIntentsDashboard = () => {
                   />
                 </Paper>
               </Box>
-
               <Box sx={{ my: 4 }}>
-                {/** success msg for cancelling */}
                 {message && (
                   <Snackbar
                     open={openSnackbar}
@@ -290,7 +232,7 @@ const PaymentIntentsDashboard = () => {
                       {message}
                     </Alert>
                   </Snackbar>
-                )}{" "}
+                )}
                 <TableContainer component={Paper}>
                   <Table
                     sx={{ minWidth: 650 }}
@@ -306,80 +248,58 @@ const PaymentIntentsDashboard = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {allActiveIntents.map((intent) => {
-                        // Use getClientById to get the client object for name
-                        const client = getClientById(intent.customer);
-
-                        return (
-                          <TableRow key={intent.id}>
-                            <TableCell>
-                              {new Date(
-                                intent.created * 1000
-                              ).toLocaleDateString()}
-                            </TableCell>
-                            {/* Display client name if available, otherwise show the customer ID */}
-                            <TableCell>
-                              {client ? client.name : intent.customer}
-                            </TableCell>
-                            <TableCell align="right">
-                              {(intent.amount / 100).toFixed(2)}
-                            </TableCell>
-                            <TableCell>{intent.status}</TableCell>
-                            <TableCell>
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  gap: 1,
-                                  alignItems: "center",
-                                }}
-                              >
-                                {intent.status !== "succeeded" && (
-                                  <>
-                                    <Button
-                                      variant="contained"
-                                      onClick={() =>
-                                        handleCancelIntent(intent.id)
-                                      }
-                                      sx={{
-                                        width: "auto",
-                                        padding: "6px 16px",
-                                        fontSize: "0.875rem",
-                                        lineHeight: 1.75,
-                                        backgroundColor: "#53937d",
-                                        color: "#ffffff",
-                                        "&:hover": {
-                                          backgroundColor: "#456f5a",
-                                        },
-                                      }}
-                                    >
-                                      Cancel Intent
-                                    </Button>
-                                    <Button
-                                      variant="contained"
-                                      onClick={() =>
-                                        handleGenerateLink(intent.id)
-                                      }
-                                      sx={{
-                                        width: "auto",
-                                        padding: "6px 16px",
-                                        fontSize: "0.875rem",
-                                        lineHeight: 1.75,
-                                        backgroundColor: "#53937d",
-                                        color: "#ffffff",
-                                        "&:hover": {
-                                          backgroundColor: "#456f5a",
-                                        },
-                                      }}
-                                    >
-                                      Generate Link
-                                    </Button>
-                                  </>
-                                )}
-                              </Box>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
+                      {allActiveIntents.map((intent) => (
+                        <TableRow key={intent.id}>
+                          <TableCell>
+                            {new Date(intent.created * 1000).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell>
+                            {getClientById(intent.customer)?.name || intent.customer}
+                          </TableCell>
+                          <TableCell align="right">
+                            {(intent.amount / 100).toFixed(2)}
+                          </TableCell>
+                          <TableCell>{intent.status}</TableCell>
+                          <TableCell>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                gap: 1,
+                                alignItems: "center",
+                              }}
+                            >
+                              {intent.status !== "succeeded" && (
+                                <>
+                                  <Button
+                                    variant="contained"
+                                    onClick={() => handleCancelIntent(intent.id)}
+                                    sx={{
+                                      backgroundColor: "#53937d",
+                                      "&:hover": {
+                                        backgroundColor: "#456f5a",
+                                      },
+                                    }}
+                                  >
+                                    Cancel Intent
+                                  </Button>
+                                  <Button
+                                    variant="contained"
+                                    onClick={() => handleGenerateLink(intent.id)}
+                                    sx={{
+                                      backgroundColor: "#53937d",
+                                      "&:hover": {
+                                        backgroundColor: "#456f5a",
+                                      },
+                                    }}
+                                  >
+                                    Generate Link
+                                  </Button>
+                                </>
+                              )}
+                            </Box>
+                          </TableCell>
+                        </TableRow>
+                      ))}
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -391,6 +311,6 @@ const PaymentIntentsDashboard = () => {
       </Box>
     </ThemeProvider>
   );
-};
-
+}
+  
 export default PaymentIntentsDashboard;

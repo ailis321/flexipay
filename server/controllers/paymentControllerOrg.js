@@ -1,5 +1,6 @@
 const { parse } = require('path');
 const bodyParser = require('body-parser');
+const Customer = require('../models/customer');
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
@@ -9,34 +10,39 @@ function getPaymentLink(req, res) {
   
   async function createPaymentLink(req, res) {
     try {
-        const email = req.body.email; 
-        console.log('Email:', email);
-    
-        // Creating payment intent with stripeAccount parameter
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: parseInt(req.body.amount) * 100,
-            currency: 'gbp',
-            customer: req.body.customerId,
-            description: req.body.description,
-            receipt_email: email,
-            payment_method: "pm_card_visa",
-            automatic_payment_methods: { enabled: true },
-          },
-          { stripeAccount: req.user.stripeAccountId }
-        );
+      const customerStripeId = req.body.customerId;
+      const email = req.body.email;
+      console.log('Email:', email);
+  
+      // Creating payment intent with stripeAccount parameter
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: parseInt(req.body.amount) * 100,
+        currency: 'gbp',
+        customer: req.body.customerId,
+        description: req.body.description,
+        receipt_email: email,
+        payment_method: "pm_card_visa",
+        automatic_payment_methods: { enabled: true },
+      }, {
+        stripeAccount: req.user.stripeAccountId
+      });
+  
+      console.log('Payment intent:', paymentIntent);
+      const paymentLink = `http://localhost:3000/pay/${paymentIntent.id}?account=${req.user.stripeAccountId}`;
+  
+      // Update customer in the database with the new payment intent ID to link it easier with this customer for stats
+     const accountToUpdate =  await Customer.updateOne(
+        { stripeCustomerId: customerStripeId }, // Find customer by customer ID
+        { $push: { paymentIntents: paymentIntent.id } } 
+          );
 
-        console.log('Payment intent:', paymentIntent);
-        const paymentLink = `http://localhost:3000/pay/${paymentIntent.id}?account=${req.user.stripeAccountId}`;
-
- 
-        console.log(`Sending payment link ${paymentLink} to ${email}`);
-
-        res.json({ paymentLink });
+        console.log('Account updated successfully :', accountToUpdate);
+      res.json({ paymentLink });
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Error creating payment link.');
+      console.error(error);
+      res.status(500).send('Error creating payment link.');
     }
-}
+  }
 
 const generateNewPaymentIntent = async (req, res) => {
     try {

@@ -18,7 +18,8 @@ const getTransactions = async (req, res) => {
       return res.status(404).send('No transactions found');
     }
     
-    console.log('Transactions:', transactions);
+    console.log('Transactions listed are :', transactions.data);
+    console.log('There are this many : ', transactions.data.length);
     res.status(200).send(transactions);
   } catch (error) {
     console.error('Error fetching transactions:', error);

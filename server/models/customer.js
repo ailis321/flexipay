@@ -6,8 +6,9 @@ const customerSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   account: { type: mongoose.Schema.Types.ObjectId, ref: 'Account', required: true },
   businessId: { type: mongoose.Schema.Types.ObjectId, ref: 'Business' },
-  stripeAccountId: { type: String, required: true }, // Stripe account ID
+  stripeAccountId: { type: String, required: true }, // the stripe connect account this is linked to
   stripeCustomerId: { type: String, required: true }, // Stripe customer ID
+  paymentIntents: [{ type: String }] // Array of Stripe payment intent IDs so i can link them to the customer easier
 });
 
 

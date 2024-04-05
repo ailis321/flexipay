@@ -18,6 +18,8 @@ import PaymentSuccess from "./components/PaymentSuccess";
 import Dashboard from "./pages/Dashboard";
 import PaymentIntentsDashboard from "./pages/PaymentIntentsDashboard";
 import PaymentsInAndOut from "./pages/PaymentsInAndOut";
+import CustomerActivityPage from "./pages/CustomerActivityPage";
+import CustomerProfilePage from "./pages/CustomerProfilePage";
 
 function App() {
   const { user } = useAuthenticationContext();
@@ -39,6 +41,8 @@ function App() {
             <Route path="/pay/success" element={<PaymentSuccess />} />
             <Route path="/dashboard2" element={user ? <DashboardPage /> : <Navigate to="/login" />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/customer-activity" element={<CustomerActivityPage />} />
+            <Route path="/customer-profile/:customerId" element={<CustomerProfilePage />} />
             <Route path="/paymentIntents" element={<PaymentIntentsDashboard />} />
             <Route path="/view-payments" element={ <PaymentsInAndOut />} />
             <Route path="/yourAccount" element={user ? <LoginHomeComplete /> : <Navigate to="/login" />} />

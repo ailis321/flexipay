@@ -11,6 +11,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 
+
 export const MainListItems = () => {
   const navigate = useNavigate();
 
@@ -27,54 +28,52 @@ export const MainListItems = () => {
           <ShoppingCartIcon />
         </ListItemIcon>
         <ListItemText primary="Payments" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <PeopleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Customer Activity" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Reports" />
-    </ListItemButton>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
+      </ListItemButton>
+      <ListItemButton onClick={() => navigate('/customer-activity')}>
+        <ListItemIcon>
+          <PeopleIcon />
+        </ListItemIcon>
+        <ListItemText primary="Customer Activity" />
+      </ListItemButton>
+      <ListItemButton onClick={() => navigate('/reports')}>
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Reports" />
+      </ListItemButton>
       <ListItemButton onClick={() => navigate('/paymentIntents')}>
         <ListItemIcon>
           <ShoppingCartIcon />
         </ListItemIcon>
-      <ListItemText primary="Payment Link Activity" />
-    </ListItemButton>
+        <ListItemText primary="Payment List Activity" />
+      </ListItemButton>
     </React.Fragment>
   );
 };
 
 export const SecondaryListItems = () => {
-
+  const navigate = useNavigate();
   return (
     <React.Fragment>
-      <ListItemButton>
+
+      <ListItemButton onClick={() => navigate('/current-month')}>
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
         <ListItemText primary="Current month" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Last quarter" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Year-end" />
-    </ListItemButton>
-  </React.Fragment>
-);
-  }
+      </ListItemButton>
+      <ListItemButton onClick={() => navigate('/last-quarter')}>
+        <ListItemIcon>
+          <AssignmentIcon />
+        </ListItemIcon>
+        <ListItemText primary="Last quarter" />
+      </ListItemButton>
+      <ListItemButton onClick={() => navigate('/year-end')}>
+        <ListItemIcon>
+          <AssignmentIcon />
+        </ListItemIcon>
+        <ListItemText primary="Year-end" />
+      </ListItemButton>
+    </React.Fragment>
+  );
+};

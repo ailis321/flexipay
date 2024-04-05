@@ -13,6 +13,8 @@ router.post('/create-customer-submit', clientController.createCustomer);
 
 router.get('/get-customers', clientController.getCustomers); 
 
+router.get('/get-all-customers', clientController.getAllCustomersFromDB);
+
 router.put('/edit-customer/:customerId', clientController.editCustomer);
 
 router.delete('/delete-customer/:customerId', clientController.deleteCustomer);

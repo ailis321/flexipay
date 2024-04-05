@@ -4,20 +4,15 @@ import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
-import List from "@mui/material/List";
+
 import { useNavigate } from 'react-router-dom';
 import Typography from "@mui/material/Typography";
-import Toolbar from "@mui/material/Toolbar";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
+
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { MainListItems, SecondaryListItems } from "../components/ListItems";
-
+import SidebarMenu from "../components/SidebarMenu";
 import Chart from "../components/Chart";
 import Deposits from "../components/Deposits";
 import Orders from "../components/Orders";
@@ -143,29 +138,13 @@ export default function Dashboard() {
 
   return (
     <ThemeProvider theme={customTheme}>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
-            <MainListItems />
-            <Divider sx={{ my: 1 }} />
-            <SecondaryListItems />
-          </List>
-        </Drawer>
+        <SidebarMenu open={open} handleDrawerClose={toggleDrawer} />
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+        >
         <Box
           component="main"
           sx={{
@@ -197,7 +176,8 @@ export default function Dashboard() {
                   />
                 </Paper>
               </Grid>
-              {/* Recent Deposits */}
+
+         
               <Grid item xs={12} md={4} lg={3}>
                 <Paper
                   sx={{
@@ -210,7 +190,8 @@ export default function Dashboard() {
                   <Deposits total={chargeConverted} />
                 </Paper>
               </Grid>
-              {/* Recent Orders */}
+
+        
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
                   <Orders transactions={charges} />
@@ -219,8 +200,10 @@ export default function Dashboard() {
             </Grid>
             <Copyright sx={{ pt: 4 }} />
           </Container>
-        </Box>
+          </Box>
+      </Box>
       </Box>
     </ThemeProvider>
   );
 }
+

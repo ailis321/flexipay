@@ -58,11 +58,41 @@ async function createCustomer(req, res) {
         res.status(500).send('Error fetching customers');
       }
     }
+
+    async function getAllCustomersFromDB(req, res) {
+      try {
+       
+        const customers = await Customer.find({}).lean();
+    
+        if (customers.length === 0) {
+          return res.status(404).json({ message: 'No customers found.' });
+        }
+    
+        const customerData = customers.map(customer => {
+       
+          const dateJoined = new Date(parseInt(customer._id.toString().substring(0, 8), 16) * 1000);
+          
+          return {
+            ...customer,
+            dateJoined: dateJoined.toISOString() //adding in a date joined field based on when the record was created
+          };
+        });
+
+        console.log('Customers retrieved:', customerData);
+    
+        res.json(customerData);
+      } catch (error) {
+        console.error('Error fetching customers:', error);
+
+        res.status(500).json({ message: 'Error retrieving customers from the database.' });
+      }
+    }
+    
     
     async function editCustomer(req, res) {
       const { customerId } = req.params;
       const { firstName, lastName, email, phone } = req.body; 
-      const fullName = `${firstName} ${lastName}`; //combing  these to make a full name for updating stripe
+      const fullName = `${firstName} ${lastName}`; //combinig  these to make a full name for updating stripe
       const { stripeAccountId } = req.user;
     
       try {
@@ -130,5 +160,6 @@ module.exports = {
   getCustomers,
   editCustomer,
   deleteCustomer,
+  getAllCustomersFromDB,
 
 };

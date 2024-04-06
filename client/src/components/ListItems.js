@@ -45,7 +45,7 @@ export const MainListItems = () => {
         <ListItemIcon>
           <ShoppingCartIcon />
         </ListItemIcon>
-        <ListItemText primary="Payment List Activity" />
+        <ListItemText primary="Payment Link Activity" />
       </ListItemButton>
     </React.Fragment>
   );

@@ -1,12 +1,11 @@
 import React from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   Box,
   CssBaseline,
   Button,
   Snackbar,
-
   Typography,
   Paper,
   Table,
@@ -30,10 +29,9 @@ import MuiAlert from "@mui/material/Alert";
 const drawerWidth = 240;
 
 const chartStyles = {
-  maxWidth: "400px", 
-  margin: "0 auto", 
+  maxWidth: "400px",
+  margin: "0 auto",
 };
-
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -64,9 +62,8 @@ const PaymentIntentsDashboard = () => {
   const token = user.token;
 
   if (!user) {
-    navigate('/login');
+    navigate("/login");
   }
-
 
   const { intents, isLoading, error, noIntents } = useGetIntents(token);
   const { retrieveClients, getClientById, clients } = useRetrieveClients();
@@ -76,7 +73,6 @@ const PaymentIntentsDashboard = () => {
     useCancelPaymentIntent();
 
   useEffect(() => {
-
     retrieveClients(token);
   }, [token, retrieveClients]);
 
@@ -116,13 +112,13 @@ const PaymentIntentsDashboard = () => {
   const handleGenerateLink = async (intentId) => {
     const result = await generateNewPaymentLink(intentId);
     if (result && result.paymentLink) {
-        //link in message to copy
+      //link in message to copy
       setMessage(
         `New payment link generated successfully: ${result.paymentLink}`
       );
       setMessageType("success");
       setOpenSnackbar(true);
-      setLink(result.paymentLink); 
+      setLink(result.paymentLink);
     } else {
       setMessage("Sorry, we were not able to generate a new link.");
       setMessageType("error");
@@ -172,12 +168,16 @@ const PaymentIntentsDashboard = () => {
 
   return (
     <ThemeProvider theme={customTheme}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <SidebarMenu open={open} handleDrawerClose={toggleDrawer} />
         <Box
           component="main"
-          sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+          sx={{
+            flexGrow: 1,
+            p: 3,
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+          }}
         >
           {isLoading && <CircularProgress />}
           {error && <Typography color="error">{error}</Typography>}
@@ -251,15 +251,27 @@ const PaymentIntentsDashboard = () => {
                       {allActiveIntents.map((intent) => (
                         <TableRow key={intent.id}>
                           <TableCell>
-                            {new Date(intent.created * 1000).toLocaleDateString()}
+                            {new Date(
+                              intent.created * 1000
+                            ).toLocaleDateString()}
                           </TableCell>
                           <TableCell>
-                            {getClientById(intent.customer)?.name || intent.customer}
+                            {getClientById(intent.customer)?.name ||
+                              intent.customer}
                           </TableCell>
                           <TableCell align="right">
-                            {(intent.amount / 100).toFixed(2)}
+                            {`£${(intent.amount / 100).toFixed(2)}`}
                           </TableCell>
-                          <TableCell>{intent.status}</TableCell>
+                          <TableCell>
+                            {intent.status === "succeeded" &&
+                              "Payment Received"}
+                            {intent.status === "requires_payment_method" &&
+                              "Awaiting Payment"}
+                            {intent.status === "requires_confirmation" &&
+                              "Awaiting Payment"}
+                            {intent.status === "canceled" && "Canceled"}{" "}
+                            {/* Or any other status you want to map */}
+                          </TableCell>
                           <TableCell>
                             <Box
                               sx={{
@@ -272,7 +284,9 @@ const PaymentIntentsDashboard = () => {
                                 <>
                                   <Button
                                     variant="contained"
-                                    onClick={() => handleCancelIntent(intent.id)}
+                                    onClick={() =>
+                                      handleCancelIntent(intent.id)
+                                    }
                                     sx={{
                                       backgroundColor: "#53937d",
                                       "&:hover": {
@@ -284,7 +298,9 @@ const PaymentIntentsDashboard = () => {
                                   </Button>
                                   <Button
                                     variant="contained"
-                                    onClick={() => handleGenerateLink(intent.id)}
+                                    onClick={() =>
+                                      handleGenerateLink(intent.id)
+                                    }
                                     sx={{
                                       backgroundColor: "#53937d",
                                       "&:hover": {
@@ -311,6 +327,6 @@ const PaymentIntentsDashboard = () => {
       </Box>
     </ThemeProvider>
   );
-}
-  
+};
+
 export default PaymentIntentsDashboard;

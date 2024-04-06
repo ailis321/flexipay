@@ -1,6 +1,7 @@
 import React from 'react';
 
 const PaymentsTable = ({ transactions, type }) => {
+
   const isCharge = type === 'charge';
   const title = isCharge ? 'Payments Received' : 'Payments Out';
 

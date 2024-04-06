@@ -20,6 +20,7 @@ import PaymentIntentsDashboard from "./pages/PaymentIntentsDashboard";
 import PaymentsInAndOut from "./pages/PaymentsInAndOut";
 import CustomerActivityPage from "./pages/CustomerActivityPage";
 import CustomerProfilePage from "./pages/CustomerProfilePage";
+import CurrentMonthDashboard from "./pages/CurrentMonthDashboard";
 
 function App() {
   const { user } = useAuthenticationContext();
@@ -32,15 +33,16 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/view-customers" element={user ? <ViewCustomers/> : <Navigate to="/login" />} />
-            <Route path="/createCustomer" element={<CreateCustomerPage />} />
+            <Route path="/create-customer" element={<CreateCustomerPage />} />
             <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
             <Route path="/register" element={!user ? <RegisterAccount /> : <Navigate to="/dashboard" />} />
             <Route path="/moreInfo" element={<LoginHomeIncomplete />} />
-            <Route path="/paymentLink" element={user ? <PaymentLinkPage /> : <Navigate to="/login" />} />
+            <Route path="/payment-link" element={user ? <PaymentLinkPage /> : <Navigate to="/login" />} />
             <Route path="/pay/:paymentIntentId" element={<PaymentTakePage />} />
             <Route path="/pay/success" element={<PaymentSuccess />} />
             <Route path="/dashboard2" element={user ? <DashboardPage /> : <Navigate to="/login" />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/current-month" element={<CurrentMonthDashboard />} />
             <Route path="/customer-activity" element={<CustomerActivityPage />} />
             <Route path="/customer-profile/:customerId" element={<CustomerProfilePage />} />
             <Route path="/paymentIntents" element={<PaymentIntentsDashboard />} />

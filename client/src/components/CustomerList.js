@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import useEditCustomer from '../hooks/useEditCustomer';
 import useDeleteCustomer from '../hooks/useDeleteCustomer';
+import { useNavigate } from 'react-router-dom';
 
 const CustomersList = ({ customers, fetchCustomers }) => {
+  const navigate = useNavigate(); 
   const [selectedCustomers, setSelectedCustomers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState({ id: '', firstName: '', lastName: '', email: '', phone: '' });
@@ -20,6 +22,14 @@ const CustomersList = ({ customers, fetchCustomers }) => {
       }
     });
   };
+
+  const handleViewProfileClick = () => {
+    if (selectedCustomers.length === 1) {
+      const customerId = selectedCustomers[0]; 
+      navigate(`/customer-profile/${customerId}`);
+    }
+  };
+
 
   const handleEditClick = () => {
     if (selectedCustomers.length === 1) {
@@ -91,9 +101,17 @@ const CustomersList = ({ customers, fetchCustomers }) => {
     <section className="py-5">
       <div className="container">
         <h2 style={{ color: '#53937d' }}>Customer Directory</h2>
+        {selectedCustomers.length > 0 && (
+          <div className="mb-3 d-flex justify-content-center gap-2">
+            <button className="btn btn-sm" onClick={handleEditClick} style={{ backgroundColor: '#53937d', color: 'white' }}>Edit</button>
+            <button className="btn btn-sm" onClick={handleDeleteClick} style={{ backgroundColor: '#53937d', color: 'white' }}>Delete</button>
+            <button className="btn btn-sm" onClick={handleViewProfileClick} style={{ backgroundColor: '#53937d', color: 'white' }}>View Profile</button>
+            <button className="btn btn-sm" onClick={() => setSelectedCustomers([])} style={{ backgroundColor: '#53937d', color: 'white' }}>Clear Selection</button>
+          </div>
+        )}
         <div className="table-responsive">
           <table className="table table-striped table-hover" style={{ backgroundColor: "rgba(83, 147, 125, 0.8)", color: 'white' }}>
-            <thead>
+          <thead>
               <tr style={{ fontSize: '1.2rem' }}>
                 <th></th>
                 <th>Name</th>
@@ -116,13 +134,6 @@ const CustomersList = ({ customers, fetchCustomers }) => {
           </table>
         </div>
         {renderEditModal()}
-        {selectedCustomers.length > 0 && (
-          <div className="mt-3 d-flex justify-content-center gap-2">
-            <button className="btn btn-sm" onClick={handleEditClick} style={{ backgroundColor: '#53937d', color: 'white' }}>Edit</button>
-            <button className="btn btn-sm" onClick={handleDeleteClick} style={{ backgroundColor: '#53937d', color: 'white' }}>Delete</button>
-            <button className="btn btn-sm" onClick={() => setSelectedCustomers([])} style={{ backgroundColor: '#53937d', color: 'white' }}>Clear Selection</button>
-          </div>
-        )}
       </div>
     </section>
   );

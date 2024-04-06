@@ -42,7 +42,7 @@ const Header = () => {
              )}
              {user && (
             <li className="nav-item">
-              <Link className="nav-link" to="/paymentLink">
+              <Link className="nav-link" to="/payment-link">
                 Payment Links
               </Link>
             </li>
@@ -59,6 +59,13 @@ const Header = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/view-customers">
                 Customers
+              </Link>
+            </li>
+             )}
+                  {user && (
+            <li className="nav-item">
+              <Link className="nav-link" to="/create-customer">
+                Add Customer
               </Link>
             </li>
              )}

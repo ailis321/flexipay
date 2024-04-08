@@ -1,3 +1,9 @@
+// shows list of customers 
+// allows user to add more customers as well at the bottom of the page
+// can also edit customer details here which will update in DB and stripe
+// can delete customers here which will delete from DB and stripe
+// option to view a customers specific profile from here too 
+
 import React, { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useRetrieveClients from '../hooks/useRetrieveClients';

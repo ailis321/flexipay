@@ -1,3 +1,7 @@
+// this is the customer dashboard and gives insights into activity by customers
+// shows top 5 customers by amount received
+// will show a table with top 5 customer activity and amounts rec'd
+// will then list all customer profiles showing names and amounts received in order
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -27,10 +31,14 @@ const CustomerActivityPage = () => {
   const toggleDrawer = () => setOpen(!open);
 
   const user = JSON.parse(localStorage.getItem("user"));
-  if (!user) {
-    navigate("/login");
-  }
-  const token = user.token;
+
+  React.useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [navigate, user]);
+
+  const token = user ? user.token : null;
 
   const {
     clients,

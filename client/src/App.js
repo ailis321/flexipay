@@ -3,12 +3,10 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuthenticationContext } from "./hooks/useAuthenticationContext";
 import CreateCustomerPage from "./pages/CreateCustomerPage";
 import Home from "./pages/Home";
-import Header from "./components/Header";
 import ViewCustomers from "./pages/ViewCustomers";
 import RegisterAccount from "./pages/RegisterAccount";
 import Footer from "./components/Footer";
 import LoginHomeIncomplete from "./pages/LoginHomeIncomplete";
-import LoginHomeComplete from "./pages/LoginHomeComplete";
 import Login from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import PaymentLinkPage from "./pages/PaymentLinkPage";
@@ -21,6 +19,8 @@ import PaymentsInAndOut from "./pages/PaymentsInAndOut";
 import CustomerActivityPage from "./pages/CustomerActivityPage";
 import CustomerProfilePage from "./pages/CustomerProfilePage";
 import CurrentMonthDashboard from "./pages/CurrentMonthDashboard";
+import YearEndDashboard from "./pages/YearEndDashboard";
+import AccountPage from "./pages/AccountPage";
 
 function App() {
   const { user } = useAuthenticationContext();
@@ -43,11 +43,12 @@ function App() {
             <Route path="/dashboard2" element={user ? <DashboardPage /> : <Navigate to="/login" />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/current-month" element={<CurrentMonthDashboard />} />
+            <Route path="/year-end" element={<YearEndDashboard />} />
+            <Route path="/account" element={<AccountPage /> } />
             <Route path="/customer-activity" element={<CustomerActivityPage />} />
             <Route path="/customer-profile/:customerId" element={<CustomerProfilePage />} />
             <Route path="/paymentIntents" element={<PaymentIntentsDashboard />} />
             <Route path="/view-payments" element={ <PaymentsInAndOut />} />
-            <Route path="/yourAccount" element={user ? <LoginHomeComplete /> : <Navigate to="/login" />} />
             <Route path="/home" element={<Home />} />
           </Routes>
         </Layout>

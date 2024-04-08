@@ -1,22 +1,39 @@
+// main dashboard user will see when they log in
+// this will only show todays data
+// gives a graph repesentation of amount in over times of the day today
+// shows total amount in and total amount out today
+// shows a list of all transactions today
+
 import * as React from "react";
+import { useState, useEffect } from "react";
 
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
-
+import {
+  Button,
+  Snackbar,
+  Container,
+  Typography,
+  Paper,
+  Link,
+  Grid,
+} from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import { useNavigate } from 'react-router-dom';
-import Typography from "@mui/material/Typography";
-
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Link from "@mui/material/Link";
+import useGenerateNewPaymentLink from "../hooks/useGenerateNewPaymentLink";
 import SidebarMenu from "../components/SidebarMenu";
 import Chart from "../components/Chart";
 import Deposits from "../components/Deposits";
 import Orders from "../components/Orders";
+import PaymentIntentsTable from "../components/PaymentIntentsTable";
+import useGetIntents from "../hooks/useGetIntents";
 import useTransactions from "../hooks/useTransactions";
+import useRetrieveClients from "../hooks/useRetrieveClients";
+import useCancelPaymentIntent from "../hooks/useCancelPaymentIntent";
+import ActivityBarChart from "../components/ActivityBarChart";
+
 
 function Copyright(props) {
   return (
@@ -38,51 +55,70 @@ function Copyright(props) {
 
 const drawerWidth = 240;
 
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  "& .MuiDrawer-paper": {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    boxSizing: "border-box",
-    ...(!open && {
-      overflowX: "hidden",
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9),
-      },
-    }),
-  },
-}));
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
-const defaultTheme = createTheme();
 
-export default function Dashboard() {
+const Dashboard = () => {
   const [open, setOpen] = React.useState(true);
   const navigate = useNavigate();
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("success");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [link, setLink] = useState(null);
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  const token = user.token;
 
-    if (!user) {
-    navigate('/login');
-  }
+   const user = JSON.parse(localStorage.getItem("user"));
+ 
+   const token = user ? user.token : null;
+ 
 
-  const { transactions, isLoading, error } = useTransactions(token);
+  const { transactions, isLoading: isLoadingTransactions, error: errorTransactions } = useTransactions(token);
+  const { intents, isLoading: isLoadingGetIntents, error: errorIntents, noIntents } = useGetIntents(token);
+  const { retrieveClients, getClientById } = useRetrieveClients();
+  const { generateNewPaymentLink } = useGenerateNewPaymentLink();
+  const { cancelPaymentIntent, cancelError } = useCancelPaymentIntent();
 
-  // Filter transactions for today
+  useEffect(() => {
+    if (!user.token) {
+      navigate("/login");
+    }
+    retrieveClients(token);
+  }, []);
+
+  const handleCancelIntent = async (intentId) => {
+    const wasCancelled = await cancelPaymentIntent(intentId);
+    if (wasCancelled) {
+      setMessage("Payment intent cancelled successfully.");
+      setMessageType("success");
+      setOpenSnackbar(true);
+      setTimeout(() => window.location.reload(), 2000);
+    } else {
+      setMessage(cancelError || "Sorry, we were not able to complete your request.");
+      setMessageType("error");
+      setOpenSnackbar(true);
+    }
+  };
+
+  const handleGenerateLink = async (intentId) => {
+    const result = await generateNewPaymentLink(intentId);
+    if (result && result.paymentLink) {
+      setMessage(`New payment link generated successfully: ${result.paymentLink}`);
+      setMessageType("success");
+      setOpenSnackbar(true);
+      setLink(result.paymentLink);
+    } else {
+      setMessage("Sorry, we were not able to generate a new link.");
+      setMessageType("error");
+      setOpenSnackbar(true);
+    }
+  };
+
+  
   const today = new Date();
   const startOfDay = new Date(
     today.getFullYear(),
@@ -123,6 +159,27 @@ export default function Dashboard() {
     amount: transaction.amount / 100,
   }));
 
+  const todaysPaymentIntents= intents.filter((intent) => {
+    const intentDate = new Date(intent.created * 1000);
+    return intentDate >= startOfDay && intentDate < endOfDay;
+  });
+
+//filter out cancelled ones for data
+  const allActiveIntents = intents.filter((intent) => intent.status !== "canceled");
+
+    // filtered out cancelled intents for chart data for todays intents
+  const allActiveIntentsToday = todaysPaymentIntents.filter((intent) => intent.status !== "canceled");
+
+  const intentTrends = allActiveIntents.map((intent) => ({
+    date: new Date(intent.created * 1000).toLocaleDateString(),
+    amount: intent.amount / 100,
+  }));
+
+  console.log("Intent chart data : ", intentTrends);
+
+
+  
+
   const customTheme = createTheme({
     components: {
       MuiDrawer: {
@@ -140,23 +197,32 @@ export default function Dashboard() {
     <ThemeProvider theme={customTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <SidebarMenu open={open} handleDrawerClose={toggleDrawer} />
+        <SidebarMenu open={open} handleDrawerClose={() => setOpen(!open)} />
         <Box
           component="main"
           sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
         >
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
-          }}
-        >
+          <Snackbar
+            open={openSnackbar}
+            autoHideDuration={6000}
+            onClose={() => setOpenSnackbar(false)}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          >
+            <Alert
+              onClose={() => setOpenSnackbar(false)}
+              severity={messageType}
+              sx={{ width: "100%" }}
+              action={
+                messageType === "success" && link ? (
+                  <Button color="inherit" size="small" onClick={() => window.open(link)}>
+                    Open Link
+                  </Button>
+                ) : null
+              }
+            >
+              {message}
+            </Alert>
+          </Snackbar>
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
               {/* Chart */}
@@ -171,13 +237,14 @@ export default function Dashboard() {
                 >
                   <Chart
                     transactions={chargeTrends}
-                    isLoading={isLoading}
-                    error={error}
+                    isLoading={isLoadingTransactions}
+                    error={errorTransactions}
+                    title="Today's Transactions"
                   />
                 </Paper>
               </Grid>
-
-         
+  
+              {/* Deposits */}
               <Grid item xs={12} md={4} lg={3}>
                 <Paper
                   sx={{
@@ -190,20 +257,36 @@ export default function Dashboard() {
                   <Deposits total={chargeConverted} />
                 </Paper>
               </Grid>
-
-        
+  
+     
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
                   <Orders transactions={charges} />
                 </Paper>
               </Grid>
+  
+           
+              <Grid item xs={12} sx={{ mt: 4 }}>
+                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+                  <PaymentIntentsTable
+
+                    allActiveIntents={allActiveIntentsToday}
+                    getClientById={getClientById}
+                    handleCancelIntent={handleCancelIntent}
+                    handleGenerateLink={handleGenerateLink}
+                    title={"Today's Payment Intents"}
+                  />
+                </Paper>
+              </Grid>
+              <ActivityBarChart data={intentTrends} />
+
             </Grid>
             <Copyright sx={{ pt: 4 }} />
           </Container>
-          </Box>
-      </Box>
+        </Box>
       </Box>
     </ThemeProvider>
   );
-}
+};
 
+export default Dashboard;

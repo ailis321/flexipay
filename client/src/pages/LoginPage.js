@@ -1,3 +1,4 @@
+//main login page to sign in or can sign up from here as well
 import React from 'react';
 import Tagline from '../components/Tagline';
 import LoginForm from '../components/LoginForm';

@@ -1,4 +1,7 @@
-// CurrentMonthDashboard.js
+// statement like dashboard for this particular month
+// shows summaries of income and outgoings for the month at the top
+// shows a list of all transactions for the month with balances as well
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Grid, Typography, CircularProgress } from '@mui/material';
@@ -13,8 +16,6 @@ import useTransactions from '../hooks/useTransactions';
 import {
     getStartOfCurrentMonth,
     getEndOfCurrentMonth,
-    getStartOfCurrentYear,
-    getEndOfCurrentYear,
     getMonthYearFromDate,
 
   
@@ -26,8 +27,10 @@ const CurrentMonthDashboard = () => {
 
     const drawerWidth = 240;
 
+    const currentDate = new Date();
+    const currentMonthName = currentDate.toLocaleString('default', { month: 'long' });
+    const currentYear = currentDate.getFullYear();
 
-  
   // States for statistics
   const [currentMonthStats, setCurrentMonthStats] = useState({
     totalIncome: 0,
@@ -52,13 +55,14 @@ const CurrentMonthDashboard = () => {
           navigate("/login");
         }
       }, [user, navigate]);
+
+      const token = user ? user.token : null;
+ 
   
 
   const { transactions, isLoading: isLoadingTransactions, error: errorTransactions } = useTransactions(user.token);
   const { customers, isLoading: isLoadingCustomers, error: errorCustomers } = useGetAllCustomers(user.token);
   const { intents, isLoading: isLoadingIntents, error: errorIntents } = useGetIntents(user.token);
-
-
 
 
   useEffect(() => {
@@ -77,14 +81,11 @@ const CurrentMonthDashboard = () => {
 
         const allDatesFromTransactions = allFilteredTransactions.map(transaction => new Date(transaction.created * 1000));
 
-        console.log('allFilteredTransactions by month :', allDatesFromTransactions);
 
       const chargeFilteredTransactions = chargeTransactions.filter(transaction => {
         const [month, year] = getMonthYearFromDate(new Date(transaction.created * 1000));
         return month === currentMonth && year === currentYear;
-      });
-
-      console.log('chargeFilteredTransactions:', chargeFilteredTransactions);
+      })
 
       const totalIncome = chargeFilteredTransactions.reduce((acc, transaction) => acc + transaction.amount, 0);
       const netIncome = chargeFilteredTransactions.reduce((acc, transaction) => acc + (transaction.amount - transaction.fee), 0);
@@ -153,11 +154,13 @@ const CurrentMonthDashboard = () => {
           <StatisticCard title="Payments sources" value={currentMonthStats.uniqueCustomers} />
         </Grid>
         <TransactionStatement
-        transactions={transactions}
+         transactions={transactions}
         timeRange={{
-         start: getStartOfCurrentYear(),
-         end: getEndOfCurrentYear(),
-         }}/> 
+         start: getStartOfCurrentMonth(),
+         end: getEndOfCurrentMonth(),
+         }}
+        title={`${currentMonthName} ${currentYear} Overview`} // Dynamic based on current month
+        />
       </Grid>
     </Box>
     </Box>

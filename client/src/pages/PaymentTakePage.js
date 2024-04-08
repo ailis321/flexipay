@@ -1,3 +1,11 @@
+// this is the page that the recipient of the payment link will see
+// it will display the payment form and the payment details asking for card info
+// the payment form will be handled by stripe 
+// no need to be logged in here so not checking for user token
+// needs a public stripe key to load the stripe elements
+// payment form will only render if status of the intent is not succeeded
+// if status is cancelled (by sender) then relevant message will be displayed to user 
+
 import React, { useState, useEffect } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
@@ -111,7 +119,7 @@ const PaymentTakePage = () => {
          <p>The payment of {Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(paymentInfo.amount / 100)} has been cancelled by the sender. Please contact {paymentInfo.companyName || 'the sender'} for any further queries on this.</p>
        </div>
      ) : clientSecret ? (
-        //ONLY rendering the payment form if the payment status is not succeeded
+        //ONLY rendering the payment form if the payment status is not succeeded i.e its not been taken already.
         <div>
           <PaymentGreeting 
             customerName={paymentInfo.customerName} 

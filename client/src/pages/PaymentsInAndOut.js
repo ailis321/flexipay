@@ -1,3 +1,8 @@
+// this is the view-payments page where the user can enter a date range to show the payments
+// that have come in and been paid out during that date range
+// the user can also get the receipt for the payments here if they need to resend to a customer
+// it goes into details about payments including the id so gives a more detailed view than the dashboard/statememt pages
+
 import * as React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -65,18 +70,23 @@ const PaymentsInAndOut = () => {
     setOpen(!open);
   };
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  const token = user.token;
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
+
+ 
+    React.useEffect(() => {
+        if (!user.token) {
+          navigate("/login");
+        }
+      }, [user, navigate]);
+
+  const token = user ? user.token : null;
+
   const { transactions, isLoading, error, noTransactions } =
-    useTransactions(token);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-
-  if (!user) {
-    navigate("/login");
-  }
-
+  useTransactions(token);
+ const [startDate, setStartDate] = useState(new Date());
+ const [endDate, setEndDate] = useState(new Date());
+  
   const filteredTransactions = transactions.filter((transaction) => {
     const transactionDate = new Date(transaction.created * 1000);
     return transactionDate >= startDate && transactionDate <= endDate;

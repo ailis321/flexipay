@@ -1,5 +1,5 @@
 
-
+const Account = require('../models/account');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const getTransactions = async (req, res) => {
@@ -54,4 +54,5 @@ const getIntents = async (req, res) => {
 module.exports = {
   getTransactions,
   getIntents,
+
 };

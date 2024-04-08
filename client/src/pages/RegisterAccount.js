@@ -1,3 +1,7 @@
+// register account page to sign up for a new account
+// will redirect to the onboarding page to complete the stripe account setup
+// no need for user or token checks here
+
 import React, { useEffect, useState } from 'react';
 import SignUpForm from '../components/SignUpForm';
 import FeatureSections from '../components/FeatureSections';

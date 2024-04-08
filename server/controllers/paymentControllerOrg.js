@@ -4,9 +4,7 @@ const Customer = require('../models/customer');
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-function getPaymentLink(req, res) {
-    res.render('paymentLink');
-  }
+
   
   async function createPaymentLink(req, res) {
     try {
@@ -120,38 +118,6 @@ async function createPaymentMethod(req, res) {
     }
 }
 
-//not using atm - will change***
-  async function completePayment(req, res) {
-    try {
-        const { paymentIntentId, paymentMethodId, name, email } = req.body;
-
-        
-        const confirmedPaymentIntent = await stripe.paymentIntents.confirm(paymentIntentId, {
-            payment_method: paymentMethodId,
-            customer: name,
-
-                email,
-          
-        });
-
-      
-        if (confirmedPaymentIntent.status === 'succeeded') {
-           
-            res.json({ success: true, paymentIntent: confirmedPaymentIntent });
-        } else {
-            
-            res.json({ success: false, paymentIntent: confirmedPaymentIntent });
-        }
-    } catch (error) {
-        console.error(error);
-        console.log(error);
-        res.status(500).send('Error completing payment.');
-    }
-  
-}
-
-
-
 const cancelPayment = async (req, res) => {
     console.log('Cancelling payment');
     const { stripeAccountId } = req.user;
@@ -171,10 +137,9 @@ const cancelPayment = async (req, res) => {
 };
 
 module.exports = {
-  getPaymentLink,
+
   createPaymentLink,
   createPaymentMethod,
-  completePayment, 
   cancelPayment,
   generateNewPaymentIntent,
 };

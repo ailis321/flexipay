@@ -1,4 +1,7 @@
-// Home.js
+// home page when user has not yet registered. 
+// gives user the option to register or login
+// will provide info about how flexipay works 
+// includes FAQs and a carousel of reviews from other users
 
 import React, { useEffect, useState } from 'react';
 import Tagline from '../components/Tagline';

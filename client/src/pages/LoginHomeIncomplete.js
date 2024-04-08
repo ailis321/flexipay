@@ -1,3 +1,7 @@
+//this page is rendered if the customer tries to login but the onboarding process with stripe is not complete
+//the customer is then redirected to the onboardingUrl to complete the process
+//the stripeAccountId is passed as a query parameter to the onboardingUrl
+
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import TaglineComponent from '../components/Tagline';

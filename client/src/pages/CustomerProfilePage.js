@@ -1,3 +1,12 @@
+// this is a detailed page for a specifiic customer
+// it will show total received from this customer and if any intents are outstanding
+// gives option to send a payment link
+// shows payment history and any cancelled payments by business
+// if any intents are awaiting status, can either cancel this intent or generate link again to send
+// if intent is cancelled then totals will update immediately on page to reflect updated data
+// shows any intents that have been cancelled by business
+// shows a chart to give insight into the most common types of payment this customer sends by descpription
+
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";

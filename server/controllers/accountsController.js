@@ -10,7 +10,7 @@ const createToken = (_id) => {
                 try {
                     const { email, firstName, lastName, businessName, password } = req.body;
             
-                    //attemoting to register the user with DB before creating stripe account
+                    //attempting to register the user with DB before creating stripe account
                     try {
                         const user = await Account.register(email, password, firstName, lastName, businessName);
             
@@ -71,6 +71,7 @@ exports.login = async (req, res) => {
     }
 }
 
+
 exports.checkOnboardingStatus = async (req, res) => {
     try {
         const { accountId } = req.params;
@@ -80,15 +81,15 @@ exports.checkOnboardingStatus = async (req, res) => {
 
         // Check if onboarding is complete
         if (account.details_submitted) {
-            // Redirect to yourAccount page if onboarding is complete
-            res.redirect('http://localhost:3000/LoginHomeComplete');
+            // Redirect to dashboard page if onboarding is complete
+            res.redirect('http://localhost:3000/dashboard');
      
         } else {
             // Create account link to send back to onboarding
             const accountLink = await stripe.accountLinks.create({
                 account: accountId,
                 refresh_url: `http://localhost:8000/api/accounts/check-onboarding/${accountId}`, 
-                return_url: 'http://localhost:3000/LoginHomeComplete', 
+                return_url: 'http://localhost:3000/dashboard', 
                 type: 'account_onboarding',
             });
 

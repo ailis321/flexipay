@@ -64,11 +64,12 @@ const PaymentIntentsDashboard = () => {
   const { cancelPaymentIntent, cancelError } = useCancelPaymentIntent();
 
   useEffect(() => {
-    if (!user.token) {
-      navigate("/login");
+    if (!token) { 
+      navigate('/login');
+    } else {
+      retrieveClients(token);
     }
-    retrieveClients(token);
-  }, []);
+  }, [token]); 
 
   const handleCancelIntent = async (intentId) => {
     const wasCancelled = await cancelPaymentIntent(intentId);

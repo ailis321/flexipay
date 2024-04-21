@@ -12,6 +12,7 @@ const Layout = ({ children }) => {
     <>
       {showHeaderAndFooter && <Header />}
       {children}
+      {showHeaderAndFooter && <Footer />}
 
     </>
   );

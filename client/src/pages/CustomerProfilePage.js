@@ -23,45 +23,65 @@ import CancelledPayments from "../components/CancelledPayments";
 import PaymentDescriptionChart from "../components/PaymentDescriptionChart";
 
 const drawerWidth = 240;
+const customTheme = createTheme({
+  components: {
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: '#53937d',
+          color: '#ffffff',
+        },
+      },
+    },
+  },
+});
 
 const CustomerProfilePage = () => {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
   const { customerId } = useParams();
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
-  const token = user.token;
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')));
 
-  if (!user) {
-    navigate("/login");
-  }
+  useEffect(() => {
+    if (!user || !user.token) {
+      navigate('/login');
+      return;
+    }
+  }, [user, navigate]);
+
+  const token = user?.token;
 
   const {
     customers,
     isLoading: isLoadingCustomers,
     error: errorCustomers,
   } = useGetAllCustomers(token);
+
   const {
     intents,
     isLoading: isLoadingIntents,
     error: errorIntents,
   } = useGetIntents(token);
+
   const [customer, setCustomer] = useState(null);
   const [paymentHistory, setPaymentHistory] = useState([]);
 
   useEffect(() => {
-    const specificCustomer = customers.find(
-      (c) => c.stripeCustomerId === customerId
-    );
-    setCustomer(specificCustomer);
+    if (token) {
+      const specificCustomer = customers.find(
+        (c) => c.stripeCustomerId === customerId
+      );
+      setCustomer(specificCustomer);
 
-    const customerIntents = intents.filter(
-      (intent) => intent.customer === specificCustomer?.stripeCustomerId
-    );
-    setPaymentHistory(customerIntents);
-  }, [customers, intents]);
+      const customerIntents = intents.filter(
+        (intent) => intent.customer === specificCustomer?.stripeCustomerId
+      );
+      setPaymentHistory(customerIntents);
+    }
+  }, [customers, intents, token, customerId]);
 
   if (isLoadingCustomers || isLoadingIntents) {
     return <div>Loading...</div>;
@@ -76,40 +96,21 @@ const CustomerProfilePage = () => {
   }
 
   // Calculate totals
-  const totalReceived =
-    paymentHistory
-      .filter((payment) => payment.status === "succeeded")
-      .reduce((acc, payment) => acc + payment.amount, 0) / 100;
+  const totalReceived = paymentHistory
+    .filter((payment) => payment.status === 'succeeded')
+    .reduce((acc, payment) => acc + payment.amount, 0) / 100;
 
-  const totalAwaiting =
-    paymentHistory
-      .filter((payment) =>
-        ["requires_payment_method", "requires_confirmation"].includes(
-          payment.status
-        )
-      )
-      .reduce((acc, payment) => acc + payment.amount, 0) / 100;
-
-  const customTheme = createTheme({
-    components: {
-      MuiDrawer: {
-        styleOverrides: {
-          paper: {
-            backgroundColor: "#53937d",
-            color: "#ffffff",
-          },
-        },
-      },
-    },
-  });
+  const totalAwaiting = paymentHistory
+    .filter((payment) => ['requires_payment_method', 'requires_confirmation'].includes(payment.status))
+    .reduce((acc, payment) => acc + payment.amount, 0) / 100;
 
   return (
     <ThemeProvider theme={customTheme}>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <SidebarMenu open={open} handleDrawerClose={toggleDrawer} />
         <Box
-          component="main"
+          component='main'
           sx={{
             flexGrow: 1,
             p: 3,
@@ -118,40 +119,23 @@ const CustomerProfilePage = () => {
         >
           <Container>
             <Box sx={{ my: 4 }}>
-              <Typography variant="h4" gutterBottom>
+              <Typography variant='h4' gutterBottom>
                 Customer Profile
               </Typography>
-              <ProfileInfo customer={customer} />
+              {customer && <ProfileInfo customer={customer} />}
               <Box
                 sx={{
-                  display: "flex",
-                  justifyContent: "space-around",
-                  flexWrap: "wrap",
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                  flexWrap: 'wrap',
                 }}
               >
-                <StatisticCard
-                  title="Total Received"
-                  value={`£${totalReceived.toFixed(2)}`}
-                />
-                <StatisticCard
-                  title="Total Awaiting"
-                  value={`£${totalAwaiting.toFixed(2)}`}
-                  valueStyle={{ color: "red" }} 
-                />
+                <StatisticCard title='Total Received' value={`£${totalReceived.toFixed(2)}`} />
+                <StatisticCard title='Total Awaiting' value={`£${totalAwaiting.toFixed(2)}`} valueStyle={{ color: 'red' }} />
               </Box>
-              <ProfilePaymentHistory
-                paymentHistory={paymentHistory.filter(
-                  (payment) => payment.status !== "canceled"
-                )}
-              />
-              <CancelledPayments
-                cancelledPayments={paymentHistory.filter(
-                  (payment) => payment.status === "canceled"
-                )}
-              />
-              <PaymentDescriptionChart
-            paymentHistory={paymentHistory} customerName={customer.name}
-            />
+              <ProfilePaymentHistory paymentHistory={paymentHistory.filter((payment) => payment.status !== 'canceled')} />
+              <CancelledPayments cancelledPayments={paymentHistory.filter((payment) => payment.status === 'canceled')} />
+              <PaymentDescriptionChart paymentHistory={paymentHistory} customerName={customer.name} />
             </Box>
           </Container>
         </Box>

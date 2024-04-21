@@ -7,11 +7,13 @@ import React, { useEffect, useState } from 'react';
 import Tagline from '../components/Tagline';
 import FeatureSections from '../components/FeatureSections'; 
 import FAQSection from '../components/FAQSection';
-import Carousel from '../components/Carousel';
+import Carousel from '../components/ReviewsCarousel';
 
 import HeroVideo from '../components/HeroVideo';
 
 const Home = () => {
+
+
   const [features, setFeatures] = useState([]);
 
   useEffect(() => {

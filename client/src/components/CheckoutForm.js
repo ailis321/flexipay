@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useNavigate } from 'react-router-dom'; 
 
-export default function CheckoutForm({ clientSecret, stripeAccountId }) { 
+export default function CheckoutForm({ clientSecret, stripeAccountId, logo, colour, businessName}) { 
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate(); 
@@ -31,7 +31,12 @@ export default function CheckoutForm({ clientSecret, stripeAccountId }) {
 
     setIsLoading(true);
 
-    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret);
+    const { error, paymentIntent } = await stripe.confirmPayment ({
+      elements,
+   
+    });
+
+  
 
     if (error) {
       setMessage(error.message);
@@ -53,15 +58,19 @@ export default function CheckoutForm({ clientSecret, stripeAccountId }) {
       }
     }
   };
+  const paymentElementOptions = {
+    layout: "tabs"
+  }
+
 
   return (
     <section className="bg-light py-5">
       <form id="payment-form" onSubmit={handleSubmit}>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#53937d' }}>
-          <img src={process.env.PUBLIC_URL + "/logo.png"} alt="Logo" style={{ maxWidth: '50px', marginRight: '10px' }} />
-          <p>FlexiPay Ltd</p>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color: {colour} }}>
+          <img src={logo} alt="Logo" style={{ maxWidth: '50px', marginRight: '10px' }} />
+            <p style={{ color: colour }}>{businessName}</p>
         </div>
-        <PaymentElement />
+        <PaymentElement id="payment-element" options={paymentElementOptions}/>
         <button disabled={isLoading || !stripe || !elements} type="submit">
           <span id="button-text">
             {isLoading ? <div className="spinner" id="spinner"></div> : "Pay Now"}

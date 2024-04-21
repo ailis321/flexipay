@@ -21,7 +21,7 @@ const FAQSection = () => {
                                         aria-expanded="false"
                                         aria-controls="flush-collapseOne"
                                     >
-                                        Accordion Item #1
+                                        Is there any sign-up fees?
                                     </button>
                                 </h2>
                                 <div
@@ -30,9 +30,9 @@ const FAQSection = () => {
                                     data-bs-parent="#accordionFlushExample"
                                 >
                                     <div className="accordion-body" style={{ color: '#53937d' }}>
-                                        Placeholder content for this accordion, which is intended to
-                                        demonstrate the <code>.accordion-flush</code> className.
-                                        This is the first item's accordion body.
+                                        No, there are no sign-up fees to start using FlexiPay. However, as we partner with Stripe to handle our payment processing, 
+                                        each successful transaction will incur a small fee. You can find detailed information about these transaction fees on 
+                                        <a href="https://stripe.com/gb/pricing" target="_blank" rel="noopener noreferrer"> Stripe's pricing page</a>.
                                     </div>
                                 </div>
                             </div>
@@ -46,7 +46,7 @@ const FAQSection = () => {
                                         aria-expanded="false"
                                         aria-controls="flush-collapseTwo"
                                     >
-                                        Accordion Item #2
+                                        Do I require much information to sign up?
                                     </button>
                                 </h2>
                                 <div
@@ -55,10 +55,14 @@ const FAQSection = () => {
                                     data-bs-parent="#accordionFlushExample"
                                 >
                                     <div className="accordion-body" style={{ color: '#53937d' }}>
-                                        Placeholder content for this accordion, which is intended to
-                                        demonstrate the <code>.accordion-flush</code> className.
-                                        This is the second item's accordion body. Let's imagine this
-                                        being filled with some actual content.
+                                    Signing up for FlexiPay is quick and straightforward, taking no more than 5 minutes. 
+                                    You only need to provide some basic details such as your name, contact number, email, 
+                                    business name, and password. After this initial signup, you will be redirected to 
+                                    a Stripe-hosted onboarding page to enter further information. This includes your company 
+                                    name and address, a bank account number and sort code for receiving payouts, 
+                                    and other essential business details. Once this process is complete, 
+                                    you will be directed back to FlexiPay, where you can start creating payment links and 
+                                    adding clients to your client database.
                                     </div>
                                 </div>
                             </div>
@@ -72,7 +76,7 @@ const FAQSection = () => {
                                         aria-expanded="false"
                                         aria-controls="flush-collapseThree"
                                     >
-                                        Accordion Item #3
+                                        How do I know this is secure?
                                     </button>
                                 </h2>
                                 <div
@@ -80,15 +84,19 @@ const FAQSection = () => {
                                     className="accordion-collapse collapse"
                                     data-bs-parent="#accordionFlushExample"
                                 >
-                                    <div className="accordion-body" style={{ color: '#53937d' }}>
-                                        Placeholder content for this accordion, which is intended to
-                                        demonstrate the <code>.accordion-flush</code> className.
-                                        This is the third item's accordion body. Nothing more
-                                        exciting happening here in terms of content, but just
-                                        filling up the space to make it look, at least at first
-                                        glance, a bit more representative of how this would look in
-                                        a real-world application.
-                                    </div>
+                                  <div className="accordion-body" style={{ color: '#53937d' }}>
+                            <p>At FlexiPay, ensuring the security of your transactions is paramount. We use Stripe as our payment gateway, 
+                                renowned for its rigorous security standards. Stripe is certified to PCI Service Provider Level 1, 
+                                the highest level of certification available in the payments industry. This certification is part of Stripe's 
+                                commitment to maintaining robust security measures, which include compliance with the PCI Data Security Standard 
+                                (PCI DSS) to protect card data, implementation of strict access controls, and regular security audits.</p>
+
+                             <p>Stripe also adheres to additional security standards such as the EMVCo standard for card terminals, ensuring secure card transactions. 
+                                Their systems are designed to prevent unauthorised access and safeguard sensitive information, utilising strong cryptography and 
+                                secure network architectures.</p>
+
+                            <p>For more details on Stripe's security practices, you can visit their <a href="https://stripe.com/docs/security/stripe" target="_blank" rel="noopener noreferrer">security documentation</a>.</p>
+                                </div>
                                 </div>
                             </div>
                         </div>

@@ -10,18 +10,22 @@ import {
   ThemeProvider,
   Typography,
   createTheme,
+  Button,
+  TextField,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import SidebarMenu from "../components/SidebarMenu";
 import StatisticCard from "../components/StatisticCard";
 import TopCustomersList from "../components/TopCustomersList";
-import ActivityTable from "../components/ActivityTable";
 import useTransactions from "../hooks/useTransactions";
 import AllCustomersList from "../components/AllCustomersList";
 import TotalAmountCard from "../components/TotalAmountCard";
 import useRetrieveClients from "../hooks/useRetrieveClients"; 
 import { Bar } from "react-chartjs-2";
-import Chart from "chart.js/auto";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+
 
 const drawerWidth = 240;
 
@@ -29,12 +33,15 @@ const CustomerActivityPage = () => {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => setOpen(!open);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
 
   const user = JSON.parse(localStorage.getItem("user"));
 
   React.useEffect(() => {
     if (!user) {
       navigate('/login');
+      return; 
     }
   }, [navigate, user]);
 
@@ -189,6 +196,31 @@ const CustomerActivityPage = () => {
                 Customer Activity
               </Typography>
             </Grid>
+
+            <Grid item xs={12}>
+          <Typography variant="h6" gutterBottom>
+            Filter by Date
+          </Typography>
+            <DatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            selectsStart
+            startDate={startDate}
+            endDate={endDate}
+            dateFormat="MMMM d, yyyy"
+          />
+          <DatePicker
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
+            selectsEnd
+            startDate={startDate}
+            endDate={endDate}
+            minDate={startDate}
+            dateFormat="MMMM d, yyyy"
+          />
+        </Grid>
+
+            
             <Grid item xs={12} sm={6} md={3}>
               <StatisticCard
                 title="Total Charges Received "

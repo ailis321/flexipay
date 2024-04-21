@@ -15,13 +15,9 @@ import ChangePasswordDialog from './ChangePasswordDialog';
 
 
 // Account Info Component
-const AccountInfo = ({ profileInfo, token }) => {
+const AccountInfo = ({ profileInfo, token, logo}) => {
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
-
-  const handleEditAccount = () => {
-//TODO
-  };
-
+  
   const handleOpenChangePasswordDialog = () => {
     setIsPasswordDialogOpen(true);
   };
@@ -33,15 +29,15 @@ const AccountInfo = ({ profileInfo, token }) => {
   return (
     <>
       <Box sx={{ my: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Avatar sx={{ bgcolor: '#53937d', width: 56, height: 56 }}>
-          <AccountCircleIcon />
+        <Avatar sx={{ bgcolor: 'white', width: 56, height: 56 }}>
+        <img src={logo} alt="Logo" style={{ width: 100, height: 100 }} />
         </Avatar>
         <Typography variant="h4" component="h1" gutterBottom>
-          My Account
+          {profileInfo.businessName}
         </Typography>
       </Box>
       <Divider sx={{ width: '100%', my: 2 }} />
-      <Paper elevation={3} sx={{ p: 3, width: '100%', bgcolor: '#53937d', color: 'white' }}>
+      <Paper elevation={3} sx={{ p: 3, width: '100%', bgcolor: 'white', color: '#53937d' }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <Typography variant="h6">First Name:</Typography>
@@ -61,10 +57,8 @@ const AccountInfo = ({ profileInfo, token }) => {
           </Grid>
         </Grid>
         <Box mt={2} display="flex" justifyContent="center" gap={2}>
-          <Button variant="contained" size="small" onClick={handleEditAccount} sx={{ bgcolor: 'primary.contrastText', color: 'primary.main' }}>
-            Edit Account
-          </Button>
-          <Button variant="outlined" size="small" onClick={handleOpenChangePasswordDialog} sx={{ bgcolor: 'white', border: '1px solid white' }}>
+      
+          <Button variant="outlined" size="small" onClick={handleOpenChangePasswordDialog} sx={{ bgcolor: '#53937d', border: '1px solid white', color: 'white' }}>
             Change Password
           </Button>
         </Box>

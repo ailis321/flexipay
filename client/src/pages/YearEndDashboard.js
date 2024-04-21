@@ -43,16 +43,20 @@ const YearEndDashboard = () => {
     };
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem("user"));
+    const token = user ? user.token : null;
+   
   
-    useEffect(() => {
-        if (!user.token) {
+      React.useEffect(() => {
+          if (!token) {
             navigate("/login");
-        }
-    }, [user, navigate]);
+            return;
+          }
+        }, [user, navigate]);
   
-    const { transactions, isLoading: isLoadingTransactions, error: errorTransactions } = useTransactions(user.token);
-    const { customers, isLoading: isLoadingCustomers, error: errorCustomers } = useGetAllCustomers(user.token);
-    const { intents, isLoading: isLoadingIntents, error: errorIntents } = useGetIntents(user.token);
+  
+    const { transactions, isLoading: isLoadingTransactions, error: errorTransactions } = useTransactions(token);
+    const { customers, isLoading: isLoadingCustomers, error: errorCustomers } = useGetAllCustomers(token);
+    const { intents, isLoading: isLoadingIntents, error: errorIntents } = useGetIntents(token);
   
     useEffect(() => {
         const chargeTransactions = transactions.filter(transaction => transaction.type === 'charge');

@@ -19,7 +19,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
         customer: req.body.customerId,
         description: req.body.description,
         receipt_email: email,
-        payment_method: "pm_card_visa",
+      //  payment_method: "pm_card_visa",
         automatic_payment_methods: { enabled: true },
       }, {
         stripeAccount: req.user.stripeAccountId

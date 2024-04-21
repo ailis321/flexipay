@@ -12,6 +12,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useParams, useLocation } from 'react-router-dom';
 import CheckoutForm from '../components/CheckoutForm';
 import PaymentGreeting from '../components/PaymentGreeting';
+import CustomHeader from '../components/CustomHeader';
+import CustomFooter from '../components/CustomFooter';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -29,6 +31,16 @@ const PaymentTakePage = () => {
     amount: ''
   });
   const [error, setError] = useState(null);
+  const [preferences, setPreferences] = useState({
+    colour: '',
+    logoUrl: '',
+    displayedBusinessName: '',
+    paymentMessage: '',
+    businessContactNumber: '',
+    businessEmailAddress: '',
+
+  }); //to store the preferences of the business that the payment is being made to
+
 
   useEffect(() => {
     const fetchPaymentInfo = async () => {
@@ -47,9 +59,20 @@ const PaymentTakePage = () => {
           return;
         }
 
+
+
         const data = await response.json();
+
         setClientSecret(data.clientSecret);
         setPaymentStatus(data.status); 
+        setPreferences({
+          colour: data.preferences.colour,
+          logoUrl: data.preferences.logo,
+          displayedBusinessName: data.preferences.displayedBusinessName,
+          paymentMessage: data.preferences.customMessageForPaymentLink,
+          businessContactNumber: data.preferences.businessContactNumber,
+          businessEmailAddress: data.preferences.businessEmailAddress,
+        });
         setPaymentInfo({
           customerName: data.customerName,
           companyName: data.businessName,
@@ -71,9 +94,9 @@ const PaymentTakePage = () => {
   const appearance = {
     theme: 'stripe',
     variables: {
-      colorPrimary: '#53937d', 
+      colorPrimary: preferences.colour || '#53937d',
       colorBackground: '#ffffff', 
-      colorText: '#53937d', 
+      colorText: preferences.colour || '#53937d',
       colorDanger: '#df1b41', 
       fontFamily: 'Arial, sans-serif', 
       spacingUnit: '8px', 
@@ -100,6 +123,11 @@ const PaymentTakePage = () => {
   
   return (
     <div className="PaymentTakePage">
+        <CustomHeader
+      color={preferences.colour || '#53937d'}
+      companyName={preferences.displayedBusinessName || paymentInfo.companyName}
+      logoUrl={preferences.logoUrl}
+    />
       {error ? (
         <div className="ErrorWrapper">
           <div className="ErrorMessage">
@@ -123,15 +151,24 @@ const PaymentTakePage = () => {
         <div>
           <PaymentGreeting 
             customerName={paymentInfo.customerName} 
-            companyName={paymentInfo.companyName} 
+            companyName={preferences.displayedBusinessName || paymentInfo.companyName} 
             amount={paymentInfo.amount} 
-            logoUrl={process.env.PUBLIC_URL + "/logo.png"}/>
+            message={preferences.paymentMessage}
+            logoUrl={preferences.logoUrl}/>
           <Elements stripe={stripePromise} options={{ clientSecret, appearance }}> 
-            <CheckoutForm clientSecret={clientSecret} stripeAccountId={stripeAccountId}/>
+            <CheckoutForm clientSecret={clientSecret} stripeAccountId={stripeAccountId} logo={preferences.logoUrl} colour={preferences.colour} businessName={preferences.displayedBusinessName}/>
           </Elements>
         </div>
       ) : <p>Loading...</p>}
+      <CustomFooter
+        email={preferences.businessEmailAddress}
+        phone={preferences.businessContactNumber}
+        colour={preferences.colour}
+        businessName={preferences.displayedBusinessName}
+      />
     </div>
+
+
   );
 }
 

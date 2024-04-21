@@ -7,9 +7,13 @@ import PaymentLink from '../components/PaymentLink';
 import { Card, CardContent, Typography, Box, Container, Paper, Grid } from '@mui/material';
 import PaymentIcon from '@mui/icons-material/Payment';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { useState } from 'react';
+
+
 
 const PaymentLinkPage = () => {
   const navigate = useNavigate();
+  const [paymentLink, setPaymentLink] = useState(''); 
   const user = JSON.parse(localStorage.getItem("user"));
 
  

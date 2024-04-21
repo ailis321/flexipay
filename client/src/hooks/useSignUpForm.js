@@ -36,20 +36,25 @@ export const useSignupForm = () => {
         return;
       }
 
-      //if no error, get data to create account
-      const responseData = await response.json(); 
+      const responseData = await response.json();
+      console.log('Account created:', responseData);
+  
+      if (response.ok) {
+        // Save only the token and email to local storage
+        const { token, email, onboardingComplete } = responseData;
+        // Save only the token, email, and onboarding status to local storage
+        localStorage.setItem('user', JSON.stringify({ token, email, onboardingComplete }));
+
+        // Updating authentication context as logged in
+        dispatch({ type: 'LOGIN', payload: { token, email, onboardingComplete } });
+  
+        // Redirecting the user to the Stripe onboarding URL from backend
+        window.location.href = responseData.accountLink;
+      } else {
+        throw new Error(responseData.message || 'Failed to create account');
+      }
       
-
-      console.log('Account created : ', +responseData);
-            
-      //Saving the user to local storage which includes the JWT token
-      localStorage.setItem('user', JSON.stringify(responseData));
-      // Updating authentication context as logged in
-      dispatch({ type: 'LOGIN', payload: responseData });
-      setIsLoading(false); 
-
-      //// Redirecting the user to the stripe onboarding URL from backend
-      window.location.href = responseData.accountLink; 
+      setIsLoading(false);
     } catch (error) {
       console.error('Error creating account:', error);
       setIsLoading(false); 

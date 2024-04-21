@@ -71,11 +71,16 @@ const Dashboard = () => {
     setOpen(!open);
   };
 
-
-   const user = JSON.parse(localStorage.getItem("user"));
- 
-   const token = user ? user.token : null;
- 
+  const user = JSON.parse(localStorage.getItem('user'));
+  const token = user?.token; // Safely access the token using optional chaining
+  
+  useEffect(() => {
+    if (!token) { // Now checking if token is not available instead of user.token
+      navigate('/login');
+    } else {
+      retrieveClients(token);
+    }
+  }, [token]); 
 
   const { transactions, isLoading: isLoadingTransactions, error: errorTransactions } = useTransactions(token);
   const { intents, isLoading: isLoadingGetIntents, error: errorIntents, noIntents } = useGetIntents(token);
@@ -83,12 +88,6 @@ const Dashboard = () => {
   const { generateNewPaymentLink } = useGenerateNewPaymentLink();
   const { cancelPaymentIntent, cancelError } = useCancelPaymentIntent();
 
-  useEffect(() => {
-    if (!user.token) {
-      navigate("/login");
-    }
-    retrieveClients(token);
-  }, []);
 
   const handleCancelIntent = async (intentId) => {
     const wasCancelled = await cancelPaymentIntent(intentId);
@@ -169,6 +168,17 @@ const Dashboard = () => {
 
     // filtered out cancelled intents for chart data for todays intents
   const allActiveIntentsToday = todaysPaymentIntents.filter((intent) => intent.status !== "canceled");
+
+  const outstandingIntents = allActiveIntentsToday.filter((intent) => ['requires_payment_method', 'requires_confirmation'].includes(intent.status));
+
+  const totalAwaiting = allActiveIntentsToday
+  .filter((payment) => ['requires_payment_method', 'requires_confirmation'].includes(payment.status))
+  .reduce((acc, payment) => acc + payment.amount, 0) / 100;
+
+  const intentsSentTrends = outstandingIntents.map((total) => ({
+    time: new Date(total.created * 1000).toLocaleTimeString(),
+    amount: total.amount / 100,
+  }));
 
   const intentTrends = allActiveIntents.map((intent) => ({
     date: new Date(intent.created * 1000).toLocaleDateString(),
@@ -254,7 +264,37 @@ const Dashboard = () => {
                     height: 240,
                   }}
                 >
-                  <Deposits total={chargeConverted} />
+                  <Deposits total={chargeConverted} title ='Total Payments Received Today'/>
+                </Paper>
+              </Grid>
+              <Grid item xs={12} md={4} lg={3}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    height: 240,
+                  }}
+                >
+                  <Deposits total={totalAwaiting} title='Total Payments Awaiting Today' />
+                </Paper>
+              </Grid>
+               {/* Chart */}
+               <Grid item xs={12} md={8} lg={9}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    height: 240,
+                  }}
+                >
+                  <Chart
+                    transactions={intentsSentTrends}
+                    isLoading={isLoadingGetIntents}
+                    error={errorIntents}
+                    title="Today's Outstanding Transactions"
+                  />
                 </Paper>
               </Grid>
   

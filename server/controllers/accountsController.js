@@ -4,6 +4,7 @@ const bycrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const createToken = (_id) => {
+    //TODO - Maybe reduce expiry of token
     return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: '3d'})};
 
         exports.registerUser = async (req, res) => {
@@ -36,13 +37,14 @@ const createToken = (_id) => {
                         
                             refresh_url: `http://localhost:8000/api/accounts/check-onboarding/${user.stripeAccountId}`,
                             // return URL to bring the user to their logged in dashboard once onboarding is complete
-                            return_url: 'http://localhost:3000/LoginHomeComplete',
+                            return_url: 'http://localhost:3000/preferences',
                             type: 'account_onboarding',
                         });
+
+                        console.log('JSON RESPONSE', { accountLink: accountLink.url, email, token, onboardingComplete: false});
             
-                        // Sending the account link URL to frontend along with user and token
-                        res.json({ accountLink: accountLink.url, user, token });
-                        
+                        // Sending the account link URL to frontend along with user and token and onboarding status to false as this is not done yet
+                        res.json({ accountLink: accountLink.url, email, token, onboardingComplete: false });
                     } catch (error) {
                         console.error('Error creating user:', error);
                         // get the error message from the error object to display on frontend
@@ -63,8 +65,28 @@ exports.login = async (req, res) => {
         const user = await Account.login(email, password);
         const token = createToken(user._id);
 
-        
-        res.status(200).json({email, token})
+        //before logging in need to check onboarding status is complete
+        const stripeId = user.stripeAccountId;
+        const account = await stripe.accounts.retrieve(stripeId);
+
+        if (account.details_submitted) {
+            const onboardingComplete = true;
+            console.log('JSON RESPONSE', { email, token, onboardingComplete });
+            res.status(200).json({ email, token, onboardingComplete });
+        }
+        else {
+        // If onboarding is not complete, create a new account link and redirect
+        const accountLink = await stripe.accountLinks.create({
+            account: user.stripeAccountId,
+            refresh_url: `http://localhost:8000/api/accounts/check-onboarding/${user.stripeAccountId}`, 
+            return_url: `http://localhost:8000/api/accounts/check-onboarding/${user.stripeAccountId}`, 
+            type: 'account_onboarding',
+        });
+
+        console.log('Redirecting to complete onboarding', { accountLink: accountLink.url });
+        res.status(200).json({ email, token, onboardingComplete: false, accountLink: accountLink.url });
+        }
+
     } catch (error) {
         console.error('Error logging in:', error);
         res.status(400).json({ error: error.message });
@@ -81,15 +103,17 @@ exports.checkOnboardingStatus = async (req, res) => {
 
         // Check if onboarding is complete
         if (account.details_submitted) {
-            // Redirect to dashboard page if onboarding is complete
-            res.redirect('http://localhost:3000/dashboard');
+            // Redirect to preferences page if onboarding is complete
+            //want to change onboarding status to true in local storage
+            
+            res.redirect(`http://localhost:3000/preferences?onboardingComplete=true`);
      
         } else {
             // Create account link to send back to onboarding
             const accountLink = await stripe.accountLinks.create({
                 account: accountId,
                 refresh_url: `http://localhost:8000/api/accounts/check-onboarding/${accountId}`, 
-                return_url: 'http://localhost:3000/dashboard', 
+                return_url: `http://localhost:8000/api/accounts/check-onboarding/${accountId}`, 
                 type: 'account_onboarding',
             });
 

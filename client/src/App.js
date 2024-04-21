@@ -21,6 +21,8 @@ import CustomerProfilePage from "./pages/CustomerProfilePage";
 import CurrentMonthDashboard from "./pages/CurrentMonthDashboard";
 import YearEndDashboard from "./pages/YearEndDashboard";
 import AccountPage from "./pages/AccountPage";
+import HowItWorks from "./pages/HowItWorks";
+import PreferenceSetupPage from "./pages/PreferenceSetupPage";
 
 function App() {
   const { user } = useAuthenticationContext();
@@ -43,16 +45,17 @@ function App() {
             <Route path="/dashboard2" element={user ? <DashboardPage /> : <Navigate to="/login" />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/current-month" element={<CurrentMonthDashboard />} />
+            <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/year-end" element={<YearEndDashboard />} />
             <Route path="/account" element={<AccountPage /> } />
+            <Route path="/preferences" element={<PreferenceSetupPage />} />
             <Route path="/customer-activity" element={<CustomerActivityPage />} />
             <Route path="/customer-profile/:customerId" element={<CustomerProfilePage />} />
             <Route path="/paymentIntents" element={<PaymentIntentsDashboard />} />
             <Route path="/view-payments" element={ <PaymentsInAndOut />} />
-            <Route path="/home" element={<Home />} />
+            <Route path="/home" element= {!user ? <Home /> : <Navigate to="/dashboard" />} />
           </Routes>
         </Layout>
-        <Footer />
       </BrowserRouter>
 
     </div>

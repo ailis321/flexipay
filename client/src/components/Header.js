@@ -2,10 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthenticationContext } from '../hooks/useAuthenticationContext';
 import { useLogout } from '../hooks/useLogout';
+import {useNavigate} from 'react-router-dom';
 
 const Header = () => {
   const { logout } = useLogout();
   const { user } = useAuthenticationContext();
+  const navigate = useNavigate();  
+  const handleLogout = () => {
+    logout();  
+    navigate('/home'); 
+  };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light py-4">
@@ -47,13 +53,7 @@ const Header = () => {
               </Link>
             </li>
              )}
-               {!user && (
-              <li className="nav-item">
-              <Link className="nav-link" to="/pricing">
-                Pricing
-              </Link>
-            </li>
-             )}
+              
         
           {user && (
             <li className="nav-item">
@@ -85,7 +85,7 @@ const Header = () => {
              )}
             {user && (
                 <li className="nav-item">
-                  <button className="btn btn-link nav-link" onClick={logout}>Logout</button>
+                  <button className="btn btn-link nav-link" onClick={handleLogout}>Logout</button>
                 </li>
             )}
             {!user && (

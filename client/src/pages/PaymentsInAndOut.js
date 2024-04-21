@@ -72,15 +72,15 @@ const PaymentsInAndOut = () => {
 
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
-
+  const token = user ? user.token : null;
  
+
     React.useEffect(() => {
-        if (!user.token) {
+        if (!token) {
           navigate("/login");
         }
       }, [user, navigate]);
 
-  const token = user ? user.token : null;
 
   const { transactions, isLoading, error, noTransactions } =
   useTransactions(token);

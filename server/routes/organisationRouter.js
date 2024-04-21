@@ -12,6 +12,10 @@ router.get('/profile', organisationController.getAccountInfo);
 
 router.post('/change-password', organisationController.changePassword);
 
+router.post('/set-preferences', organisationController.updatePreferences);
+
+router.get('/get-preferences', organisationController.getPreferences);
+
 
 
 module.exports = router;

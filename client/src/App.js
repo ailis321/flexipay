@@ -23,6 +23,7 @@ import YearEndDashboard from "./pages/YearEndDashboard";
 import AccountPage from "./pages/AccountPage";
 import HowItWorks from "./pages/HowItWorks";
 import PreferenceSetupPage from "./pages/PreferenceSetupPage";
+import CustomStatementDashboard from "./pages/CustomStatementDashboard";
 
 function App() {
   const { user } = useAuthenticationContext();
@@ -49,6 +50,7 @@ function App() {
             <Route path="/year-end" element={<YearEndDashboard />} />
             <Route path="/account" element={<AccountPage /> } />
             <Route path="/preferences" element={<PreferenceSetupPage />} />
+            <Route path="/custom-statement" element={<CustomStatementDashboard />} />
             <Route path="/customer-activity" element={<CustomerActivityPage />} />
             <Route path="/customer-profile/:customerId" element={<CustomerProfilePage />} />
             <Route path="/paymentIntents" element={<PaymentIntentsDashboard />} />

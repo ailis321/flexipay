@@ -10,7 +10,7 @@ const useGetAccountPreferences = (token) => {
     const fetchPreferences = async () => {
       setLoading(true);
       setError(null);
-      setPreferencesFound(true); // Reset this flag on new fetch attempt
+      setPreferencesFound(true); 
 
       try {
         const response = await fetch('/api/organisations/get-preferences', {
@@ -28,11 +28,11 @@ const useGetAccountPreferences = (token) => {
         const data = await response.json();
         if (data.preferencesFound === false) {
           setPreferencesFound(false);
-          setPreferences(null); // Clear any existing preferences if none are found
+          setPreferences(null); 
         } else {
           setPreferences(data.preferences);
           setPreferencesFound(true);
-          console.log('Preferences found:', data.preferences);
+  
         }
       } catch (err) {
         setError(err.message);

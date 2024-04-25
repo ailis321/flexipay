@@ -16,6 +16,7 @@ const PaymentLinkPage = () => {
   const [paymentLink, setPaymentLink] = useState(''); 
   const user = JSON.parse(localStorage.getItem("user"));
 
+
  
     React.useEffect(() => {
         if (!user.token) {

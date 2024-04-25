@@ -10,7 +10,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { Box, Typography, Container } from "@mui/material";
+import { Box, Typography, Container, Grid } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import SidebarMenu from "../components/SidebarMenu";
@@ -87,9 +87,6 @@ const CustomerProfilePage = () => {
     return <div>Loading...</div>;
   }
 
-  if (errorCustomers || errorIntents) {
-    return <div>Error: {errorCustomers || errorIntents}</div>;
-  }
 
   if (!customer) {
     return <div>No customer found</div>;
@@ -135,7 +132,9 @@ const CustomerProfilePage = () => {
               </Box>
               <ProfilePaymentHistory paymentHistory={paymentHistory.filter((payment) => payment.status !== 'canceled')} />
               <CancelledPayments cancelledPayments={paymentHistory.filter((payment) => payment.status === 'canceled')} />
+              <Grid item xs={12} sx={{ mt: 4 }}>
               <PaymentDescriptionChart paymentHistory={paymentHistory} customerName={customer.name} />
+            </Grid>
             </Box>
           </Container>
         </Box>

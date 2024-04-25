@@ -88,7 +88,6 @@ const updatePreferences = async (req, res) => {
       }
     );
 
-    console.log('Updated preferences:', updatedPreferences);
 
     res.status(200).json(updatedPreferences);
   } catch (error) {

@@ -12,6 +12,7 @@ import {
   Snackbar,
   Typography,
   Paper,
+  Grid,
   CircularProgress,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -21,8 +22,10 @@ import useCancelPaymentIntent from "../hooks/useCancelPaymentIntent";
 import SidebarMenu from "../components/SidebarMenu";
 import useGenerateNewPaymentLink from "../hooks/useGenerateNewPaymentLink";
 import Chart from "react-apexcharts";
+import DateRangePicker from "../components/DateRangePicker";
+import SearchBar from "../components/SearchBar";
 import MuiAlert from "@mui/material/Alert";
-import PaymentIntentsTable from "../components/PaymentIntentsTable"; // Ensure to create this component as per the second part
+import PaymentIntentsTable from "../components/PaymentIntentsTable"; 
 
 const drawerWidth = 240;
 const customTheme = createTheme({
@@ -54,6 +57,12 @@ const PaymentIntentsDashboard = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [link, setLink] = useState(null);
   const [open, setOpen] = useState(true);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredIntents, setFilteredIntents] = useState([]);
+
+
 
   const user = JSON.parse(localStorage.getItem("user"));
   const token = user ? user.token : null;
@@ -70,6 +79,27 @@ const PaymentIntentsDashboard = () => {
       retrieveClients(token);
     }
   }, [token]); 
+
+  useEffect(() => {
+    const filterIntents = () => {
+      const filtered = intents.filter(intent => {
+        const intentDate = new Date(intent.created * 1000); 
+        const client = getClientById(intent.customer);
+        const matchesDateRange = intentDate >= startDate && intentDate <= endDate;
+        const matchesSearchTerm = client?.name.toLowerCase().includes(searchTerm.toLowerCase());
+  
+        return matchesDateRange && matchesSearchTerm;
+      });
+  
+      setFilteredIntents(filtered);
+      console.log("filtered intents: ", filtered);
+    };
+  
+    if (intents.length > 0 && !isLoading) {
+      filterIntents();
+    }
+  }, [intents, startDate, endDate, searchTerm, getClientById, isLoading]);
+  
 
   const handleCancelIntent = async (intentId) => {
     const wasCancelled = await cancelPaymentIntent(intentId);
@@ -99,14 +129,14 @@ const PaymentIntentsDashboard = () => {
     }
   };
 
-  const fulfilledIntents = intents.filter((intent) => intent.status === "succeeded");
-  const unfulfilledIntents = intents.filter((intent) => intent.status !== "succeeded");
+  const fulfilledIntents = filteredIntents.filter((intent) => intent.status === "succeeded");
+  const unfulfilledIntents = filteredIntents.filter((intent) => intent.status !== "succeeded" );
 
-  // Dont want to show intents that are already cancelled
-  const allActiveIntents = intents.filter((intent) => intent.status !== "canceled");
+  // Dont want to show intents that are already cancelled for table data
+  const allActiveIntents = filteredIntents.filter((intent) => intent.status !== "canceled");
 
   // only want to include intents that are waiting for payment and not cancelled in chart data
-  const allUnsuccessfulIntents = intents.filter(
+  const allUnsuccessfulIntents = unfulfilledIntents.filter(
     (intent) =>
       intent.status === "requires_confirmation" ||
       intent.status === "requires_payment_method"
@@ -118,7 +148,7 @@ const PaymentIntentsDashboard = () => {
 
   const chartOptions = {
     series: [fulfilledIntents.length, allUnsuccessfulIntents.length],
-    labels: ["Fulfilled", "Unfulfilled"],
+    labels: ["Intents Fulfilled", "Intents Unfulfilled"],
     chart: {
       type: "pie",
       width: "100%",
@@ -155,6 +185,18 @@ const PaymentIntentsDashboard = () => {
             width: { sm: `calc(100% - ${drawerWidth}px)` },
           }}
         >
+        <Typography variant="h6" align="center" style={{ padding: '16px 0' }}>
+          {`Payment Link Dashboard`} 
+        </Typography>
+           <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} label={'Search By Customer Name..'}/>
+          
+          <DateRangePicker
+            startDate={startDate}
+            endDate={endDate}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+          />
+    
           {isLoading && <CircularProgress />}
           {error && <Typography color="error">{error}</Typography>}
           {!isLoading && !noIntents && (
@@ -164,6 +206,7 @@ const PaymentIntentsDashboard = () => {
                   display: "flex",
                   justifyContent: "space-evenly",
                   marginBottom: "32px",
+                  marginTop: "32px",
                 }}
               >
                 <Paper sx={chartStyles}>

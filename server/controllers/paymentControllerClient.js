@@ -41,9 +41,7 @@ async function getTakePaymentInfo(req, res) {
             preferences = await UserPreferences.findOne({ stripeAccountId });
             if (!preferences) {
                 console.log('No preferences found for this user');
-            } else {
-                console.log('Preferences found:', preferences);
-            }
+            } 
         } catch (error) {
             console.error('Failed to get user preferences:', error);
         }

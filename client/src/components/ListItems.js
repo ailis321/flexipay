@@ -41,13 +41,7 @@ export const MainListItems = () => {
         </ListItemIcon>
         <ListItemText primary="Payments & Receipts" />
       </ListItemButton>
-      <ListItemButton onClick={() => navigate('/reports')}>
-        <ListItemIcon>
-          <BarChartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Reports" />
-      </ListItemButton>
-     
+   
     </React.Fragment>
   );
 };
@@ -56,6 +50,13 @@ export const SecondaryListItems = () => {
   const navigate = useNavigate();
   return (
     <React.Fragment>
+
+    <ListItemButton onClick={() => navigate('/custom-statement')}>
+        <ListItemIcon>
+          <AssignmentIcon />
+        </ListItemIcon>
+        <ListItemText primary="Statement Search" />
+      </ListItemButton>
 
       <ListItemButton onClick={() => navigate('/current-month')}>
         <ListItemIcon>

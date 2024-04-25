@@ -67,7 +67,7 @@ const CurrentMonthDashboard = () => {
 
   useEffect(() => {
 
-    const chargeTransactions = transactions.filter(transaction => transaction.type === 'charge');
+    const chargeTransactions = transactions.filter(transaction => transaction.type === 'charge' || transaction.type === 'payment');
     const payoutTransactions = transactions.filter(transaction => transaction.type === 'payout');
 
     if (transactions && customers && intents) {
@@ -103,7 +103,7 @@ const CurrentMonthDashboard = () => {
     }
   }, [transactions, customers, intents]);
 
-  // Check if still loading any data
+  
   const isLoading = isLoadingTransactions || isLoadingCustomers || isLoadingIntents;
   const error = errorTransactions || errorCustomers || errorIntents;
 
@@ -159,7 +159,7 @@ const CurrentMonthDashboard = () => {
          start: getStartOfCurrentMonth(),
          end: getEndOfCurrentMonth(),
          }}
-        title={`${currentMonthName} ${currentYear} Overview`} // Dynamic based on current month
+        title={`${currentMonthName} ${currentYear} Overview`} 
         />
       </Grid>
     </Box>

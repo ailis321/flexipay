@@ -93,7 +93,7 @@ const PaymentsInAndOut = () => {
   });
 
   const charges = filteredTransactions.filter(
-    (transaction) => transaction.type === "charge"
+    (transaction) => transaction.type === "charge" || transaction.type === "payment"
   );
   const payouts = filteredTransactions.filter(
     (transaction) => transaction.type === "payout"
@@ -195,12 +195,15 @@ const PaymentsInAndOut = () => {
             },
           }}
         >
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <section className="py-5 bg-light d-flex justify-content-center align-items-center min-vh-40">
+
+       
+          <Typography variant="h6" align="center" style={{ padding: '16px 0' }}>
+          {`Payments and Receipts`} 
+          </Typography>
             <div className="dashboard-page container-fluid">
               <div className="row">
                 <div className="col-md-12">
-                  <h1>Date Range</h1>
+                 <p>Date Range</p>
                   <div className="date-filter mb-4">
                     <DatePicker
                       selected={startDate}
@@ -239,8 +242,8 @@ const PaymentsInAndOut = () => {
                 </div>
               </div>
             </div>
-          </section>
-          </Container>
+
+
         </Box>
       </Box>
     </ThemeProvider>

@@ -39,7 +39,7 @@ const PaymentTakePage = () => {
     businessContactNumber: '',
     businessEmailAddress: '',
 
-  }); //to store the preferences of the business that the payment is being made to
+  }); 
 
 
   useEffect(() => {
@@ -96,7 +96,7 @@ const PaymentTakePage = () => {
     variables: {
       colorPrimary: preferences.colour || '#53937d',
       colorBackground: '#ffffff', 
-      colorText: preferences.colour || '#53937d',
+      colorText: '#333333',
       colorDanger: '#df1b41', 
       fontFamily: 'Arial, sans-serif', 
       spacingUnit: '8px', 
@@ -156,7 +156,7 @@ const PaymentTakePage = () => {
             message={preferences.paymentMessage}
             logoUrl={preferences.logoUrl}/>
           <Elements stripe={stripePromise} options={{ clientSecret, appearance }}> 
-            <CheckoutForm clientSecret={clientSecret} stripeAccountId={stripeAccountId} logo={preferences.logoUrl} colour={preferences.colour} businessName={preferences.displayedBusinessName}/>
+            <CheckoutForm clientSecret={clientSecret} stripeAccountId={stripeAccountId} logo={preferences.logoUrl} colour={preferences.colour} businessName={preferences.displayedBusinessName} paymentIntentId ={paymentIntentId}/>
           </Elements>
         </div>
       ) : <p>Loading...</p>}

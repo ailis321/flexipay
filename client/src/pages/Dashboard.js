@@ -6,7 +6,6 @@
 
 import * as React from "react";
 import { useState, useEffect } from "react";
-
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -33,6 +32,7 @@ import useTransactions from "../hooks/useTransactions";
 import useRetrieveClients from "../hooks/useRetrieveClients";
 import useCancelPaymentIntent from "../hooks/useCancelPaymentIntent";
 import ActivityBarChart from "../components/ActivityBarChart";
+import MostCommonPaymentMethod from "../components/MostCommonPaymentMethod";
 
 
 function Copyright(props) {
@@ -72,10 +72,10 @@ const Dashboard = () => {
   };
 
   const user = JSON.parse(localStorage.getItem('user'));
-  const token = user?.token; // Safely access the token using optional chaining
+  const token = user?.token; 
   
   useEffect(() => {
-    if (!token) { // Now checking if token is not available instead of user.token
+    if (!token) { 
       navigate('/login');
     } else {
       retrieveClients(token);
@@ -134,10 +134,12 @@ const Dashboard = () => {
     const transactionDate = new Date(transaction.created * 1000);
     return transactionDate >= startOfDay && transactionDate < endOfDay;
   });
+  console.log("Todays Transactions: ", todaysTransactions);
 
   const charges = todaysTransactions.filter(
-    (transaction) => transaction.type === "charge"
+    (transaction) => transaction.type === "charge" || transaction.type === "payment"
   );
+  console.log("Charges: ", charges);
   const payouts = todaysTransactions.filter(
     (transaction) => transaction.type === "payout"
   );
@@ -168,6 +170,9 @@ const Dashboard = () => {
 
     // filtered out cancelled intents for chart data for todays intents
   const allActiveIntentsToday = todaysPaymentIntents.filter((intent) => intent.status !== "canceled");
+  console.log("All Active Intents Today: ", allActiveIntentsToday);
+
+  const allPaidIntents = allActiveIntentsToday.filter((intent) => intent.status === "succeeded");
 
   const outstandingIntents = allActiveIntentsToday.filter((intent) => ['requires_payment_method', 'requires_confirmation'].includes(intent.status));
 
@@ -306,7 +311,7 @@ const Dashboard = () => {
               </Grid>
   
            
-              <Grid item xs={12} sx={{ mt: 4 }}>
+              <Grid item xs={12} sx={{ mt: 4, mb: 4 }}> 
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
                   <PaymentIntentsTable
 
@@ -318,8 +323,9 @@ const Dashboard = () => {
                   />
                 </Paper>
               </Grid>
-              <ActivityBarChart data={intentTrends} />
-
+              <Grid item xs={12} sx={{ mt: 4 }}>
+           <MostCommonPaymentMethod todaysTransactions={charges} />
+            </Grid>
             </Grid>
             <Copyright sx={{ pt: 4 }} />
           </Container>

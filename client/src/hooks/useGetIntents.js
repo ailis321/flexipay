@@ -4,7 +4,7 @@ const useGetIntents = (token) => {
   const [intents, setIntents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [noIntents, setNoIntents] = useState(false); // You may or may not need this anymore
+  const [noIntents, setNoIntents] = useState(false); 
 
   useEffect(() => {
     const fetchGetIntents = async () => {
@@ -28,8 +28,7 @@ const useGetIntents = (token) => {
         const data = await response.json();
         if (data.data.length === 0) {
           console.log('response data:', data);
-          setError('No payment intents found');
-          throw new Error('No payment intents found');
+          setIntents([]);
           setNoIntents(true);
           console.log('No payment intents found');
 

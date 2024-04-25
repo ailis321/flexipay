@@ -10,7 +10,6 @@ const AccountPage = () => {
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem("user"));
 
-    // Redirect to login if not logged in
     useEffect(() => {
         if (!user) {
             navigate('/login');
@@ -19,11 +18,9 @@ const AccountPage = () => {
 
     const token = user ? user.token : null;
 
-    // Retrieve profile information and preferences
     const { profileInfo, loading: loadingProfile, error: errorProfile } = useGetProfileInfo(token);
     const { preferences, loading: loadingPreferences, error: errorPreferences, preferencesFound } = useGetAccountPreferences(token);
 
-    // Display errors from either profile info or preferences
     useEffect(() => {
         if (errorProfile) {
             alert(errorProfile);
@@ -33,7 +30,7 @@ const AccountPage = () => {
         }
     }, [errorProfile, errorPreferences]);
 
-    // Check if loading either profile info or preferences
+
     if (loadingProfile || loadingPreferences) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" height="90vh">
@@ -42,7 +39,6 @@ const AccountPage = () => {
         );
     }
 
-    // Check if data is loaded
     if (!profileInfo) {
         return <Typography variant="h6" textAlign="center">Unable to load account details.</Typography>;
     }

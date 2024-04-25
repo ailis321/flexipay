@@ -23,7 +23,7 @@ const ViewCustomers = () => {
   }, [user, retrieveClients, token]);
 
   const handleAddCustomers = () => {
-    navigate('/createCustomer'); // Redirect to the create customer page
+    navigate('/create-customer'); 
   };
 
   return (

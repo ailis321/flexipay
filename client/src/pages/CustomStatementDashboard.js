@@ -1,7 +1,4 @@
-// this is like a statement of account for the year showing income in and out with balance
-// user will be able to download the statement as a PDF
-// Also shows summaries of income and outgoings for the year
-// will show how many different customers have made payments in this time period
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Grid, Typography, CircularProgress } from '@mui/material';
@@ -11,31 +8,25 @@ import StatisticCard from '../components/StatisticCard';
 import useGetAllCustomers from '../hooks/useGetAllCustomers';
 import useGetIntents from '../hooks/useGetIntents';
 import SidebarMenu from '../components/SidebarMenu';
+import DateRangePicker from '../components/DateRangePicker';
+import SearchBar from '../components/SearchBar';
 
 import useTransactions from '../hooks/useTransactions';
-import {
-    getStartOfCurrentYear,
-    getEndOfCurrentYear,
-
-} from '../utils/dateHelpers';
 
 import TransactionStatement from '../components/TransactionStatement';
 
-const YearEndDashboard = () => {
+const CustomStatementDashboard = () => {
     const drawerWidth = 240;
-
-    const currentYear = new Date().getFullYear();
   
- 
-    const [yearEndStats, setYearEndStats] = useState({
+
+    const [customStats, setCustomStats] = useState({
         totalIncome: 0,
         netIncome: 0,
         transactionCount: 0,
         uniqueCustomers: 0,
-        thisYearTransactions: [],
+        thisPeriodTransactions: [],
     });
-  
-    const year = new Date().getFullYear();
+
   
     const [open, setOpen] = useState(true);
     const toggleDrawer = () => {
@@ -57,38 +48,51 @@ const YearEndDashboard = () => {
     const { transactions, isLoading: isLoadingTransactions, error: errorTransactions } = useTransactions(token);
     const { customers, isLoading: isLoadingCustomers, error: errorCustomers } = useGetAllCustomers(token);
     const { intents, isLoading: isLoadingIntents, error: errorIntents } = useGetIntents(token);
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [searchTerm, setSearchTerm] = useState("");
   
     useEffect(() => {
+       
         const chargeTransactions = transactions.filter(transaction => transaction.type === 'charge' || transaction.type === 'payment');
-        const payoutTransactions = transactions.filter(transaction => transaction.type === 'payout');
-
-        if (transactions && customers && intents) {
+    
+        if (transactions) {
+            
+            //Filtering transactions based on date range and search term
             const allFilteredTransactions = transactions.filter(transaction => {
-                const transactionDate = new Date(transaction.created * 1000);
-                return transactionDate >= getStartOfCurrentYear() && transactionDate <= getEndOfCurrentYear();
-            });
-
-            const chargeFilteredTransactions = chargeTransactions.filter(transaction => {
-                const transactionDate = new Date(transaction.created * 1000);
-                return transactionDate >= getStartOfCurrentYear() && transactionDate <= getEndOfCurrentYear();
-            });
+                const transactionDate = new Date(transaction.created * 1000); 
+                const description = transaction.description ? transaction.description.toLowerCase() : "";
+                console.log ("description", description)
+                console.log ("searchTerm", searchTerm) 
+                const matchesDate = transactionDate >= startDate && transactionDate <= endDate;
+                const matchesSearch = description.toLowerCase().includes(searchTerm.toLowerCase());
+                console.log ("matchesSearch", matchesSearch)
            
+                return matchesDate && matchesSearch;
 
-
-            const totalIncome = chargeFilteredTransactions.reduce((acc, transaction) => acc + transaction.amount, 0);
-            const netIncome = chargeFilteredTransactions.reduce((acc, transaction) => acc + (transaction.amount - transaction.fee), 0);
+           
+            });
+    
+    
+            const totalIncome = allFilteredTransactions
+                .filter(t => t.type === 'charge' || t.type === 'payment')
+                .reduce((acc, transaction) => acc + transaction.amount, 0);
+            const netIncome = allFilteredTransactions
+                .filter(t => t.type === 'charge' || t.type === 'payment')
+                .reduce((acc, transaction) => acc + (transaction.amount - transaction.fee), 0);
             const transactionCount = allFilteredTransactions.length;
-            const uniqueCustomers = new Set(allFilteredTransactions.map(transaction => transaction.source.customer)).size;
-
-            setYearEndStats({
+            const uniqueCustomers = new Set(allFilteredTransactions.map(transaction => transaction.description)).size;
+    
+            setCustomStats({
                 totalIncome: totalIncome / 100,
                 netIncome: netIncome / 100,
                 transactionCount,
                 uniqueCustomers,
-                thisYearTransactions: allFilteredTransactions,
+                thisPeriodTransactions: allFilteredTransactions,
             });
         }
-    }, [transactions, customers, intents]);
+    }, [transactions, startDate, endDate, searchTerm]);
+    
   
   
   const isLoading = isLoadingTransactions || isLoadingCustomers || isLoadingIntents;
@@ -125,28 +129,36 @@ const YearEndDashboard = () => {
                 >
                     <Box sx={{ flexGrow: 1, m: 2 }}>
                         <Typography variant="h4" gutterBottom>
-                            {`${year} Year-End Overview`} 
+                            {`Transaction Statement for ${startDate.toDateString()} to ${endDate.toDateString()}`} 
                         </Typography>
+                        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} label={"Search by Payment Description.."} />
+          
+                         <DateRangePicker
+                        startDate={startDate}
+                        endDate={endDate}
+                        setStartDate={setStartDate}
+                        setEndDate={setEndDate}
+                        />
                         <Grid container spacing={2}>
                             <Grid item xs={12} md={3}>
-                                <StatisticCard title="Total Income" value={`£${yearEndStats.totalIncome.toFixed(2)}`} />
+                                <StatisticCard title="Total Income" value={`£${customStats.totalIncome.toFixed(2)}`} />
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <StatisticCard title="Net Income" value={`£${yearEndStats.netIncome.toFixed(2)}`} />
+                                <StatisticCard title="Net Income" value={`£${customStats.netIncome.toFixed(2)}`} />
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <StatisticCard title="Total Transactions" value={yearEndStats.transactionCount} />
+                                <StatisticCard title="Total Transactions" value={customStats.transactionCount} />
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <StatisticCard title="Payments sources" value={yearEndStats.uniqueCustomers} />
+                                <StatisticCard title="Payments sources" value={customStats.uniqueCustomers} />
                             </Grid>
                             <TransactionStatement
-                         transactions={transactions}
+                         transactions={customStats.thisPeriodTransactions}
                         timeRange={{
-                         start: getStartOfCurrentYear(),
-                         end: getEndOfCurrentYear(),
+                         start: startDate,
+                         end: endDate,
                              }}
-                        title={`${currentYear} Year-End Overview`} 
+                        title={ null } 
                         />
                         </Grid>
                     </Box>
@@ -156,4 +168,4 @@ const YearEndDashboard = () => {
     );
 };
 
-export default YearEndDashboard;
+export default CustomStatementDashboard;

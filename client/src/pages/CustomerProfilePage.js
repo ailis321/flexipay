@@ -21,6 +21,7 @@ import StatisticCard from "../components/StatisticCard";
 import useGetIntents from "../hooks/useGetIntents";
 import CancelledPayments from "../components/CancelledPayments";
 import PaymentDescriptionChart from "../components/PaymentDescriptionChart";
+import { useAuthenticationContext } from "../hooks/useAuthenticationContext";
 
 const drawerWidth = 240;
 const customTheme = createTheme({
@@ -43,16 +44,15 @@ const CustomerProfilePage = () => {
   };
   const { customerId } = useParams();
   const navigate = useNavigate();
-  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')));
+  const { user, dispatch } = useAuthenticationContext();  
 
   useEffect(() => {
-    if (!user || !user.token) {
-      navigate('/login');
-      return;
-    }
-  }, [user, navigate]);
+      if (!user) {
+          navigate('/login');
+      }
+  }, [navigate, user]);
 
-  const token = user?.token;
+  const token = user ? user.token : null;
 
   const {
     customers,

@@ -4,27 +4,33 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PaymentLink from '../components/PaymentLink';
-import { Card, CardContent, Typography, Box, Container, Paper, Grid } from '@mui/material';
+import { Card, CardContent, Typography, Box, Container, Paper, Grid, Button, Dialog, DialogActions, DialogContent, DialogContentText} from '@mui/material';
 import PaymentIcon from '@mui/icons-material/Payment';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useState } from 'react';
+import { useEffect } from 'react';
+import { useAuthenticationContext } from '../hooks/useAuthenticationContext';
 
 
 
 const PaymentLinkPage = () => {
   const navigate = useNavigate();
-  const [paymentLink, setPaymentLink] = useState(''); 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { user, dispatch } = useAuthenticationContext();  
 
-
- 
-    React.useEffect(() => {
-        if (!user.token) {
-          navigate("/login");
-        }
-      }, [user, navigate]);
+  useEffect(() => {
+      if (!user) {
+          navigate('/login');
+  
+      }
+  }, [navigate, user]);
 
   const token = user ? user.token : null;
+
+  const [openDialog, setOpenDialog] = useState(false);
+
+ 
+  const handleOpenDialog = () => setOpenDialog(true);
+  const handleCloseDialog = () => setOpenDialog(false);
   
 
   return (
@@ -49,9 +55,12 @@ const PaymentLinkPage = () => {
               </CardContent>
             </Card>
             <Box mt={2} display="flex" justifyContent="center" alignItems="center">
-              <InfoOutlinedIcon color="info" />
+            <InfoOutlinedIcon color="info" />
               <Typography variant="body2" sx={{ ml: 1 }}>
-                Need help? Check out our <a href="#">payment link guide</a>.
+                Need help? Check out our 
+                <Button onClick={handleOpenDialog} component="span" style={{textTransform: 'none'}}>
+                  payment link guide
+                </Button>.
               </Typography>
             </Box>
           </Paper>
@@ -64,6 +73,25 @@ const PaymentLinkPage = () => {
           />
         </Grid>
       </Grid>
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogContent>
+          <DialogContentText>
+            Here's how to create a payment link:
+            <ol>
+              <li>Enter the amount you wish to request from the customer.</li>
+              <li>Add a description for the payment request. This will be useful for transaction data and reporting</li>
+              <li>Select the customer you wish to send the payment link to. Ensure you have added the customer first to your Client Directory</li>
+              <li>If this customer has not been registered, please click on "Add Customer" in the top menu.</li>
+              <li>Click on 'Generate Link' to create a unique payment link.</li>
+              <li>Copy and share the generated link with your customer.</li>
+            </ol>
+            This link can be used by your customers to make secure payments directly into your account.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">Close</Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

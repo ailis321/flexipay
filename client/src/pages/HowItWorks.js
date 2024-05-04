@@ -1,17 +1,20 @@
 import React from 'react';
 import { Box, Container, Typography, Button, Paper, Divider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useAuthenticationContext } from '../hooks/useAuthenticationContext';
 
 function HowItWorksPage() {
   const navigate = useNavigate();
+  const { user, dispatch } = useAuthenticationContext();  
 
+  useEffect(() => {
+      if (!user) {
+          navigate('/login');
+      }
+  }, [navigate, user]);
 
-  const user = JSON.parse(localStorage.getItem("user"));
   const token = user ? user.token : null;
-
-  if (!token) {
-    navigate("/login");
-  }
 
   return (
     <Container maxWidth="md">

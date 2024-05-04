@@ -76,13 +76,7 @@ const Header = () => {
               </Link>
             </li>
              )}
-               {!user && (
-              <li className="nav-item">
-              <Link className="nav-link" to="/pricing">
-                Pricing
-              </Link>
-            </li>
-             )}
+         
             {user && (
                 <li className="nav-item">
                   <button className="btn btn-link nav-link" onClick={handleLogout}>Logout</button>

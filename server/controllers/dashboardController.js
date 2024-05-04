@@ -20,8 +20,7 @@ const getTransactions = async (req, res) => {
       return res.status(200).json({ data: [], message: 'No transactions found' });
     }
     
-    console.log('Transactions listed are:', transactions.data);
-    console.log('Number of transactions:', transactions.data.length);
+
     res.status(200).send(transactions);
   } catch (error) {
     console.error('Error fetching transactions:', error);
@@ -42,10 +41,10 @@ const getIntents = async (req, res) => {
 
     if (paymentIntents.data.length === 0) {
       console.log('No payment intents found');
-      console.log('Payment Intents:', paymentIntents);
+
       res.status(200).send({ data: [] });
     } else {
-      console.log('Payment Intents:', paymentIntents);
+    
       res.status(200).send(paymentIntents);
     }
   } catch (error) {

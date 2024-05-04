@@ -4,50 +4,75 @@
 // can delete customers here which will delete from DB and stripe
 // option to view a customers specific profile from here too 
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useRetrieveClients from '../hooks/useRetrieveClients';
 import CustomerList from '../components/CustomerList';
 import AddMoreCustomers from '../components/AddMoreCustomers'; 
+import SearchBar from '../components/SearchBar';
+import { Container, Grid, Typography, Button } from '@mui/material';
+import { useAuthenticationContext } from '../hooks/useAuthenticationContext';
 
 const ViewCustomers = () => {
-  const user = useMemo(() => JSON.parse(localStorage.getItem('user')), []);
-  const token = user.token;
+
   const navigate = useNavigate();
-  const { clients, isLoading, error, retrieveClients } = useRetrieveClients();
+  const { user, dispatch } = useAuthenticationContext();  
 
   useEffect(() => {
-    if (user && retrieveClients) {
-      retrieveClients(token);
+    if (!user) {
+        navigate('/login');
+    } else {
+        retrieveClients(user.token);
     }
-  }, [user, retrieveClients, token]);
+}, [navigate, user]);
+
+const token = user ? user.token : null;
+
+  const { clients, isLoading, error, retrieveClients } = useRetrieveClients();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  
+
+  useEffect(() => {
+    const results = clients.filter(client =>
+      client.name && client.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setSearchResults(results);
+    console.log("search results: ", results);
+}, [clients, searchTerm]); 
+
 
   const handleAddCustomers = () => {
     navigate('/create-customer'); 
   };
 
   return (
-    <div className="home">
+    <Container maxWidth="lg">
       {isLoading ? (
-        <p>Loading...</p>
+        <Typography>Loading...</Typography>
       ) : error ? (
-        <p>Error: {error}</p>
+        <Typography color="error">{error}</Typography>
       ) : (
         <>
+          <Grid container spacing={2} justifyContent="center">
+            <Grid item xs={12} md={6} sx={{ mt: 4, mb: 2 }} >
+              <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} label={'Search By Customer Name..'} />
+            </Grid>
+          </Grid>
           {clients.length > 0 ? (
             <>
-              <CustomerList customers={clients} fetchCustomers={() => retrieveClients(token)} />
+              <CustomerList customers={searchResults} fetchCustomers={() => retrieveClients(token)} />
               <AddMoreCustomers onAddMoreCustomersClick={handleAddCustomers} />
             </>
           ) : (
             <div>
-              <p>You have not added any customers yet.</p>
-              <button onClick={handleAddCustomers}>Click here to update your customer directory</button>
+              <Typography>You have not added any customers yet.</Typography>
+              <Button onClick={handleAddCustomers} variant="contained">Click here to add your first customer</Button>
             </div>
           )}
         </>
       )}
-    </div>
+    </Container>
   );
 };
 

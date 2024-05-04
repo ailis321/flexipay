@@ -30,7 +30,7 @@ const useChangePassword = (token, handleClose) => {
 
     try {
       const response = await fetch('/api/organisations/change-password', {
-        method: 'POST',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'Authorisation': `Bearer ${token}`  

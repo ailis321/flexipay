@@ -5,10 +5,11 @@ import useGetProfileInfo from '../hooks/useGetProfileInfo';
 import useGetAccountPreferences from '../hooks/useGetAccountPreferences';
 import AccountInfo from '../components/AccountInfo';
 import Preferences from '../components/Preferences';
+import { useAuthenticationContext } from '../hooks/useAuthenticationContext';  
 
 const AccountPage = () => {
     const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem("user"));
+    const { user, dispatch } = useAuthenticationContext();  
 
     useEffect(() => {
         if (!user) {
@@ -29,7 +30,6 @@ const AccountPage = () => {
             alert(errorPreferences);
         }
     }, [errorProfile, errorPreferences]);
-
 
     if (loadingProfile || loadingPreferences) {
         return (
@@ -55,11 +55,10 @@ const AccountPage = () => {
                             You have not completed your preferences yet.
                         </Typography>
                         <Button 
-                    variant="contained" 
-                        color="primary" 
-                    onClick={() => navigate(`/preferences?onboardingComplete=true`)}
-                    > Update Now </Button>
-
+                            variant="contained" 
+                            color="primary" 
+                            onClick={() => navigate(`/preferences?onboardingComplete=true`)}
+                        > Update Now </Button>
                     </Box>
                 )}
             </Box>

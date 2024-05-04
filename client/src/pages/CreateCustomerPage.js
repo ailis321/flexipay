@@ -4,19 +4,20 @@
 // gives an option to add more customers once one is added or to view all customers
 
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
+import { useEffect } from "react";
 import { UseAutocompleteParameters } from "@mui/material";
 import CreateCustomerForm from "../components/CreateCustomerForm";
+import { useAuthenticationContext } from "../hooks/useAuthenticationContext";
 
 const CreateCustomerPage = () => {
   const navigate = useNavigate();
+  const { user, dispatch } = useAuthenticationContext();  
 
-  const user = JSON.parse(localStorage.getItem("user"));
-
-  React.useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    }
+  useEffect(() => {
+      if (!user) {
+          navigate('/login');
+      }
   }, [navigate, user]);
 
   const token = user ? user.token : null;

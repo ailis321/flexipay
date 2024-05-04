@@ -43,7 +43,7 @@ async function createCustomer(req, res) {
       const { stripeAccountId } = req.user;
     
       try {
-        const customers = await stripe.customers.list({ limit: 50 }, { stripeAccount: stripeAccountId });
+        const customers = await stripe.customers.list({ limit: 200 }, { stripeAccount: stripeAccountId });
         
         const formattedCustomers = customers.data.map(customer => ({
           id: customer.id,
@@ -77,8 +77,6 @@ async function createCustomer(req, res) {
             dateJoined: dateJoined.toISOString() //adding in a date joined field based on when the record was created
           };
         });
-
-        console.log('Customers retrieved:', customerData);
     
         res.json(customerData);
       } catch (error) {
@@ -122,10 +120,6 @@ async function createCustomer(req, res) {
         if (!updatedDatabaseCustomer) {
           return res.status(404).json({ message: "Customer not found in database" });
         }
-  
-        console.log('Customer updated on stripe ', updatedStripeCustomer);
-        console.log('Customer updated in database ', updatedDatabaseCustomer);
-  
         res.json({ message: "Customer updated successfully", updatedCustomer: updatedStripeCustomer });
       } catch (error) {
         console.error('Error updating customer:', error);
@@ -145,8 +139,9 @@ async function createCustomer(req, res) {
             stripeAccount: stripeAccountId
           }
         );
-    
-        res.json({ message: "Customer deleted successfully" });
+
+        console.log('Customer deleted:', customerId);
+       res.status(200).json({ message: 'Customer deleted successfully ', customerId});
       } catch (error) {
         console.error('Error deleting customer:', error);
         res.status(500).send('Error deleting customer');

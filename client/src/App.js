@@ -8,7 +8,6 @@ import RegisterAccount from "./pages/RegisterAccount";
 import Footer from "./components/Footer";
 import LoginHomeIncomplete from "./pages/LoginHomeIncomplete";
 import Login from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
 import PaymentLinkPage from "./pages/PaymentLinkPage";
 import PaymentTakePage from "./pages/PaymentTakePage";
 import Layout from "./components/Layout";
@@ -26,6 +25,7 @@ import PreferenceSetupPage from "./pages/PreferenceSetupPage";
 import CustomStatementDashboard from "./pages/CustomStatementDashboard";
 
 function App() {
+
   const { user } = useAuthenticationContext();
 
   console.log('user:', user);
@@ -43,7 +43,6 @@ function App() {
             <Route path="/payment-link" element={user ? <PaymentLinkPage /> : <Navigate to="/login" />} />
             <Route path="/pay/:paymentIntentId" element={<PaymentTakePage />} />
             <Route path="/pay/success" element={<PaymentSuccess />} />
-            <Route path="/dashboard2" element={user ? <DashboardPage /> : <Navigate to="/login" />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/current-month" element={<CurrentMonthDashboard />} />
             <Route path="/how-it-works" element={<HowItWorks />} />

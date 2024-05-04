@@ -46,11 +46,11 @@ const useRetrieveClients = () => {
       setError('An error occurred while retrieving the clients');
     }
   }, []); 
-
-      // Function to get a single client by ID
-  const getClientById = useCallback((clientId) => {
-    return clients.find(client => client.id === clientId) || null;
-  }, [clients]);
+// Function to get a single client by ID
+//will return that its a deleted customer if the customer is not found with their ID
+const getClientById = useCallback((clientId) => {
+  return clients.find(client => client.id === clientId) || { name: `Deleted Customer : ${clientId}`, id: clientId };
+}, [clients]);
 
   useEffect(() => {
     //Resetting the error 

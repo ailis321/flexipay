@@ -26,6 +26,7 @@ import DateRangePicker from "../components/DateRangePicker";
 import SearchBar from "../components/SearchBar";
 import MuiAlert from "@mui/material/Alert";
 import PaymentIntentsTable from "../components/PaymentIntentsTable"; 
+import { useAuthenticationContext } from "../hooks/useAuthenticationContext";
 
 const drawerWidth = 240;
 const customTheme = createTheme({
@@ -51,7 +52,7 @@ const chartStyles = {
 };
 
 const PaymentIntentsDashboard = () => {
-  const navigate = useNavigate();
+
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("success");
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -62,9 +63,17 @@ const PaymentIntentsDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredIntents, setFilteredIntents] = useState([]);
 
+  const navigate = useNavigate();
+  const { user, dispatch } = useAuthenticationContext();  
 
+  useEffect(() => {
+      if (!user) {
+          navigate('/login');
+      } else {
+          retrieveClients(user.token);
+      }
+  }, [navigate, user]);
 
-  const user = JSON.parse(localStorage.getItem("user"));
   const token = user ? user.token : null;
 
   const { intents, isLoading, error, noIntents } = useGetIntents(token);
@@ -72,19 +81,12 @@ const PaymentIntentsDashboard = () => {
   const { generateNewPaymentLink } = useGenerateNewPaymentLink();
   const { cancelPaymentIntent, cancelError } = useCancelPaymentIntent();
 
-  useEffect(() => {
-    if (!token) { 
-      navigate('/login');
-    } else {
-      retrieveClients(token);
-    }
-  }, [token]); 
 
   useEffect(() => {
     const filterIntents = () => {
       const filtered = intents.filter(intent => {
         const intentDate = new Date(intent.created * 1000); 
-        const client = getClientById(intent.customer);
+        const client = getClientById(intent.customer); 
         const matchesDateRange = intentDate >= startDate && intentDate <= endDate;
         const matchesSearchTerm = client?.name.toLowerCase().includes(searchTerm.toLowerCase());
   
@@ -134,6 +136,7 @@ const PaymentIntentsDashboard = () => {
 
   // Dont want to show intents that are already cancelled for table data
   const allActiveIntents = filteredIntents.filter((intent) => intent.status !== "canceled");
+  
 
   // only want to include intents that are waiting for payment and not cancelled in chart data
   const allUnsuccessfulIntents = unfulfilledIntents.filter(

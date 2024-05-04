@@ -11,6 +11,7 @@ import StatisticCard from '../components/StatisticCard';
 import useGetAllCustomers from '../hooks/useGetAllCustomers';
 import useGetIntents from '../hooks/useGetIntents';
 import SidebarMenu from '../components/SidebarMenu';
+import { useAuthenticationContext } from '../hooks/useAuthenticationContext';
 
 import useTransactions from '../hooks/useTransactions';
 import {
@@ -22,6 +23,18 @@ import {
 import TransactionStatement from '../components/TransactionStatement';
 
 const YearEndDashboard = () => {
+
+    const navigate = useNavigate();
+    const { user, dispatch } = useAuthenticationContext();  
+
+    useEffect(() => {
+        if (!user) {
+            navigate('/login');
+        }
+    }, [navigate, user]);
+
+    const token = user ? user.token : null;
+
     const drawerWidth = 240;
 
     const currentYear = new Date().getFullYear();
@@ -41,17 +54,7 @@ const YearEndDashboard = () => {
     const toggleDrawer = () => {
         setOpen(!open);
     };
-    const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem("user"));
-    const token = user ? user.token : null;
-   
-  
-      React.useEffect(() => {
-          if (!token) {
-            navigate("/login");
-            return;
-          }
-        }, [user, navigate]);
+    
   
   
     const { transactions, isLoading: isLoadingTransactions, error: errorTransactions } = useTransactions(token);

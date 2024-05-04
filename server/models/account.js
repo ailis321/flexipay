@@ -13,7 +13,7 @@ const accountSchema = new mongoose.Schema({
   stripeAccountId: { type: String }, 
 
   });
-
+  
 
   accountSchema.statics.register = async function(email, password, firstName, lastName, businessName) {
     // validation

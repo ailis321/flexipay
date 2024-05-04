@@ -10,9 +10,8 @@ import useGetIntents from '../hooks/useGetIntents';
 import SidebarMenu from '../components/SidebarMenu';
 import DateRangePicker from '../components/DateRangePicker';
 import SearchBar from '../components/SearchBar';
-
 import useTransactions from '../hooks/useTransactions';
-
+import { useAuthenticationContext } from '../hooks/useAuthenticationContext';
 import TransactionStatement from '../components/TransactionStatement';
 
 const CustomStatementDashboard = () => {
@@ -33,16 +32,15 @@ const CustomStatementDashboard = () => {
         setOpen(!open);
     };
     const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem("user"));
-    const token = user ? user.token : null;
-   
+    const { user, dispatch } = useAuthenticationContext();  
   
-      React.useEffect(() => {
-          if (!token) {
-            navigate("/login");
-            return;
-          }
-        }, [user, navigate]);
+    useEffect(() => {
+        if (!user) {
+            navigate('/login');
+        }
+    }, [navigate, user]);
+  
+    const token = user ? user.token : null;
   
   
     const { transactions, isLoading: isLoadingTransactions, error: errorTransactions } = useTransactions(token);
@@ -81,13 +79,13 @@ const CustomStatementDashboard = () => {
                 .filter(t => t.type === 'charge' || t.type === 'payment')
                 .reduce((acc, transaction) => acc + (transaction.amount - transaction.fee), 0);
             const transactionCount = allFilteredTransactions.length;
-            const uniqueCustomers = new Set(allFilteredTransactions.map(transaction => transaction.description)).size;
+            const uniqueCustomers = new Set(allFilteredTransactions.map(transaction => transaction.source.customer)).size;
     
             setCustomStats({
                 totalIncome: totalIncome / 100,
                 netIncome: netIncome / 100,
-                transactionCount,
-                uniqueCustomers,
+                transactionCount: transactionCount,
+                uniqueCustomers : uniqueCustomers,
                 thisPeriodTransactions: allFilteredTransactions,
             });
         }

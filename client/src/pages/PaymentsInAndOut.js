@@ -22,6 +22,8 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { MainListItems, SecondaryListItems } from "../components/ListItems";
 import useTransactions from "../hooks/useTransactions";
 import PaymentsTable from "../components/PaymentsTable";
+import { useAuthenticationContext } from "../hooks/useAuthenticationContext";
+import { useEffect } from "react";
 
 const drawerWidth = 240;
 
@@ -69,17 +71,17 @@ const PaymentsInAndOut = () => {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
-  const token = user ? user.token : null;
- 
+  const { user, dispatch } = useAuthenticationContext();  
 
-    React.useEffect(() => {
-        if (!token) {
-          navigate("/login");
-        }
-      }, [user, navigate]);
+  useEffect(() => {
+      if (!user) {
+          navigate('/login');
+  
+      }
+  }, [navigate, user]);
+
+  const token = user ? user.token : null;
 
 
   const { transactions, isLoading, error, noTransactions } =

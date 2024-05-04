@@ -10,18 +10,23 @@ import Alert from '@mui/material/Alert';
 import useStorePreferences from '../hooks/useStorePreferences';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useLocation } from 'react-router-dom';
+import { useAuthenticationContext } from '../hooks/useAuthenticationContext';
+
 
 
 function PreferenceSetupPage() {
     const location = useLocation();
     const navigate = useNavigate();
+  const { user, dispatch } = useAuthenticationContext();  
 
-    const user = JSON.parse(localStorage.getItem("user"));
-    const token = user ? user.token : null;
+  useEffect(() => {
+      if (!user) {
+          navigate('/login');
   
-    if (!token) {
-      navigate("/login");
-    }
+      }
+  }, [navigate, user]);
+
+  const token = user ? user.token : null;
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
@@ -37,13 +42,7 @@ function PreferenceSetupPage() {
             // Save the updated user object back to local storage
             localStorage.setItem('user', JSON.stringify(user));
           
-        } else {
-          const onboardingCompleted = user ? user.onboardingComplete : false;
-          if (onboardingCompleted) {
-            navigate('/how-it-works');
-          }
-        
-        }
+        } 
     }, [location, navigate]);
 
     const { isSaving, error, storePreferences } = useStorePreferences(token);

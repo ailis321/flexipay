@@ -70,10 +70,6 @@ async function confirmationPaymentDetails(req, res) {
             stripeAccount: stripeAccountId,
         });
 
-    
-        console.log("PAYMENT STATUS: ", paymentIntent.status);
-        console.log("RECEIPT EMAIL: ", paymentIntent.receipt_email);
-
         const amount = paymentIntent.amount / 100; 
 
         // Get the email of the recipient of this stripe account receiving the payment
@@ -99,8 +95,6 @@ async function confirmationPaymentDetails(req, res) {
                 text: `Hello,\n\nYou have received a payment of £${paymentIntent.amount / 100} from ${paymentIntent.receipt_email}. Thank you for using FlexiPay`, // plain text body
       
             });
-
-            console.log("Message sent: %s", info.messageId);
         }
 
         res.json({

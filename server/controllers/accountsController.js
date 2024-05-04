@@ -4,8 +4,8 @@ const bycrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const createToken = (_id) => {
-    //TODO - Maybe reduce expiry of token
-    return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: '3d'})};
+    return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: '1h'})
+};
 
         exports.registerUser = async (req, res) => {
                 try {
@@ -37,11 +37,10 @@ const createToken = (_id) => {
                         
                             refresh_url: `http://localhost:8000/api/accounts/check-onboarding/${user.stripeAccountId}`,
                             // return URL to bring the user to their logged in dashboard once onboarding is complete
-                            return_url: 'http://localhost:3000/preferences',
+                            return_url: `http://localhost:8000/api/accounts/check-onboarding/${user.stripeAccountId}`,
                             type: 'account_onboarding',
                         });
 
-                        console.log('JSON RESPONSE', { accountLink: accountLink.url, email, token, onboardingComplete: false});
             
                         // Sending the account link URL to frontend along with user and token and onboarding status to false as this is not done yet
                         res.json({ accountLink: accountLink.url, email, token, onboardingComplete: false });
@@ -105,7 +104,6 @@ exports.checkOnboardingStatus = async (req, res) => {
         if (account.details_submitted) {
             // Redirect to preferences page if onboarding is complete
             //want to change onboarding status to true in local storage
-            
             res.redirect(`http://localhost:3000/preferences?onboardingComplete=true`);
      
         } else {

@@ -33,7 +33,7 @@ import useRetrieveClients from "../hooks/useRetrieveClients";
 import useCancelPaymentIntent from "../hooks/useCancelPaymentIntent";
 import ActivityBarChart from "../components/ActivityBarChart";
 import MostCommonPaymentMethod from "../components/MostCommonPaymentMethod";
-
+import { useAuthenticationContext } from "../hooks/useAuthenticationContext";
 
 function Copyright(props) {
   return (
@@ -62,7 +62,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const Dashboard = () => {
   const [open, setOpen] = React.useState(true);
-  const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("success");
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -71,16 +70,19 @@ const Dashboard = () => {
     setOpen(!open);
   };
 
-  const user = JSON.parse(localStorage.getItem('user'));
-  const token = user?.token; 
+
+  const navigate = useNavigate();
+  const { user } = useAuthenticationContext(); 
+  const token = user?.token;
+
   
   useEffect(() => {
-    if (!token) { 
+    if (!user) { 
       navigate('/login');
     } else {
       retrieveClients(token);
     }
-  }, [token]); 
+  }, [user, token]); 
 
   const { transactions, isLoading: isLoadingTransactions, error: errorTransactions } = useTransactions(token);
   const { intents, isLoading: isLoadingGetIntents, error: errorIntents, noIntents } = useGetIntents(token);
@@ -146,7 +148,6 @@ const Dashboard = () => {
 
   const chargeTotal = charges.reduce((acc, curr) => acc + curr.amount, 0);
   const chargeConverted = chargeTotal / 100;
-  const payoutTotal = payouts.reduce((acc, curr) => acc + curr.amount, 0);
 
   //incoming transactions converted to chart data
   const chargeTrends = charges.map((transaction) => ({

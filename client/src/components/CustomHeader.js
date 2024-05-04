@@ -7,11 +7,11 @@ const CustomHeader = ({ color, companyName, logoUrl }) => {
     color: 'white',
     display: 'flex',
     alignItems: 'center',
-    padding: '10px 20px'
+    padding: '40px 150px'
   };
 
   const logoStyle = {
-    height: '50px', // Adjust as needed
+    height: '120px', 
     marginRight: '10px'
   };
 

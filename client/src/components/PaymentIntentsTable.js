@@ -31,7 +31,7 @@ const PaymentIntentsTable = ({ allActiveIntents, getClientById, handleCancelInte
             {allActiveIntents.map((intent) => (
               <TableRow key={intent.id}>
                 <TableCell>{new Date(intent.created * 1000).toLocaleDateString()}</TableCell>
-                <TableCell>{getClientById(intent.customer)?.name || intent.customer}</TableCell>
+                <TableCell>{getClientById(intent.customer)?.name || intent.receipt_email}</TableCell>
                 <TableCell align="right">{`£${(intent.amount / 100).toFixed(2)}`}</TableCell>
                 <TableCell>
                   {intent.status === "succeeded" ? "Payment Received" :

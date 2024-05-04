@@ -13,33 +13,37 @@ import AllCustomersList from "../components/AllCustomersList";
 import TotalAmountCard from "../components/TotalAmountCard";
 import useRetrieveClients from "../hooks/useRetrieveClients";
 import { Bar } from "react-chartjs-2";
+import { useAuthenticationContext } from "../hooks/useAuthenticationContext";
 
 const drawerWidth = 240;
 
 const CustomerActivityPage = () => {
-  const navigate = useNavigate();
   const [open, setOpen] = useState(true);
   const toggleDrawer = () => setOpen(!open);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+  const { user, dispatch } = useAuthenticationContext();  
 
-  const user = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    }
+      if (!user) {
+          navigate('/login');
+      }
   }, [navigate, user]);
 
   const token = user ? user.token : null;
-  const { clients, retrieveClients, getClientById, isLoading: isLoadingClients, error: clientsError } = useRetrieveClients();
+
+ 
+  const { clients, retrieveClients, getClientById, 
+         isLoading: isLoadingClients, error: clientsError } = useRetrieveClients();
   const { transactions, isLoading, error } = useTransactions(token);
 
   useEffect(() => {
     if (token) {
       retrieveClients(token);
     }
-  }, [token, retrieveClients]);
+  }, [retrieveClients]);
 
   const [topCustomerAmountsSentByName, setTopCustomerAmountsSentByName] = useState([]);
   const [allCustomerAmountsSentByName, setAllCustomerAmountsSentByName] = useState([]);
@@ -64,7 +68,8 @@ const CustomerActivityPage = () => {
       filteredTransactions.forEach(curr => {
         if ((curr.type === 'charge' || curr.type ==='payment') && curr.source.customer) {
           const customer = getClientById(curr.source.customer);
-          const customerId = customer ? customer.id : "Unknown Customer";  //using ID as identifier because name can be duplicated
+           //using ID as identifier because name can be duplicated
+          const customerId = customer ? customer.id : "Unknown Customer"; 
           if (!paymentAmounts[customerId]) {
             paymentAmounts[customerId] = { totalSent: 0, name: customer ? customer.name : "Unknown" };
           }

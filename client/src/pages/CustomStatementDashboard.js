@@ -1,3 +1,8 @@
+//custom date and search field statement page
+//can download as PDF
+//can search by payment description
+//can filter by date range
+//shows total income, net income, total transactions, and unique customers
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';

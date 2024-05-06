@@ -3,8 +3,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 const CustomFooter = ({ email, phone, colour, businessName }) => {
 
   const footerStyle = {
-    backgroundColor: colour || 'defaultColor', // Provide a default color if colour is not passed
-    color: 'white', // Assuming you want text to be white
+    backgroundColor: colour || 'defaultColor', 
+    color: 'white', 
     paddingTop: '20px',
     paddingBottom: '20px'
   };

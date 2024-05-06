@@ -18,7 +18,7 @@ const useStorePreferences = (token) => {
         body: JSON.stringify(preferences),
       });
 
-      const data = await response.json(); // Attempt to parse JSON regardless of response status
+      const data = await response.json(); 
 
       if (!response.ok) {
         // Use the parsed JSON to get more specific error messages, if available

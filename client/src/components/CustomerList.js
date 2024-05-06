@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useEffect } from 'react';
 import useEditCustomer from '../hooks/useEditCustomer';
 import useDeleteCustomer from '../hooks/useDeleteCustomer';
 import { useNavigate } from 'react-router-dom';

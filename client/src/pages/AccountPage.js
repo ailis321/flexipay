@@ -1,3 +1,8 @@
+//this page is the account profile page
+//it will display the account details and preferences
+//it will also allow the user to update their preferences
+//user can also change their password here
+
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Typography, Container, Box, CircularProgress, Button } from '@mui/material';

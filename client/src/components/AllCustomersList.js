@@ -1,4 +1,4 @@
-// AllCustomersList.js
+
 import React from 'react';
 import { Grid, Card, CardContent, Typography, Avatar, CardActionArea } from '@mui/material';
 import ProfileIcon from '@mui/icons-material/AccountCircle'; // 

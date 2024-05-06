@@ -83,8 +83,8 @@ const updatePreferences = async (req, res) => {
         businessContactNumber: businessContactNumber,
       },
       {
-        new: true, // Return the updated document
-        upsert: true // Create a new document if one doesn't exist
+        new: true, //Return the updated document
+        upsert: true //Create a new document if one doesnt exist
       }
     );
 

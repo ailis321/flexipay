@@ -1,3 +1,7 @@
+//page to set up custom preferences for the user for payment page
+//can add colour theme and logo and custom message
+//can also add business name, contact number and email address
+
 import React, { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {

@@ -1,3 +1,9 @@
+//this page is shown after users update their preferences on the first login
+//it will show the user how to use the app and what to do next
+//it will also give the user the option to add customers to their directory
+//it will also give the user the option to view their dashboard
+
+
 import React from 'react';
 import { Box, Container, Typography, Button, Paper, Divider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';

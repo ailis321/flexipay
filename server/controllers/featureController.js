@@ -1,7 +1,7 @@
 
 const Feature = require('../models/feature');
 
-// Function to fetch all features
+//Function to fetch all features
 exports.getAllFeatures = async (req, res) => {
   try {
     const features = await Feature.find();
@@ -11,7 +11,7 @@ exports.getAllFeatures = async (req, res) => {
   }
 };
 
-// Controller function to create and save new features
+//Controller function to create and save new features
 exports.createFeatures = async (req, res) => {
   try {
     const features = req.body; 

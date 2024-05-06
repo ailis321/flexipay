@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 export default function CheckoutForm({ clientSecret, stripeAccountId, logo, colour, businessName, paymentIntentId}) {
   const stripe = useStripe();
   const elements = useElements();
-  const navigate = useNavigate(); 
+ 
 
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);

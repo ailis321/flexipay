@@ -89,7 +89,7 @@ const createToken = (_id) => {
                             // If preferences are not set, redirect to preferences page
                             res.status(200).json({ email, token, onboardingComplete: true, redirectToPreferences: true });
                         } else {
-                            // All checks passed, proceed to normal login
+                            //only if all checks passed, proceed to normal login
                             console.log('JSON RESPONSE', { email, token, onboardingComplete: true });
                             res.status(200).json({ email, token, onboardingComplete: true, redirectToPreferences: false });
                         }

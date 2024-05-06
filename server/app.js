@@ -13,7 +13,6 @@ app.use(express.json());
 // IMPORTING ROUTER FILES
 
 const paymentRouterOrg = require('./routes/paymentRouterOrg');
-const webhookRouter = require('./routes/webhookRouter');
 const organisationRouter = require('./routes/organisationRouter');
 const featureRouter = require('./routes/featureRouter');
 const accountRouter = require('./routes/accountRouter');
@@ -25,7 +24,6 @@ const paymentRouterClient = require('./routes/paymentRouterClient');
 // USING ROUTER FILES
 
 app.use('/api/payment', paymentRouterOrg);
-app.use('/api/webhook', webhookRouter);
 app.use('/api/organisations', organisationRouter);
 app.use('/api/features', featureRouter);
 app.use('/api/accounts', accountRouter);

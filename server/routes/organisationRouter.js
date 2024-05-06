@@ -5,8 +5,6 @@ const organisationController = require('../controllers/organisationController');
 
 // need to fire the middleware to check the user is authenticated before they can access any routes to do with the client
 router.use(requireAuthHeader);
-// Route to add a new organisation
-router.post('/organisations', organisationController.addOrganisation);
 
 router.get('/profile', organisationController.getAccountInfo);
 

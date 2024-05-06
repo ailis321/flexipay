@@ -1,36 +1,10 @@
 
-const Organisation = require('../models/business');
 const Account = require('../models/account');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const bcrypt = require('bcrypt');
 const validator = require('validator');
 const UserPreferences = require('../models/userPreferences');
 
-
-
-const addOrganisation = async (req, res) => {
-  try {
-
-    const { name, email, password, stripePublicKey, stripeSecretKey } = req.body;
-
-
-    const newOrganisation = new Organisation({
-      name,
-      email,
-      password,
-      stripePublicKey,
-      stripeSecretKey,
-    });
-
-
-    const savedOrganisation = await newOrganisation.save();
-
-    res.status(201).json(savedOrganisation);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
 
 const getAccountInfo = async (req, res) => {
 
@@ -164,7 +138,6 @@ const changePassword = async (req, res) => {
 
 
 module.exports = {
-  addOrganisation,
   getAccountInfo,
   changePassword,
   updatePreferences,

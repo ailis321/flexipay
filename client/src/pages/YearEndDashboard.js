@@ -127,7 +127,7 @@ const YearEndDashboard = () => {
                     }}
                 >
                     <Box sx={{ flexGrow: 1, m: 2 }}>
-                        <Typography variant="h4" gutterBottom>
+                        <Typography variant="h4" id="statement-title" gutterBottom>
                             {`${year} Year-End Overview`} 
                         </Typography>
                         <Grid container spacing={2}>

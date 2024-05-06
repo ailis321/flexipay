@@ -67,7 +67,7 @@ const handleAddAnotherCustomer = () => {
                         {successMessage ? (
                             <div className="text-center">
                                 <p className="display-6 fw-bold mb-3" style={{ color: '#53937d' }}>{successMessage} </p>
-                                <img src="https://cdn-icons-png.flaticon.com/512/9746/9746205.png" alt="Success Icon" className="img-fluid mb-3" />
+                                <img src="https://i.pinimg.com/originals/32/b6/f2/32b6f2aeeb2d21c5a29382721cdc67f7.gif" alt="Success Icon" className="img-fluid mb-3" />
 
                                 <div>
                                     <button className="btn btn-primary me-2" onClick={handleAddAnotherCustomer}>Add Another Customer</button>

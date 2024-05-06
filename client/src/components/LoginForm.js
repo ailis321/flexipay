@@ -54,7 +54,7 @@ const LoginForm = () => {
                     </label>
                   </div>
                   <div className="d-flex justify-content-center">
-                    <button type="submit" className="btn btn-primary">Login</button>
+                    <button type="submit" id = "login-button" className="btn btn-primary">Login</button>
                   </div>
                 </form>
                 {error && <div className="alert alert-danger mt-3">{error}</div>} 

@@ -2,6 +2,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Account = require('../models/account');
 const bycrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const UserPreferences = require('../models/userPreferences');
 
 const createToken = (_id) => {
     return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: '1h'})
@@ -56,42 +57,49 @@ const createToken = (_id) => {
             };
             
     
-exports.login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-  
-        const user = await Account.login(email, password);
-        const token = createToken(user._id);
-
-        //before logging in need to check onboarding status is complete
-        const stripeId = user.stripeAccountId;
-        const account = await stripe.accounts.retrieve(stripeId);
-
-        if (account.details_submitted) {
-            const onboardingComplete = true;
-            console.log('JSON RESPONSE', { email, token, onboardingComplete });
-            res.status(200).json({ email, token, onboardingComplete });
-        }
-        else {
-        // If onboarding is not complete, create a new account link and redirect
-        const accountLink = await stripe.accountLinks.create({
-            account: user.stripeAccountId,
-            refresh_url: `http://localhost:8000/api/accounts/check-onboarding/${user.stripeAccountId}`, 
-            return_url: `http://localhost:8000/api/accounts/check-onboarding/${user.stripeAccountId}`, 
-            type: 'account_onboarding',
-        });
-
-        console.log('Redirecting to complete onboarding', { accountLink: accountLink.url });
-        res.status(200).json({ email, token, onboardingComplete: false, accountLink: accountLink.url });
-        }
-
-    } catch (error) {
-        console.error('Error logging in:', error);
-        res.status(400).json({ error: error.message });
-    }
-}
-
+            exports.login = async (req, res) => {
+                try {
+                    const { email, password } = req.body;
+            
+                    // Attempt to login the user
+                    const user = await Account.login(email, password);
+                    const token = createToken(user._id);
+                    const stripeAccountId = user.stripeAccountId;
+            
+                    // Retrieve Stripe account to check onboarding status
+                    const account = await stripe.accounts.retrieve(stripeAccountId);
+            
+                    if (!account.details_submitted) {
+                        // If onboarding is not complete, redirect to onboarding
+                        const accountLink = await stripe.accountLinks.create({
+                            account: stripeAccountId,
+                            refresh_url: `http://localhost:8000/api/accounts/check-onboarding/${stripeAccountId}`,
+                            return_url: `http://localhost:8000/api/accounts/check-onboarding/${stripeAccountId}`,
+                            type: 'account_onboarding',
+                        });
+            
+                        console.log('Redirecting to complete onboarding', { accountLink: accountLink.url });
+                        res.status(200).json({ email, token, onboardingComplete: false, accountLink: accountLink.url });
+                    } else {
+                        // Onboarding complete, now check for user preferences
+                        const preferences = await UserPreferences.findOne({stripeAccountId});
+                        console.log('User preferences:', preferences);
+            
+                        if (!preferences) {
+                            // If preferences are not set, redirect to preferences page
+                            res.status(200).json({ email, token, onboardingComplete: true, redirectToPreferences: true });
+                        } else {
+                            // All checks passed, proceed to normal login
+                            console.log('JSON RESPONSE', { email, token, onboardingComplete: true });
+                            res.status(200).json({ email, token, onboardingComplete: true, redirectToPreferences: false });
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error logging in:', error);
+                    res.status(400).json({ error: error.message });
+                }
+            }
+            
 
 exports.checkOnboardingStatus = async (req, res) => {
     try {

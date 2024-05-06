@@ -17,25 +17,25 @@ export const MainListItems = () => {
 
   return (
     <React.Fragment>
-      <ListItemButton onClick={() => navigate('/dashboard')}>
+      <ListItemButton id="dashboard-btn" onClick={() => navigate('/dashboard')}>
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItemButton>
-      <ListItemButton onClick={() => navigate('/customer-activity')}>
+      <ListItemButton id="customer-activity-btn" onClick={() => navigate('/customer-activity')}>
         <ListItemIcon>
           <PeopleIcon />
         </ListItemIcon>
         <ListItemText primary="Customer Activity" />
       </ListItemButton>
-      <ListItemButton onClick={() => navigate('/paymentIntents')}>
+      <ListItemButton id="payment-intents-btn" onClick={() => navigate('/paymentIntents')}>
         <ListItemIcon>
           <ShoppingCartIcon />
         </ListItemIcon>
         <ListItemText primary="Payment Link Activity" />
       </ListItemButton>
-      <ListItemButton onClick={() => navigate('/view-payments')}>
+      <ListItemButton id="payment-receipts-btn" onClick={() => navigate('/view-payments')}>
         <ListItemIcon>
           <ShoppingCartIcon />
         </ListItemIcon>
@@ -51,21 +51,21 @@ export const SecondaryListItems = () => {
   return (
     <React.Fragment>
 
-    <ListItemButton onClick={() => navigate('/custom-statement')}>
+    <ListItemButton id="statement-search-btn" onClick={() => navigate('/custom-statement')}>
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
         <ListItemText primary="Statement Search" />
       </ListItemButton>
 
-      <ListItemButton onClick={() => navigate('/current-month')}>
+      <ListItemButton id="current-month-btn" onClick={() => navigate('/current-month')}>
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
         <ListItemText primary="Current month" />
       </ListItemButton>
      
-      <ListItemButton onClick={() => navigate('/year-end')}>
+      <ListItemButton id="year-end-btn"  onClick={() => navigate('/year-end')}>
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>

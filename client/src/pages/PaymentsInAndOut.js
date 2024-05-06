@@ -208,6 +208,7 @@ const PaymentsInAndOut = () => {
                  <p>Date Range</p>
                   <div className="date-filter mb-4">
                     <DatePicker
+                      id="start-date"
                       selected={startDate}
                       onChange={(date) => setStartDate(date)}
                       selectsStart
@@ -219,6 +220,7 @@ const PaymentsInAndOut = () => {
                     />
                     <div className="mx-2">to</div>
                     <DatePicker
+                      id="end-date"
                       selected={endDate}
                       onChange={(date) => setEndDate(date)}
                       selectsEnd

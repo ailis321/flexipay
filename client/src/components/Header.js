@@ -16,7 +16,7 @@ const Header = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light py-4">
       <div className="container">
-      <Link className="navbar-brand" to="/">
+      <Link className="navbar-brand" id ="greeting" to="/">
           {user ? `Hello, ${user.email}` : "FlexiPay"}
         </Link>
         <button
@@ -57,7 +57,7 @@ const Header = () => {
         
           {user && (
             <li className="nav-item">
-              <Link className="nav-link" to="/view-customers">
+              <Link className="nav-link" id = "view-customers" to="/view-customers">
                 Customers
               </Link>
             </li>
@@ -79,12 +79,12 @@ const Header = () => {
          
             {user && (
                 <li className="nav-item">
-                  <button className="btn btn-link nav-link" onClick={handleLogout}>Logout</button>
+                  <button className="btn btn-link nav-link" id='logout-btn' onClick={handleLogout}>Logout</button>
                 </li>
             )}
             {!user && (
               <li className="nav-item">
-                <Link className="nav-link" to="/login">
+                <Link className="nav-link" id='login-btn' to="/login">
                   Login
                 </Link>
               </li>

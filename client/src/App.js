@@ -38,7 +38,7 @@ function App() {
             <Route path="/view-customers" element={user ? <ViewCustomers/> : <Navigate to="/login" />} />
             <Route path="/create-customer" element={<CreateCustomerPage />} />
             <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-            <Route path="/register" element={!user ? <RegisterAccount /> : <Navigate to="/dashboard" />} />
+            <Route path="/register" element={<RegisterAccount />} />
             <Route path="/moreInfo" element={<LoginHomeIncomplete />} />
             <Route path="/payment-link" element={user ? <PaymentLinkPage /> : <Navigate to="/login" />} />
             <Route path="/pay/:paymentIntentId" element={<PaymentTakePage />} />

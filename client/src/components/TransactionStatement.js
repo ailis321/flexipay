@@ -66,14 +66,14 @@ const TransactionStatement = ({ transactions, timeRange, title }) => {
 
   return (
     <>
-    <Button onClick={handleDownloadPdf} variant="contained" color="primary">
+    <Button onClick={handleDownloadPdf} id="pdf-download-btn" variant="contained" color="primary">
       Download as PDF
     </Button>
     <TableContainer component={Paper} ref={componentRef}>
     <Typography variant="h6" align="center" style={{ padding: '16px 0' }}>
           {title} 
         </Typography>
-      <Table sx={{ minWidth: 650 }} aria-label="transaction table">
+      <Table sx={{ minWidth: 650 }} aria-label="transaction table" id ='statement-table'>
         <TableHead>
           <TableRow>
             <TableCell>Date</TableCell>

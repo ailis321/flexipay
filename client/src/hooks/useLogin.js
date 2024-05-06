@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useAuthenticationContext } from './useAuthenticationContext';
-import { useNavigate } from 'react-router-dom'; // Ensure you import useNavigate from react-router-dom
+import { useNavigate } from 'react-router-dom'; 
 
 export const useLoginForm = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { dispatch } = useAuthenticationContext();
-  const navigate = useNavigate(); // Use navigate for redirection
+  const navigate = useNavigate(); 
 
   const login = async ({ email, password }) => {
     setIsLoading(true);
@@ -29,25 +29,24 @@ export const useLoginForm = () => {
         return;
       }
 
-      // Handle onboarding completion check
-      if (json.onboardingComplete) {
-        localStorage.setItem('user', JSON.stringify(json));
-        dispatch({ type: 'LOGIN', payload: json });
-      } else {
-        
-        const { token, email, onboardingComplete } = response;
-        // Save only the token, email, and onboarding status to local storage
-        localStorage.setItem('user', JSON.stringify({ token, email, onboardingComplete }));
+      // Save to local storage and update the context
+      localStorage.setItem('user', JSON.stringify(json));
+      dispatch({ type: 'LOGIN', payload: json });
 
-        // Updating authentication context as logged in but onboarding is not complete
-        dispatch({ type: 'LOGIN', payload: { token, email, onboardingComplete } });
-  
-        // Redirect user to the onboarding link if onboarding is not complete
-        window.location.href = json.accountLink; // Redirect directly
+      // Check the onboarding and preferences states
+      if (!json.onboardingComplete) {
+        // Redirect to Stripe onboarding using the link from the server
+        window.location.href = json.accountLink; 
         return;
-      }
+      } else if (json.redirectToPreferences) {
+   
+        navigate('/preferences');
+        return;
+      } else {
 
-      // Update loading state
+        navigate('/dashboard');
+      }
+      
       setIsLoading(false);
 
     } catch (error) {
@@ -57,6 +56,5 @@ export const useLoginForm = () => {
     }
   };
 
-  // Return the function and the loading state and error
   return { login, isLoading, error };
 };

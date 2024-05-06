@@ -10,7 +10,7 @@ const PaymentsTable = ({ transactions, type }) => {
       <h2>{title}</h2>
         {transactions.length === 0 && <p>No transactions found.</p>}
       <div className="table-responsive">
-        <table className="table table-striped table-hover">
+        <table className="table table-striped table-hover" id='receipts-table'>
           <thead>
             <tr>
               <th>Date</th>

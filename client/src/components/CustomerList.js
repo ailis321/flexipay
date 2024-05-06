@@ -116,7 +116,7 @@ const CustomersList = ({ customers, fetchCustomers }) => {
     return (
         <section className="py-5">
             <div className="container">
-                <h2 style={{ color: '#53937d' }}>Customer Directory</h2>
+                <h2 id="customer-list-heading" style={{ color: '#53937d' }}>Customer Directory</h2>
                 {deleteModalMessage && (
                     <div style={{ color: 'green', margin: '10px 0', fontSize: '1.2rem' }}>
                       {deleteModalMessage}
@@ -132,7 +132,7 @@ const CustomersList = ({ customers, fetchCustomers }) => {
                     </div>
                 )}
                 <div className="table-responsive">
-                    <table className="table table-striped table-hover" style={{ backgroundColor: "rgba(83, 147, 125, 0.8)", color: 'white' }}>
+                    <table className="table table-striped table-hover" id='customer-results-table' style={{ backgroundColor: "rgba(83, 147, 125, 0.8)", color: 'white' }}>
                         <thead>
                             <tr style={{ fontSize: '1.2rem' }}>
                                 <th></th>

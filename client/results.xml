@@ -1,0 +1,4 @@
+<testsuite name="Mocha Tests" tests="2" failures="0" errors="0" skipped="0" timestamp="Sun, 05 May 2024 14:45:05 GMT" time="29.153">
+<testcase classname="Web Application Full Workflow Test" name="should login successfully" file="/Users/ailistaylor/Documents/GIT/flexipay/client/src/tests/e2e/receiptManagementViewFunctionality.js" time="10.232"/>
+<testcase classname="Web Application Full Workflow Test" name="should be able to view receipts for transactions" file="/Users/ailistaylor/Documents/GIT/flexipay/client/src/tests/e2e/receiptManagementViewFunctionality.js" time="15.614"/>
+</testsuite>

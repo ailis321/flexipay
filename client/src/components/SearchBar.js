@@ -10,6 +10,7 @@ const SearchBar = ({ searchTerm, setSearchTerm, label }) => {
       value={searchTerm}
       onChange={(e) => setSearchTerm(e.target.value)}
       style={{ marginBottom: 20 }}
+      id='search-bar'
     />
   );
 };

@@ -86,7 +86,7 @@ const TransactionStatement = ({ transactions, timeRange, title }) => {
         </TableHead>
         <TableBody>
           {transactionsWithRunningBalance.map((transaction, index) => {
-            const isCharge = transaction.type === 'charge';
+            const isCharge = transaction.type === 'charge' || transaction.type === 'payment';
             return (
                 
               <TableRow key={index}>
